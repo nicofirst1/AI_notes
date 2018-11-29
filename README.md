@@ -37,3 +37,10 @@ combinatorial auctions by Tuomas Sandholm
     -  7.1, 7.2, 7.3, 7.4, 7.5, 7.6
     -  8.1, 8.2, 8.3
     -  9.1, 9.3, 9.4
+
+## Contributing
+You can fork this notes add your stuff and never ever tell anyone you change it...\
+Or you could take a moment to think about how you could help others understand better this kind of concepts. Maybe you are the only person capable of explaning that particular argument better than anyone alse, so why not giving it a shot?\
+Contributing is super easy! Just change what you think should be changed, add your name in the contribution part of the title page and make a pull request.\
+And vualà, you're making a difference. \
+Easy, wasn't it?
