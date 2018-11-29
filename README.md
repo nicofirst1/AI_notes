@@ -40,7 +40,7 @@ combinatorial auctions by Tuomas Sandholm
 
 ## Contributing
 You can fork this notes, add your stuff, and never ever tell anyone about it...\
-Or you could take a moment to think about how you could help others understand better this kind of concepts. Maybe you are the only person capable of explaning that particular argument better than anyone alse, so why not giving it a shot?\\
+**Or** you could take a moment to think about how you could help others understand better this kind of concepts. Maybe you are the only person capable of explaning that particular argument better than anyone alse, so why not giving it a shot?\\
 Contributing is super easy! Just change what you think should be changed, add your name in the contribution part of the title page and make a pull request.\
 And vualà, you're making a difference. \
 Easy, wasn't it?
