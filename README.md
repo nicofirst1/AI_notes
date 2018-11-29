@@ -15,8 +15,8 @@ The lessons are taught by professor [Daniele Nardi](http://www.dis.uniroma1.it/~
 - Nardi's slides
 - R&N book chapeters:
     - 10.1, 10.2
-    - 4.3
-    - 11.3, 11.2
+    - 4.3, 4.4
+    - 11.2, 11.3
 - R&N book second edition chapter 11.3
 
 ### Multi Agent Systems
