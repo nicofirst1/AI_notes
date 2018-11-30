@@ -312,7 +312,7 @@ Following there are some definitions:
 \item \textit{Formula}: is a set of literals joint by some logic connectives (e.g. a complex sentence).
 \item \textit{Literals}: can be either one propositional symbol (or atom) or a negated atom. They are the same as an atomic formulae that is a formula that contains no logical connectives.
 \item \textit{Clause}, is a \textit{disjunction} of literals, for example $L_1\vee L_2\vee...\vee L_n$
-\item Moreover we introduce the $\bot$ and $\top$ symbols that are \textit{False} and \textit{True} respectively.
+\item Moreover we introduce the constants $\bot$ and $\top$, that are \textit{False} and \textit{True} respectively.
 
 \end{itemize}
 
@@ -322,6 +322,11 @@ Following there are some definitions:
 
 \subsubsection{Conjunctive Normal Form [CNF]}
 \label{subsec:cnf}
+
+First thing first note that if we have a KB on which we \textit{can} use Modus Ponens \textit{then} we can use Resolution too. On the other hand if we can use Resolution then we may be not able to use Modus Ponent, since generalize Modus Ponens can be only used for definite horn clauses.
+
+
+
 \paragraph{Definition}
 The key idea is that: \textit{every sentence of propositional logic is logically equivalent to a conjunction of clauses} ($Formula\equiv CNF(Formula)$) ; hence sentences expressed as a conjunction of clauses are said to be in CNF. You can either preserve equivalence when converting to CNF, but the number of clauses will be $2^n$, where $n$ is the number of literals; or you can preserve \textit{satisfiability} introducing new literals and linearly increase the size of the formula.\\
 
@@ -658,9 +663,94 @@ Depending on the number of clauses $m$ and symbols $n$ we can either have an \te
 
 \newpage
 \section{First Order logic}
-Having $A\Rightarrow B \Rightarrow C$ is read as $A\Rightarrow (B \Rightarrow C)$ not $(A\Rightarrow B) \Rightarrow C$
 
-If we can use   modus ponens then we can use resolution, but if we can use resolution  we can't use modus ponent, since generalize modus ponens can be only for definite horn clauses.
+One of the most important proprieties a bout propositional logic that holds for First Order Logic (FOL from now on) is the \textbf{compositionality}, that is the meaning of a sentence is a function of the meaning of its parts. For example given $S_1=$\textit{I have don't want to write this} and $S_2=$\textit{I would love to watch Netflix} if would be weird if $S_1 \wedge S_2=$\textit{Tomorrow will be cold}.\\
+Moreover propositional logic assumes that there are facts that either hold or do not hold in the world \footnote{Each fact can be in one of two states: true or false.}, while FOL assumes that the world consists of objects with certain relations among them that do or do not hold. Hence in both logic a sentence represents a fact and the agent either believes the sentence to be true, believes it to be false, or has no opinion. 
+
+\paragraph{Structure}
+FOL assumes the world contains:
+\begin{itemize}
+\item \textbf{Objects} like: pc, tv, beer....
+\item \textbf{Relations} is a set of tuples of objects that are related. Depending on the number of tuple in the set we can have:
+	\begin{itemize}
+	\item \textit{Proprieties} (or unary relationship) that have just one tuple in the set; such as: red, round, big...
+	\item \textit{General} (or $n$-ary relationship)  which may have $n$ tuples; like: bigger than, has color, owns...
+	\end{itemize}
+
+\item \textbf{Functions}  For example: father of, best friend...
+\end{itemize}
+
+\paragraph{Example}
+Given the sentence \textit{"The next MidTerm will be easier then the first one"}\footnote{Probably not a model.} I have that:
+\begin{itemize}
+\item \textit{Objects}: Midterm, one
+\item \textit{Proprieties}: next, first (unary)
+\item \textit{Functions}: easier than
+\end{itemize}
+
+
+\paragraph{Symbols} For each one on the structures we have a related symbol:
+\begin{itemize}
+\item \textbf{Constants}: stands for objects.
+\item \textbf{Predicates}: stands for relations.
+\item \textbf{Functions}: stands for functions \footnote{You don't say.}
+\end{itemize}
+The last two comes with an \textbf{arity} that is the number of arguments they are referring to \footnote{For example the function \textit{Sibling(x,y)} has arity 2 (since we need a subject and a brother), while the function \textit{Human(x)} has arity 1.}.
+
+\paragraph{Interpretation vs Model}
+A model in first-order logic consists of a set of objects and an interpretation that maps constant symbols to objects, predicate symbols to relations on those objects, and function symbols to functions on those objects.
+
+\paragraph{Terms}
+are a logical expressions that refers to an object. That is what is used to refer to a particular object in the domain; they can be:
+\begin{itemize}
+\item \textbf{Constants} symbols; for example the color red, or that guy Eric over there.
+\item \textbf{Functional} terms; which are functions applied to constant symbols such as: \textit{BestFriendOf(Eric)} or \textit{Mother(Marta)}.
+\end{itemize}
+Notice that both refer to an "object" in the domain, one directly (constants), while the other indirectly. A functional term can be used both for not known constants, like the name of Marta's mother, but they can also be used for thing we do not bother to name, e.g. \textit{LeftArmOf(Edoardo)}. 
+
+\paragraph{Atomic Formulas}
+An atomic formula (or atom for short) is a predicate symbol with a number $n\in [0,\infy]$ of terms. For example given $t_1,...,t_n$ terms, the following are all atoms:
+\begin{itemize}
+\item \textit{Sibling($t_i,t_j$)}:  predicate symbol with arity 2.
+\item $Friend(t_1,...,t_n$: predicate symbol with arity $n$.
+\item $t_i=t_j$: predicate symbol $=$ with arity 2, can be written as $Equals(t_i,t_j)$
+\item $ParentOf(ParentOf(x))$ is the grandparent of $x$ and has arity 1.
+\item $\bot ,\top$ are atoms.
+\end{itemize}
+
+\paragraph{Terms vs Atoms}
+So what is the difference between this two symbols?\\
+The difference is in the use of relationships, for example:
+\begin{itemize}
+\item \textit{BatCave, CaveOf(Batman)} are terms, while \textit{Big(BatCave),Big(CaveOf(Batman))} are atoms.
+\item Equal symbols generate atoms, for example \textit{MobileOf(Batman)} and \textit{BatMobile} are terms, where \textit{MobileOf(Batman)=BatMobile} is an atom.
+\end{itemize}
+
+\paragraph{Complex Sentences}
+When we have atoms joint by some logic connectives then we call them \textbf{complex sentence}, for example:
+\begin{itemize}
+\item $\neg Friends(Superman,LexLutor)$
+\item $Superman\wedge Kryponite \Rightarrow Weak(Superman)$
+\end{itemize}
+
+\subsubsection{Quantifiers}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
