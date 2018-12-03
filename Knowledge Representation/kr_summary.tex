@@ -897,16 +897,57 @@ For what regard models we have that if $\mathcal{U} \satisfy A$ then $\mathcal{U
 \paragraph{Validity and satisfiability}
 
 We have that if a formula $A\in \mathcal{L}$ is true in every structure of a language $\mathcal{L}$, then $A$ is \textbf{valid}.\\
-On the other hand, given a set of formulas $\Gamma$, if there exists a structure $\mathcal{U}$ such that $\mathcal{U} \satisfy A$ for every $A \in \Gamma$ then $\Gamma$ is \textbf{satisfiable}, matematically:
+On the other hand, given a set of formulas $\Gamma$, if there exists a structure $\mathcal{U}$ such that $\mathcal{U} \satisfy A$ for every $A \in \Gamma$ then $\Gamma$ is \textbf{satisfiable}, mathematically:
 \[\Gamma = \lbrace A_1,...,A_n \rbrace,\ iff\ \exists\ \mathcal{U} :\mathcal{U}\satisfy A_i, \forall A_i \in Gamma\ \Rightarrow \Gamma\ satisfiable\]
 We can derive the notion of \textbf{logic entailment} $\gamma models A$, where $A$ is a closed formula, form the satisfiability, in the following way:\\
 For every structure $\mathcal{U}$ of the language $\mathcal{L}$, $\forall B\in \Gamma:\mathcal{U} \satisfy B$, we have $\mathcal{U} \satisfy A$ then  $\gamma models A$.
 
 
+\subsection{Propositional vs First Order Logic}
+First-order inference can be done by converting the KB to propositional logic and using propositional inference. This can be done by replacing the quantifiers as explained in the following paragraphs.
+
+\subsubsection{Universal instantiation}
+\textbf{UI} for short, is used for the universal quantifier and it says that we can substitute a variable with a ground term \footnote{Term without variables.} to infer the sentence.\\
+The \textbf{substitution} is written an follow:
+\[Subst(\theta,\alpha)=\frac{\forall v\ \alpha}{Subst(\lbrace v/g\rbrace,\alpha}\]
+where $\theta$ is the substitution applied to the term $\alpha$ for any variable $v$ and ground term $g$. \\
+The UI can be applied many times to produce multiple consequences that will be added to the KB  preserving its logical equivalence.
+
+\paragraph{An Example}
+Given the formula:
+\[\forall x,y\quad Loves(x,y)\]
+We can substitution like this:
+\[Subst(\lbrace x/Anna,y/Enrico \rbrace,Loves(x,y))=Loves(Anna,Enrico)\]
+\textit{And} like this:
+\[Subst(\lbrace x/Enrico,y/Anna \rbrace,Loves(x,y))=Loves(Enrico,Anna)\]
+
+\subsubsection{Existential instantiation}
+\textbf{EI} for short, in this case the variable is replace with \textit{a single} constant symbol $C$ that \textbf{does not} appear in the KB. The idea is saying that there is an object $C$ that satisfy the existential quantifier, but we are not specifying which is it.\\
+After applying EI we need to remove the existential quantifier and our new KB will \textit{not} be logically equivalent to the old one, but it can be shown that it is satisfiable exactly when the original KB is satisfiable.
+
+\paragraph{An Example}
+Given the formula:
+\[\exists x\ Game(x)\wedge PlayOnPc(x,Nicolo)\]
+We have \textit{the only} substitution:
+\[Game(G_1)\wedge PlayOnPc(G_1,Nicolo)\]
+Where $G_1$ is a generic constant symbol referring to some cool game I want to play.
 
 
-
-
-
-
+\subsubsection{Propositionalization}
+Is the technique of reducing first-order inference to propositional inference. The problem is that with function symbols we may have an infinite domain \footnote{For example \textit{Father(Father(Father(Father(Jhon)))).}}, so how can we preserve the entailment?\\
+Thanks to Jacques Herbrand (1930) we have a theorem which states the following:
+\textit{if a sentence is entailed by the original, first-order KB, then there is a proof involving just a finite subset of the propositionalized KB}. The problem with propositionalization is that it generates a lot of irrelevant sentences, with $p$ $k-$ary predicates and $n$ constants we have $p\cdot n^k$ instantiations.\\
+The question of entailment for first-order logic is \textit{semidecidable}, that is, algorithms exist that say yes to every entailed sentence, but no algorithm exists that also says no to every non-entailed sentence
+ 
+\paragraph{An Example}
+Given the following KB:
+\[\forall x\  Student(x) \wedge Stressed(x) \Rightarrow StudyingAI(x)\]
+\[Student(Edoardo),Student(Marco), Professor(Nardi)\]
+We ca use UI to have:
+\[Student(Edoardo) \wedge Stressed(Edoardo) \Rightarrow StudyingAI(Edoardo)\]
+\[Student(Marco) \wedge Stressed(Marco) \Rightarrow StudyingAI(Marco)\]
+\[Student(Edoardo),Student(Marco), Professor(Nardi)\]
+So that the new propositionalized KB is:
+\[Student(Edoardo), Stressed(Edoardo), StudyingAI(Edoardo),Student(Marco),\]
+\[Stressed(Marco), StudyingAI(Marco), Professor(Nardi)\]
 \end{document}
