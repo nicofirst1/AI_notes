@@ -4,6 +4,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
+\usepackage{xcolor}% or package color
 \usepackage{float}
 \usepackage[table, svgnames, dvipsnames]{xcolor}
 \usepackage{makecell, cellspace, caption}
@@ -664,6 +665,8 @@ Depending on the number of clauses $m$ and symbols $n$ we can either have an \te
 \newpage
 \section{First Order logic}
 
+\subsection{Syntax and Semantic}
+
 One of the most important proprieties a bout propositional logic that holds for First Order Logic (FOL from now on) is the \textbf{compositionality}, that is the meaning of a sentence is a function of the meaning of its parts. For example given $S_1=$\textit{I have don't want to write this} and $S_2=$\textit{I would love to watch Netflix} if would be weird if $S_1 \wedge S_2=$\textit{Tomorrow will be cold}.\\
 Moreover propositional logic assumes that there are facts that either hold or do not hold in the world \footnote{Each fact can be in one of two states: true or false.}, while FOL assumes that the world consists of objects with certain relations among them that do or do not hold. Hence in both logic a sentence represents a fact and the agent either believes the sentence to be true, believes it to be false, or has no opinion. 
 
@@ -698,7 +701,13 @@ Given the sentence \textit{"The next MidTerm will be easier then the first one"}
 The last two comes with an \textbf{arity} that is the number of arguments they are referring to \footnote{For example the function \textit{Sibling(x,y)} has arity 2 (since we need a subject and a brother), while the function \textit{Human(x)} has arity 1.}.
 
 \paragraph{Interpretation vs Model}
-A model in first-order logic consists of a set of objects and an interpretation that maps constant symbols to objects, predicate symbols to relations on those objects, and function symbols to functions on those objects.
+A model in first-order logic consists of a set of objects and an interpretation that maps constant symbols to objects, predicate symbols to relations on those objects, and function symbols to functions on those objects.\\
+Given a domain $\mathcal{D}$, an interpretation is a function $\mathcal{I}$ which maps:
+\begin{itemize}
+\item Every constant symbol $c$ into an element of $\mathcal{D}$.
+\item Every $n$-ary\footnote{A function with $n$ arguments.} function symbol $f$ into a  function $f^I$: $\mathcal{D}^n\rightarrow \mathcal{D}$. More specifically $f$ is a function which may assume any value in the domain $\mathcal{D}^n$, while $f^I$ assumes just one ($\mathcal{D}$).
+\item Every predicate symbol $P$ into a  $n$-ary relation$P^I$: $P^I\subset \mathcal{D}^n$. This means that a predicate symbol, e.g. ????????????????
+\end{itemize}
 
 \paragraph{Terms}
 are a logical expressions that refers to an object. That is what is used to refer to a particular object in the domain; they can be:
@@ -725,6 +734,7 @@ The difference is in the use of relationships, for example:
 \item \textit{BatCave, CaveOf(Batman)} are terms, while \textit{Big(BatCave),Big(CaveOf(Batman))} are atoms.
 \item Equal symbols generate atoms, for example \textit{MobileOf(Batman)} and \textit{BatMobile} are terms, where \textit{MobileOf(Batman)=BatMobile} is an atom.
 \end{itemize}
+Moreover a term is called \textbf{ground} if it does not contain variables \footnote{Later explained}, like \textit{CaveOf(Batman)}.
 
 \paragraph{Complex Sentences}
 When we have atoms joint by some logic connectives then we call them \textbf{complex sentence}, for example:
@@ -733,19 +743,164 @@ When we have atoms joint by some logic connectives then we call them \textbf{com
 \item $Superman\wedge Kryponite \Rightarrow Weak(Superman)$
 \end{itemize}
 
+
+\paragraph{Equality}
+The equations symbol $=$ is used to indicate that two terms refer to the same object \footnote{Can be used to state fact about the world.}, while the negation symbol $\neq$  is used otherwise.
+
+
+\paragraph{Database Semantics}
+\begin{itemize}
+\item \textbf{Unique name assumption}: every constant symbol refers to a distinct object.
+\item \textbf{Close-world assumption}: atomic sentences not known to be true are false.
+\item \textbf{Domain closure}: each model contains no more domain elements than those named by the constant symbols.
+\end{itemize}
+
 \subsubsection{Quantifiers}
 
+We first introduce the concept of \textbf{variables} \footnote{Variables will be in lowercase.} that are equals to terms, thus can be used as arguments for functions.
+Moreover a \textbf{free} variable is one that is not in the scope of any quantifier, elsewhere the variable is called \textbf{bounded}.\\ 
+Then we have to talk about \textbf{extended interpretations} that specifies a domain \footnote{The domain is the set of individual objects.} element for which a variable exists
+
+\paragraph{Universal Quantifier}
+If we consider the sentence \textit{Every guy literally only want one thing} \footnote{And it's fucking disgusting!}, instead of enumerating every possible guy we can use:
+\[\forall x\quad Guy(x)\Rightarrow WantOneThing(x)\]
+that is translated in:\\
+\begin{center}
+For all $x$, if $x$ is a guy, then $x$ wants one thing.
+
+\end{center}
 
 
 
 
+\subparagraph{Implication vs Conjunction}
+The question that arises is why do we have to use implication in the universal quantifier and not a conjunction?\\
+
+Consider the following example:
+\begin{itemize}
+\item \textit{A(X)= is an apple}.
+\item \textit{D(X)= is delicious}.
+\end{itemize}
+
+We want to consider an universe $U$ in which $all$ the apples are delicious, i.e. if the object is an apple then it is delicious, we must write:
+\[\forall x\in U,\ A(x)\Rightarrow D(x)\]
+That means for all objects in the universe, if $x$ is an apple $A(x)$, then $x$ is delicious $D(x)$. If we take a look at the truth table (Figure \ref{fig:truth_table}) we notice that the implication is has three rows in which is $True$, for every $x$:
+\begin{enumerate}
+\item If it is an apple and it is delicious.
+\item If it is not an apple and it is delicious.
+\item If it is not an apple and it is not delicious.
+\end{enumerate}
+This means that if we have an avocado as $x$ then the above formula will be true. So why is this?
+The important thing to understand is that we only care about an universe in which $all$ apples are delicious, i.e. there can not be any non-delicious apple \footnote{First line of the truth table.}, nothing matters when it comes down to avocado. So the fact than an implication becomes vacuously for non-apple object is not in our scope of interest.\\
+On the other hand, if we want to exclude the other two possibilities (2,3), we are saying that \textit{"any fruit is an apple and is delicious"}\footnote{Overly strong statement.}, hence \textit{all fruits are delicious apples}:
+\[\forall x\in U,\ A(x) \wedge D(x)\]
+
+\paragraph{Existential Quantifier}
+On the other hand, if we do not want to specify a propriety for each object of a domain, but either we want to say that it exists \textit{at least one} object with a certain propriety we use the \textbf{existential quantifier}, e.g. \textit{Some student will pass the midterm}:
+\[\exists x\quad Student(x) \wedge Pass(x)\]
+Which is read as:
+\begin{center}
+There exists some $x$ such that $x$ is a student and $x$ will pass the Midterm (hopefully).
+\end{center} 
 
 
+\subparagraph{Conjunction vs Implication}
+Same as before the question is : \textit{why do we use conjunction for existential quantifier}?\\
+Like previously said, the conjunction for an universal quantifier makes the formula overly strong \footnote{All objects are delicious apples}, while the use of the implication for the existential quantifiers makes the formula overly week.\\
+Going back to the apple example, we want to say that there are some apples which are delicious, if we use the implication symbol then the formula will return $True$ as soon as there is an object which is either a delicious non-apple or a non-delicious non-apple, so the look for some delicious apple stops immediately.\\
+It is useful to imagine the existential quantifier to be like a disjunction in which as soon as we encounter a $True$ element we can stop the look for other and just return $True$.
+On the other hand the implication needs to look for all the objects since its behavior is closer to the one of a conjunction.
+
+\paragraph{Nested Quantifiers}
+We can use multiple quantifiers in the same formula to express different kind of proprieties. For example, given the function $Love(x,y)$ that can be read as, $x$ loves $y$, we can say the following things:
+\begin{itemize}
+\item Everybody loves somebody:
+\[\forall x \exists y Loves(x,y)\]
+\item Somebody loves us
+\[\forall x \exists y Loves(y,x)\]
+\item X loves everybody
+\[\exists x \forall y Loves(x,y)\]
+\item Everybody loves x
+\[\exists x \forall y Loves(y,x)\]
+\end{itemize}
 
 
+\paragraph{Connection between $\forall$ and $\exists$}
+Saying that \textit{everyone likes professor Nardi} is like saying that \textit{there is no one who dislikes him}. 
+So we can make use of this information to switch between universal and existential quantifiers as shown in Table \ref{tab:quant_equiv}.
 
+\begin{table}[H]
+\centering
+\setlength\extrarowheight{5pt}
 
+    \begin{tabular}{|l|l|}
+        \hline
+		Quantifiers & Equivalences\\ \hline\hline
+        \forall x\ \neg P \equiv \neg \exists x\ P  & \neg(P\vee Q) \equiv \neg P \wedge \neg Q \\ \hline
+        \neg \forall x\ P \equiv \exists x\  \neg P & \neg(P\wedge Q) \equiv \neg P \vee \neg Q \\ \hline
+        \forall x\ P \equiv \neg \exists x\ \neg P  & P \wedge Q \equiv \ned(\ned P\vee\neg Q)  \\ \hline
+        \exists x\ P \equiv \neg \forall x\ \neg P  & P\vee Q \equiv \neg(\neg P\wedge\neg Q)  \\\hline
+        \forall x\ (P_1 \vee P_2) \equiv  \forall x\ P_1 \vee P_2   & if x \notin var(P_2) \\\hline
+        \exists x\ (P_1 \wedge P_2) \equiv  \exists x\ P_1 \wedge P_2   & if x \notin var(P_2) \\\hline
+        \forall xP(x)\equiv \forall y P(y) & \exists xP(x)\equiv \exists y P(y) \\\hline
+        \forall x\forall y P(x,y) \equiv  \forall y\forall x P(x,y) \equiv  \forall x, y P(x,y) &
+        \exists x\exists y P(x,y) \equiv  \exists y\exists x P(x,y) \equiv  \exists x, y P(x,y)\\\hline
+        \forall x P(y) \equiv P(y) &\exists x P(y) \equiv P(y)\\\hline
+        (\forall x P_1)\Rightarrow P_2 \equiv \exists x(P_1\Rightarrow P_2) & x not free in P_2\\\hline
+        (\exists x P_1)\Rightarrow P_2 \equiv \forall x(P_1\Rightarrow P_2) & x not free in P_2\\\hline
+        P_2\Rightarrow \forall x P_1 \equiv \forall x(P_2\Rightarrow P_1) & x not free in P_2\\\hline
+        P_2\Rightarrow \exists x P_1 \equiv \exists x(P_2\Rightarrow P_1) & x not free in P_2\\\hline
+    \end{tabular}
+\caption{Quantifiers equivalences}
+\label{tab:quant_equiv}
+\end{table}
 
+\subsection{Using First Order Logic}
+Sentences which are added to the KB using \textit{TELL} are called \textbf{assertion} that states some truth about the world. On the other hand, queries are information \textit{ASK}ed to the KB, if they are logically entailed by the KB they should be answered positively. Similarly the \textit{AskVars} action ask the KB for the values of the formula that make it true, such answers are called substitutions \footnote{Usually reserved for KB of only Horn Clauses.}.\\
+Depending on the type of knowledge the KB is made out of we may have:
+ \begin{itemize}
+\item \textbf{Intentional Knowledge}: which are general laws about the domain, such as $\forall x,y Mother(x,y) \Leftrightarrow (Famale(x)\wedge Parent(x,y))$.
+\item \textbf{Extensional Knowledge}: facts about a specific instance, like $Parent(Marco,Ugo)$. 
+ \end{itemize}
+
+\paragraph{FOL formulas}
+In FOL formulas follows this rules, given the formulas $A,B$:
+\begin{itemize}
+\item Every atom is a formula.
+\item $\neg A$ is a formula.
+\item If $\circ$ is a binary operator, then $A\circ B$ is a formula.
+\item Given a variable $x$, $\forall x A$ and $\exists x A$ are formulas.
+\end{itemize}
+
+\subsection{Truth, Interpretation and Models}
+
+\newcommand{\satisfy}{\textcolor{red}{\models}} 
+\newcommand{\nsatisfy}{\textcolor{red}{\nvDash}} 
+
+Remember that a \textit{closed formula}, also called a sentence, is a formula without free variables. So given a sentence $\phi$ and a structure $\mathcal{U}=\langle D, I \rangle$ we denote the truth of $\phi$ as:
+\[\mathcal{U} \satisfy \phi\]
+Meaning that the $\mathcal{U}$ satisfies \footnote{Note that in this case $\satisfy$ is read satisfies and it is red.} $\phi$ if $\phi$ is true in the $\mathcal{U}$. The following cases are used for satisfiability:
+\begin{itemize}
+\item $\mathcal{U}\satisfy \top$ and $\mathcal{U} \nsatisfy \bot$
+\item If $A$ is a closed formula $P(t_1,...,t_n)$ then
+\[\mathcal{U} \satisfy A\quad iff\quad \langle t_1^I,...,t_n^I\rangle \in P^I\]
+\item $\mathcal{U} \satisfy \neg A$ iff $\mathcal{U} \nsatisfy A$
+\item $\mathcal{U} \satisfy A \wedge B$ iff $(\mathcal{U} \satisfy A)\wedge \mathcal{U} \satisfy B$
+\item $\mathcal{U} \satisfy (A \Rightarrow B)$ iff $(\mathcal{U} \satisfy A)\Rightarrow (\mathcal{U} \satisfy B)$
+\item $\mathcal{U} \satisfy (A \leftrightarrow B)$ iff $(\mathcal{U} \satisfy A)\wedge (\mathcal{U} \satisfy B)$ or $(\mathcal{U} \nsatisfy A)\wedge (\mathcal{U} \nsatisfy B)$
+\item $\mathcal{U} \satisfy \forall x\ A$ iff $\forall d \in D, \mathcal{U}\satisfy \lbrace d \rightarrow x\rbrace$
+\item $\mathcal{U} \satisfy \exists x\ A$ iff $\exists d \in D, \mathcal{U}\satisfy \lbrace d \rightarrow x\rbrace$
+\end{itemize}
+
+For what regard models we have that if $\mathcal{U} \satisfy A$ then $\mathcal{U}$ is a \textbf{model} of $A$ \footnote{$A$ is true in $\mathcal{U}$.}.
+
+\paragraph{Validity and satisfiability}
+
+We have that if a formula $A\in \mathcal{L}$ is true in every structure of a language $\mathcal{L}$, then $A$ is \textbf{valid}.\\
+On the other hand, given a set of formulas $\Gamma$, if there exists a structure $\mathcal{U}$ such that $\mathcal{U} \satisfy A$ for every $A \in \Gamma$ then $\Gamma$ is \textbf{satisfiable}, matematically:
+\[\Gamma = \lbrace A_1,...,A_n \rbrace,\ iff\ \exists\ \mathcal{U} :\mathcal{U}\satisfy A_i, \forall A_i \in Gamma\ \Rightarrow \Gamma\ satisfiable\]
+We can derive the notion of \textbf{logic entailment} $\gamma models A$, where $A$ is a closed formula, form the satisfiability, in the following way:\\
+For every structure $\mathcal{U}$ of the language $\mathcal{L}$, $\forall B\in \Gamma:\mathcal{U} \satisfy B$, we have $\mathcal{U} \satisfy A$ then  $\gamma models A$.
 
 
 
