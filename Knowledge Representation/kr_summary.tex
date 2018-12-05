@@ -904,12 +904,17 @@ For every structure $\mathcal{U}$ of the language $\mathcal{L}$, $\forall B\in \
 
 
 \subsection{Propositional vs First Order Logic}
+
+\newcommand{\subst}[1]{Subst(\theta,#1)} 
+
 First-order inference can be done by converting the KB to propositional logic and using propositional inference. This can be done by replacing the quantifiers as explained in the following paragraphs.
 
 \subsubsection{Universal instantiation}
+\label{subsubsec:UI}
+
 \textbf{UI} for short, is used for the universal quantifier and it says that we can substitute a variable with a ground term \footnote{Term without variables.} to infer the sentence.\\
 The \textbf{substitution} is written an follow:
-\[Subst(\theta,\alpha)=\frac{\forall v\ \alpha}{Subst(\lbrace v/g\rbrace,\alpha}\]
+\[Subst(\theta,\alpha)=\frac{\forall v\ \alpha}{Subst(\lbrace v/g\rbrace,\alpha)}\]
 where $\theta$ is the substitution applied to the term $\alpha$ for any variable $v$ and ground term $g$. \\
 The UI can be applied many times to produce multiple consequences that will be added to the KB  preserving its logical equivalence.
 
@@ -922,8 +927,9 @@ We can substitution like this:
 \[Subst(\lbrace x/Enrico,y/Anna \rbrace,Loves(x,y))=Loves(Enrico,Anna)\]
 
 \subsubsection{Existential instantiation}
+\label{subsubsec:EI}
 \textbf{EI} for short, in this case the variable is replace with \textit{a single} constant symbol $C$ that \textbf{does not} appear in the KB. The idea is saying that there is an object $C$ that satisfy the existential quantifier, but we are not specifying which is it.\\
-After applying EI we need to remove the existential quantifier and our new KB will \textit{not} be logically equivalent to the old one, but it can be shown that it is satisfiable exactly when the original KB is satisfiable.
+After applying EI we need to remove the existential quantifier \footnote{Skolemization.} and our new KB will \textit{not} be logically equivalent to the old one, but it can be shown that it is satisfiable exactly when the original KB is satisfiable.
 
 \paragraph{An Example}
 Given the formula:
@@ -950,4 +956,152 @@ We ca use UI to have:
 So that the new propositionalized KB is:
 \[Student(Edoardo), Stressed(Edoardo), StudyingAI(Edoardo),Student(Marco),\]
 \[Stressed(Marco), StudyingAI(Marco), Professor(Nardi)\]
+
+\paragraph{Horn Clauses}
+We can have the following for every element of the FOL:
+\begin{itemize}
+\item \textit{Facts}: $\top\RightarrowA(x)$ ($A(x)$ for simplicity). 
+\item \textit{Rules}: $A_1(x)\wedge...\wedge A_n(x)\Rightarrow B(x)$
+\item \textit{Goals}: $A_1(x)\wedge...\wedge A_n(x)\Rightarrow \bot$ \footnote{We are using $\bot$ since want to prove the falsity of the premise is impossible so the premise is true.}
+\end{itemize}
+
+
+\subsubsection{Generalized Modus Ponens}
+
+
+When we have an implication of the kind:
+\[p_1 \wedge ... \wedge p_n \Rightarrow q\]
+If there is a substitution $\theta$ which makes every conjunct of the premises identical to a sentence in the KB, then we can infer $q$.\\
+The \textbf{Generalized Modus Ponens} [GMP] works in the following way: given $n$ atomic sentences $p_1,...,p_n$ which are the premises of an implication $p_1\wedge ... \wedge p_n\Rightarrow q$, and given $n$ atomic sentences already in the KB $p_1',...,p_n'$ so that $Subst(\theta,p_i)=Subst(\theta,p_i')$ \footnote{This is that given the substitution $\theta$ we can transform a sentence $p$ into a known sentence $p'$ in the KB.} for all $i$, we can use \textit{GMP}:
+\[\frac{p_1',...,p_n',\quad (p_1\wedge ... \wedge p_n\Rightarrow q)}{Subst(\theta,q)}\]
+And infer a valid substitution for the query $q$.\\
+
+\paragraph{Example}
+Given a KB with the following information:
+\begin{enumerate}
+\item $\forall y\ Tired(y)$, everyone \footnote{Actually every object.} in the domain is tired.
+\item $\forall x\ Student(x)\wedge Stressed(x) \wedge Tired(x) \Rightarrow NeedCoffe(x)$
+\item $Student(Edoardo),Student(Luca), Stressed(Luca)$
+\end{enumerate}
+
+Considering the second line of the KB, we have that:
+\begin{itemize}
+\item $p_1=Tired(x)$
+\item $p_2=Student(x)$
+\item $p_3=Stressed(x)$
+\item $q=NeedCoffe(x)$
+\end{itemize}
+
+So now we need a substitution $\theta$ such that $Subst(\theta,p')=Subst(\theta,p)$. Trying with:
+\[\theta=\lbrace x/Edoardo, y/Edoardo \rbrace\]
+Will not work since the KB has no notion about $Stressed(Edoardo)$ \footnote{Since the first line of the KB, implies that every one in the domain is tired the formula $Tired(x)$ will always be true. }. On the other hand, Luca is pretty stressed so we can use:
+\[\theta=\lbrace x/Luca, y/Luca \rbrace\]
+So we can conclude that $Subst(\theta, q)\longrightarrow Luca$.\\
+
+
+
+\paragraph{Soundness}
+It is easy to prove that the \textit{GMP} is sound since we need to prove that: given a sentence $p$ and a substitution $\theta$, we have:
+\[p \models Subst(\theta,p)\] 
+But this holds since it exactly what we have using \textit{UI}.
+
+\subsubsection{Unification}
+As before mentioned we need to find a substitution such that different logical expression looks identical ($\subst{p}=\subst{p'}$). We can use the \textbf{Unification} process that takes as input two sentences and returns an unifier for them\footnote{If exists.}:
+\[Unify(p,q)=\theta \subst{p}=\subst{q}\]
+We can have problems when having variables with the same name \footnote{As you can see in the next example.}, so we need to use a technique called \textbf{standardizing apart} which changes one of the two sentence's variables to avoid name clashes.\\
+Finally we can say that, for every unifiable pair of expressions, there is a single \textbf{most general unifier} that is unique up to renaming and substitution of variables, for example $P(A,B)$ is less general than $P(A,x)$ that is less general than $P(y,x)$. 
+
+\paragraph{Example}
+Given the following KB:
+\begin{enumerate}
+\item $Knows(Homer, Marge)$, Homer knows Marge.
+\item $\forall y\ Knows(y,Bart)$, everyone knows Bart.
+\item $\forall y\ Knows(y,Mother(y))$, everyone knows their mother.
+\item $\forall x\ Knows(x,Lisa)$, everyone knows Lisa.
+\item $\forall y,z\ Knows(y,z)$, everyone knows everyone.
+\end{enumerate}
+
+We ask the KB which are the persons that $Homer$ knows: $q=AskVars(Knows( Homer,x))$. So we will have the following:
+\begin{enumerate}
+\item $Unify(Knows( Homer,x),Knows(Homer, Marge)=\lbrace x/Marge \rbrace$
+\item $Unify(Knows( Homer,x),Knows(y, Bart)=\lbrace x/Bart, y/Homer \rbrace$
+\item $Unify(Knows( Homer,x),Knows(y, Mother(y))=\lbrace y/Homer, x/Mother(y) \rbrace$
+\item $Unify(Knows( Homer,x),Knows(x, Lisa)=Fail$, because the variable $x$ cannot be both $Homer$ and $Lisa$ at the same time \footnote{It should follow the behavior of point 2.}, so we use \textbf{standardizing apart}.
+\item $Unify(Knows( Homer,x),Knows(y, z)$, returns two substitutions:
+	\begin{enumerate}
+	\item $\theta=\lbrace y/Homer, x/z \rbrace$, which is the \textbf{most general unifier}.
+	\item $\theta=\lbrace y/Homer, x/Homer, z/Homer \rbrace$, which may be generated by the previous substitution with $\lbrace z/Homer \rbrace$.
+	\end{enumerate}
+\end{enumerate}
+
+
+
+\subsection{Chaining}
+Consider the following problem:
+\begin{center}
+\begin{textit}
+kinder eggs
+The law says that it is a crime for an American to sell kinder eggs to hostile nations. The Easter Island, an enemy of America, has some kinder eggs, and all of its kinder eggs were sold to it by Roger Rabbit, who is American.
+
+\end{textit}
+\end{center}
+We want to prove that Roger Rabbit is a criminal. First we need to convert the problem to a first-order definite clause KB:
+\begin{enumerate}
+\item "...it is a crime for an American to sell kinder eggs to hostile nations" results in:
+\[American(x)\wedge \KinderEgg(y)\wedge Sells(x,y,z)\wedge Hostile(z)\Rightarrow Criminal(x)\] \footnote{From now on we will not write the $\forall x,y,z$ symbol. Note that this kind of KB is called \textbf{Datalog}.}
+
+\item "The Easter Island...has some kinder eggs", the sentence can be written as an existential formula of the form:
+\[\exists x\ Owns(EasterIsland,)\wedge KinderEgg(x)\]
+We can use \textit{EI} \ref{subsubsec:EI} to remove the existential quantifier by adding some new constant $K_1$ resulting in:
+\[Owns(EsterIsland,K_1),\quad KinderEgg(K_1)\]
+
+\item "... all of its kinder eggs were sold to it by Roger Rabbit":
+\[KinderEgg(x)\wedge Owns(EsterIsland,x)\Rightarrow Sells(RogerRabbit,x,EsterIsland)\]
+
+\item We must know that an hostile object is an enemy of America:
+\[Enemy(x,America)\Rightarrow Hostile(x)\]
+
+\item "Roger Rabbit is American":
+\[American(RogerRabbit)\]
+
+
+\item "The Easter Island, an enemy of America":
+\[Enemy(EsterIsland,America)\]
+\end{enumerate}
+
+\subsubsection{Forward Chaining}
+Starting from the known facts, the algorithm triggers all the rules whose premises are satisfied, adding their conclusions to the known facts. The process repeats until the query is answered or no new facts are added. Notice that a fact is not new if it is just a \textbf{renaming} of a known fact \footnote{For example \textit{Likes(x,ice-scream)} and \textit{Likes(y,ice-scream)} are renaming of each other with the same meaning (everybody likes ice-scream).}.
+The steps for the forward chaining are the following:
+\begin{itemize}
+\item Rule 3 is satisfied with $\subst{x}=\lbrace x/K_1 \rbrace$, so that $Sells(RogerRabbit,K_1,EsterIsland)$ is added to the KB.
+\item Rule 4 is satisfied by $\subst{x}=\lbrace x/EsterIsland \rbrace$, so that $Hostile(EsterIsland)$ is added.
+\item Finally rule 1 is satisfied with $\subst{x,y,z}=\lbrace x/RogerRabbit, y/K_1, z/EsterIsland \rbrace$ so we can add $Criminal(RogerRabbit)$.\\
+
+Notice that we reached a \textbf{fixed point} in which no more inferences can be induced, but the difference with the propositional fixed point is that we may have universally quantified atomic sentence.\\
+Moreover the algorithm is \textbf{sound} since every step is an application on \textit{GMP} and complete for definite clause knowledge bases; that is, it answers every query whose answers are entailed by any knowledge base of definite clauses.\\ Finally let $k$ be the maximum arity (number of arguments) of any predicate, $p$ be the number of predicates, and $n$ be the number of constant symbols. Clearly, there can be no more than $pn^k$ distinct ground facts, so after this many iterations the algorithm must have reached a fixed point.
+
+\paragraph{Efficiency}
+The previous mentioned process may be improved with :
+\begin{itemize}
+\item \textbf{Conjunction ordering}: the problem of finding an ordering to solve the conjuncts of the rule premise so that the total cost is minimized. It arises when we have many facts in the KB that need to be matched against a premise.\\
+Given the rule 3 we have to find objects which are both  $KinderEggs$  owned by $EsterIsland$; so we can must iterate through all the $n$ $KinderEggs$ and all the $m$ objects owned by $EsterIsland$. It is logical that if $n\ll m$ it will be faster to find the $KinderEggs$ first and then the object owned by $EsterIsland$.\\ This problem is exactly as the CSP-problem studied before \footnote{We can use the studied techniques such as \textit{minimum-remaining-value}...}, thus being NP-Hard.
+
+\item \textbf{Incremental Forward Checking}: another problem is the one of matching redundant rules. It can be avoided if we consider that a rule is \textit{"new"} at iteration $t$ if it has been inferred by some facts generated in the previous iteration $t-1$, otherwise it would have been generated earlier.\\ Another problem is given by \textbf{partial matching} rules which are generated and discarded as soon as some atoms in the premise do not hold. Instead of discarding them we could leave them semi-generated and gradually complete them as new facts arrives.
+
+\item \textbf{Irrelevant Facts}: finally, the algorithm does not distinguish between relevant and irrelevant facts. To address this issue we can either use backward chaining or deductive databases that uses forward chaining as the standard inference rule.
+\end{itemize}
+
+\subsubsection{Backward Chaining}
+The backward chaining is a kind of AND/OR search, the $OR$ part because the goal query can be proved by any rule in the knowledge base, and the $AND$ part because all the conjuncts in a list of clauses must be proved.\\ It is a depth-first search so it suffers from problem such as repeated states and incompleteness.\\ It is the base for \textbf{Logic programming [PROLOG]} 
+
+
+
+\section{Prolog}
+
+
+\end{itemize} 
+
+
+
+
 \end{document}
