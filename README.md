@@ -37,6 +37,7 @@ combinatorial auctions by Tuomas Sandholm
     -  7.1, 7.2, 7.3, 7.4, 7.5, 7.6
     -  8.1, 8.2, 8.3
     -  9.1, 9.3, 9.4
+- [this](https://math.stackexchange.com/questions/2260428/why-can-we-use-implication-with-the-universal-quantifier-but-not-with-the-existe?rq=1) link from stackexchange.
 
 ## Contributing
 You can fork this notes, add your stuff, and never ever tell anyone about it...\
