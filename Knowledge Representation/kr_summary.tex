@@ -1134,11 +1134,57 @@ And we query $append(X,Y,[1,2])$ (what can be the values of $X,Y$ so that, if I 
 
 
 \subsection{Efficient Implementation}
+There are two modes of operation for the Prolog program. 
+
+
+\begin{figure}[H]
+\centering
+\fbox{\includegraphics[scale=0.5]{images/prolog_interpreted.png}}
+\caption{Abstract Interpreted Prolog Mode}
+\label{fig:interpreted_prolog}
+\end{figure}
+
+\paragraph{Interpreted}
+The algorithm works as shown in Figure \ref{fig:interpreted_prolog} with two major improvements:
+\begin{itemize}
+\item The presence of a \textbf{global stack}\footnote{Remember that a stack is the implementation of a depth-first search.} of choice points to keep track of multiple possibilities to consider .
+\item The use of a \textbf{trail} in which logic variables \footnote{Variables that remember their current bindings .} are kept. So when a branch fails the algorithm removes the last bounded variable and continues with the trail \textit{without} re-instantiating a substitution for each variable.
+\end{itemize}
+
+
+\paragraph{Compiled} In this mode the Prolog program becomes  an inference procedure for a specific set of clauses, so it knows what clauses match the goal. Prolog basically generates a miniature theorem prover for each different predicate, thereby eliminating much of the overhead of interpretation. ??????????????????
+
+\paragraph{Parallelization} There are two principal sources of parallelism. The first, called \textbf{OR} parallelism, comes from the possibility of a goal unifying with many different clauses in the knowledge base. Each gives rise to an independent branch in the search space that can lead to a potential solution, and all such branches can be solved in parallel. The second, called textbf{AND} parallelism, comes from the possibility of solving each conjunct in the body of an implication in parallel.
 
 \subsection{Redundant inference and infinite loops}
-Since Prolog works with backward chaining, hence using a depth-first search, some issues may arise. Specifically the problem of 
+Since Prolog works with backward chaining, hence using a depth-first search, some issues may arise. Specifically the problem of infinite paths makes Prolog \textbf{incomplete} as a theorem prover for definite clauses because it fails to prove sentences that are entailed. 
 
-\end{itemize} 
+\paragraph{An example}
+Given two implementation of the same problem:
+\begin{enumerate}
+\item The first one:
+	\begin{itemize}
+	\item path(X,Z) :- link(X,Z)
+	\item path(X,Z) :- path(X,Y), link(Y,Z)
+	\end{itemize}
+\item The second one:
+	\begin{itemize}
+	\item path(X,Z) :- path(X,Y), link(Y,Z)
+	\item path(X,Z) :- link(X,Z)
+	\end{itemize}
+\end{enumerate}
+
+Since Prolog chooses the clauses in the order of implementation, the resulting search tree for the second implementation will be an infinite loop, as shown in Figure \ref{fig:prolog_tree}.
+
+
+\begin{figure}[H]
+\centering
+\fbox{\includegraphics[scale=0.5]{images/prolog_tree.png}}
+\caption{Abstract Interpreted Prolog Mode}
+\label{fig:prolog_tree}
+\end{figure}
+
+
 
 
 
