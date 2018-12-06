@@ -4,15 +4,30 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
-\usepackage{xcolor}% or package color
+\usepackage[table]{xcolor}
 \usepackage{float}
 \usepackage[table, svgnames, dvipsnames]{xcolor}
 \usepackage{makecell, cellspace, caption}
 \usepackage{hyperref}
+\usepackage[a4paper,
+left=20mm,
+right=20mm,
+top=10mm]{geometry}
+\usepackage{titlesec}
+
+
+
+\titlespacing*{\subsection}
+{0pt}{7ex }{2ex}
+\addtolength{\skip\footins}{2pc plus 5pt}
+
+\renewcommand{\baselinestretch}{1.25} 
+
 
 \author{Nicolò Brandizzi}
 \title{Knowledge Representation Summary}
 \date{November 2018}
+
 \begin{document}
 
 
@@ -92,7 +107,7 @@ Sentences must follow two principles in order to be considered \textit{correct}:
 
 Other than saying \textit{each possible world} when referring to the KB, we can use the word \textbf{interpretation}. Whereas possible worlds might be thought of as (potentially) real environments that the agent might or might not be in, interpretations are mathematical abstractions, each of which simply fixes the truth or falsehood of every relevant sentence.\\
 
-Moreover a \textbf{model} $m$ is an interpretation of a sentence $\alpha$ if $\alpha$ is true in $m$ \footnote{Here the Russell-Norvig has a different concept of \textit{model} which is equal to the above \textit{interpretation (= each possible world = model)} . But Nardi prefer to make the distinction between the two so we will go with the Nardi flow (\textit{each possible world=interpretation $\neq$ model}).}. Given a set of the models of $\alpha$, $M(\alpha)$, we can derive the concept of \textit{entailment}:\\
+Moreover a \textbf{model} $m$ is an interpretation of a sentence $\alpha$ if $\alpha$ is true in $m$ \footnote{Here the Russell-Norvig has a different concept of \textit{model} which is equal to the above \textit{interpretation (= each possible world = model)} . But Nardi prefer to make the distinction between the two, so we will go with the Nardi flow (\textit{each possible world=interpretation $\neq$ model=true interpretation}).}. Given a set of the models of $\alpha$, $M(\alpha)$, we can derive the concept of \textit{entailment}:\\
 A KB \textit{entails} a sentence $\alpha$ \footnote{That is the sentence $\alpha$ follows logically/is derived from KB.} if and only if, in every interpretation in which the KB is true \footnote{That is in every \textit{model} of the KB.}, $\alpha$ is also true:
 \[KB \models \alpha \Leftrightarrow M(KB) \subseteq M(\alpha)\]
 Note that $ M(KB) \subseteq M(\alpha)$ means that KB is a \textit{stronger assertion} than $\alpha$ since it \textit{rules out} more interpretation or possible worlds \footnote{There are less models in KB than in $\alpha$.}.
@@ -150,7 +165,7 @@ The other symbol $\vdash$ is read \textbf{derives} (KB derives $\alpha$) it can 
 
 \paragraph{Difference between \textit{deduction} and \textit{inference}}
 Broadly speaking they are the same thing.\\
-More specifically the \textit{deduction} is always referred to as a syntactic derivation, while \textit{inference} is a more generic  term which means that starting from KB we can conclude $\alpha$. So \textit{deduction} is tied to the $\vdash$ symbol, while \textit{infer} is more generic and can be used in both $\vdash, \models$
+More specifically, the \textit{deduction} is always referred to as a syntactic derivation, while \textit{inference} is a more generic  term which means that starting from KB we can conclude $\alpha$. So \textit{deduction} is tied to the $\vdash$ symbol, while \textit{infer} is more generic and can be used in both $\vdash, \models$
 
 \newpage
 \section{Propositional Logic}
@@ -265,7 +280,7 @@ But if we can derive $A$ with a deduction $\vdash$ then $A$ must be valid, so $\
 \subsubsection{Inference and proof}
 \label{subsec:modusPonens}
 
-First thing first the truth tables we cited before are not associated with the inference rules. They are associated with the formulae! So you cannot apply any truth table to Modus Ponens, And Elimination and Resolution since it does not make sense.\\
+First thing first the truth tables we cited before are not associated with the inference rules. They are associated with the formulas! So you cannot apply any truth table to Modus Ponens, And Elimination and Resolution since it does not make sense.\\
 
 Moreover atom and literal are the two basic elements for the construction of the formulae, in propositional logic $A$ is a propositional variable. But since we can have bot $A$ and $\neg A$ we say that $A$ is a literal which can be positive or negative.\\
 
@@ -462,7 +477,7 @@ The key idea of the propositional resolution is that if I have two clauses $C_1,
 \item $C_1$=\textit{"There is an exam the next day"} or \textit{"My pc is broken"} or \textit{"I'm tired"}
 \item $C_2$=\textit{"There is no exam the next day"}
 \end{itemize}
-This is a special case of resolution called \textbf{unit resolution} in which I have a clause $C_1$ and a fact $C_2$. So, by examine the two clauses I can say that \textit{There is no exam the next day}, so the alternatives are either that \textit{my pc is broken} or that \textit{I'm tired}.\\
+This is a special case of resolution called \textbf{unit resolution} in which I have a clause $C_1$ and a fact $C_2$. So, by examining the two clauses, I can say that \textit{There is no exam the next day}, so the alternatives are either that \textit{my pc is broken} or that \textit{I'm tired}.\\
 If we add another fact to the KB:
 \begin{itemize}
 \item $C_3$= \textit{I'm never tired on Mondays!}
@@ -479,7 +494,7 @@ P=P_1\vee P_2 \vee...\vee P_m=\lbrace P_1,...,P_m\rbrace
 for any $n,m$.\\
 Let there be a set of literals, $O=\lbrace O_1,...,O_k\rbrace$, which appears in both $L$ and $P$ but with opposite sign:
 \[\forall O_i,\ O_i \in L, \neg O_i \in P\]
-Se we can use resolution to join $P$ and $L$ \footnote{In this instance by joining we mean that we use the disjunction symbol between the two clauses.} and remove $O$ from the union:
+Se we can use resolution to join $P$ and $L$ \footnote{In this instance by \textit{joining} we mean to merge together the two set of disjunction with a disjunction symbol} and remove $O$ from the union:
 \[\frac{L\quad P}{(L\cup P)\setminus O}\]
 Which result will look like:
 \[(L_1\vee L_2 \vee...\vee L_n\vee P_1\vee P_2 \vee...\vee P_m)\setminus (O_1\vee...\vee O_k)  \]
@@ -498,7 +513,7 @@ The procedure works as follow:
 \[C_5=\frac{\lbrace\neg P,Q\rbrace\quad \lbrace P,\neg L\rbrace}{\lbrace\neg L,Q\rbrace}=\lbrace\neg L,Q\rbrace\]
 So that we have:
 \[ C_3=\lbrace \neg Q \rbrace,\quad C_4=\lbrace L\rbrace ,\quad C_5=\lbrace\neg L,Q\rbrace \]
-\item Resolve $C3$ and $C_5$ in the same way and get:
+\item Resolve $C_3$ and $C_5$ in the same way and get:
 \[C_4=\lbrace L\rbrace ,\quad C_6=\lbrace\neg L\rbrace \]
 \item Finally resolve $C_4$ and $C_6$ and get the empty clause $\{\}$
 \end{enumerate}
@@ -526,7 +541,7 @@ Now let's prove this the other way around, we want to prove that:
 \[S\quad satisfiable\quad iff\quad \{\}\notin RC(S)\]
 First we build a model of $RC(S)$ with the following procedure.\\ For $i$ in $range(k)$:
 \begin{itemize}
-\item Given a clause $C_k \in S$ that contains $\neg P_i \in C$ and all its other literals are set to \textit{False}, $C_k=false\vee...\vee false\vee \neg P_i$; assign $False$ to $P_i$, so to make $C_k$ true.
+\item Given a clause $C_k \in S$ that contains $\neg P_i \in C_k$ and all its other literals are set to \textit{False}: $C_k=false\vee...\vee false\vee \neg P_i$; assign $False$ to $P_i$, so to make $C_k$ true.
 \item Otherwise assign \textit{True} to $P_i$.
 \end{itemize}
 So now we have a model of $S$. Since we must prove that $RC(S)$ is satisfiable, thus have some models, let's assume that what we just got is not a model, then we must have been wrong at some iteration $i$. That is setting the symbol $P_i$ causes some clause $C$ to becomes false, since we \textit{do not have a model} all the other clauses must be already false. So $C$ can be one of the following possibilities:
@@ -557,7 +572,7 @@ Given the following KB:
 \item $B$, (known fact, since positive literal)
 \end{itemize}
 We query Q \footnote{That is we ask the KB about the truthfulness of Q.}.\\
- The KB can bee seen as an \textbf{AND-OR Graph} where the implications are $or$ arches while the $\wedge$ are $and$ arches (Figure \ref{fig:forward_graph_1}).\\
+ The KB can bee seen as an \textbf{AND-OR Graph} where the implications are $OR$ arches while the $\wedge$ are $AND$ arches (Figure \ref{fig:forward_graph_1}).\\
 
 
 \begin{figure}[t]
@@ -571,7 +586,7 @@ The flow of the algorithm works as illustrated in Figure \ref{fig:forward_graph_
 
 \begin{figure}[H]
 \centering
-\fbox{\includegraphics[scale=0.3]{images/forward_graph_2.jpeg}}
+\fbox{\includegraphics[scale=0.45]{images/forward_graph_2.jpeg}}
 \caption{Forward Chaining for KB graph}
 \label{fig:forward_graph_2}
 \end{figure}
@@ -599,7 +614,7 @@ This kind of reasoning is called \textbf{goal directed} reasoning and it usually
 
 \subsection{Proposal for model checking}
 \label{subsec:search_alg}
-In this section, we describe two families of efficient algorithms for general propositional inference based on model checking: One approach based on backtracking search, and one on local hill-climbing search. Notice that these algorithms are used for checking the \textbf{satisfiability} (SAT) of a problem
+In this section, we describe two families of efficient algorithms for general propositional inference based on model checking: One approach based on backtracking search, and one on local hill-climbing search. Notice that these algorithms are used for checking the \textbf{satisfiability} (SAT) of a problem.
 
 \subsubsection{DPPL}
 Also known as David-Putnam, Logemann, Loveland algorithm, it takes as input a sentence in conjunctive normal form (Section \ref{subsec:cnf}) and uses a recursive depth-first enumeration of all possible interpretations. To speed up the algorithm we can introduce some improvements.
@@ -667,20 +682,20 @@ Depending on the number of clauses $m$ and symbols $n$ we can either have an \te
 
 \subsection{Syntax and Semantic}
 
-One of the most important proprieties a bout propositional logic that holds for First Order Logic (FOL from now on) is the \textbf{compositionality}, that is the meaning of a sentence is a function of the meaning of its parts. For example given $S_1=$\textit{I have don't want to write this} and $S_2=$\textit{I would love to watch Netflix} if would be weird if $S_1 \wedge S_2=$\textit{Tomorrow will be cold}.\\
+One of the most important proprieties about propositional logic that holds for First Order Logic (FOL from now on) is the \textbf{compositionality}, that is the meaning of a sentence is a function of the meaning of its parts. For example given $S_1=$\textit{I have don't want to write this} and $S_2=$\textit{I would love to watch Netflix} it would be weird if $S_1 \wedge S_2=$\textit{Tomorrow will be cold}.\\
 Moreover propositional logic assumes that there are facts that either hold or do not hold in the world \footnote{Each fact can be in one of two states: true or false.}, while FOL assumes that the world consists of objects with certain relations among them that do or do not hold. Hence in both logic a sentence represents a fact and the agent either believes the sentence to be true, believes it to be false, or has no opinion. 
 
 \paragraph{Structure}
 FOL assumes the world contains:
 \begin{itemize}
 \item \textbf{Objects} like: pc, tv, beer....
-\item \textbf{Relations} is a set of tuples of objects that are related. Depending on the number of tuple in the set we can have:
+\item \textbf{Relations} are sets of tuples of objects that are related. Depending on the number of tuple in the set we can have:
 	\begin{itemize}
-	\item \textit{Proprieties} (or unary relationship) that have just one tuple in the set; such as: red, round, big...
-	\item \textit{General} (or $n$-ary relationship)  which may have $n$ tuples; like: bigger than, has color, owns...
+	\item \textit{Proprieties} (or unary relationship) that have just one tuple in the set; such as:\textit{red, round, big}...
+	\item \textit{General} (or $n$-ary relationship)  which may have $n$ tuples; like:\textit{ bigger than, has color, owns}...
 	\end{itemize}
 
-\item \textbf{Functions}  For example: father of, best friend...
+\item \textbf{Functions}  For example: \textit{father of, best friend}...
 \end{itemize}
 
 \paragraph{Example}
@@ -706,7 +721,7 @@ Given a domain $\mathcal{D}$, an interpretation is a function $\mathcal{I}$ whic
 \begin{itemize}
 \item Every constant symbol $c$ into an element of $\mathcal{D}$.
 \item Every $n$-ary\footnote{A function with $n$ arguments.} function symbol $f$ into a  function $f^I$: $\mathcal{D}^n\rightarrow \mathcal{D}$. More specifically $f$ is a function which may assume any value in the domain $\mathcal{D}^n$, while $f^I$ assumes just one ($\mathcal{D}$).
-\item Every predicate symbol $P$ into a  $n$-ary relation$P^I$: $P^I\subset \mathcal{D}^n$. This means that a predicate symbol, e.g. ????????????????
+\item Every predicate symbol $P$ into a  $n$-ary relation $P^I$: $P^I\subset \mathcal{D}^n$. This means that a predicate symbol, e.g. ????????????????
 \end{itemize}
 
 \paragraph{Terms}
@@ -718,10 +733,10 @@ are a logical expressions that refers to an object. That is what is used to refe
 Notice that both refer to an "object" in the domain, one directly (constants), while the other indirectly. A functional term can be used both for not known constants, like the name of Marta's mother, but they can also be used for thing we do not bother to name, e.g. \textit{LeftArmOf(Edoardo)}. 
 
 \paragraph{Atomic Formulas}
-An atomic formula (or atom for short) is a predicate symbol with a number $n\in [0,\infy]$ of terms. For example given $t_1,...,t_n$ terms, the following are all atoms:
+An atomic formula (or atom for short) is a predicate symbol with a number $n\in [0,\infty]$ of terms. For example given $t_1,...,t_n$ terms, the following are all atoms:
 \begin{itemize}
 \item \textit{Sibling($t_i,t_j$)}:  predicate symbol with arity 2.
-\item $Friend(t_1,...,t_n$: predicate symbol with arity $n$.
+\item $Friend(t_1,...,t_n)$: predicate symbol with arity $n$.
 \item $t_i=t_j$: predicate symbol $=$ with arity 2, can be written as $Equals(t_i,t_j)$
 \item $ParentOf(ParentOf(x))$ is the grandparent of $x$ and has arity 1.
 \item $\bot ,\top$ are atoms.
@@ -856,10 +871,10 @@ So we can make use of this information to switch between universal and existenti
 \end{table}
 
 \subsection{Using First Order Logic}
-Sentences which are added to the KB using \textit{TELL} are called \textbf{assertion} that states some truth about the world. On the other hand, queries are information \textit{ASK}ed to the KB, if they are logically entailed by the KB they should be answered positively. Similarly the \textit{AskVars} action ask the KB for the values of the formula that make it true, such answers are called substitutions \footnote{Usually reserved for KB of only Horn Clauses.}.\\
+Sentences which are added to the KB using \textit{TELL} are called \textbf{assertion} that states some truth about the world. On the other hand, queries are information \textit{ASK}ed to the KB, if they are logically entailed by the KB they should be answered positively. Similarly the \textit{AskVars} action ask the KB for the values of the formula that make it true, such answers are called substitutions (Section \ref{subsec:prop_vs_fol}) \footnote{Usually reserved for KB of only Horn Clauses.}.\\
 Depending on the type of knowledge the KB is made out of we may have:
  \begin{itemize}
-\item \textbf{Intentional Knowledge}: which are general laws about the domain, such as $\forall x,y Mother(x,y) \Leftrightarrow (Famale(x)\wedge Parent(x,y))$.
+\item \textbf{Intentional Knowledge}: which are general laws about the domain, such as $\forall x,y\  Mother(x,y) \Leftrightarrow Famale(x)\wedge Parent(x,y)$.
 \item \textbf{Extensional Knowledge}: facts about a specific instance, like $Parent(Marco,Ugo)$. 
  \end{itemize}
 
@@ -869,7 +884,7 @@ In FOL formulas follows this rules, given the formulas $A,B$:
 \item Every atom is a formula.
 \item $\neg A$ is a formula.
 \item If $\circ$ is a binary operator, then $A\circ B$ is a formula.
-\item Given a variable $x$, $\forall x A$ and $\exists x A$ are formulas.
+\item Given a variable $x$, $\forall x\ A$ and $\exists x\ A$ are formulas.
 \end{itemize}
 
 \subsection{Truth, Interpretation and Models}
@@ -899,11 +914,12 @@ For what regard models we have that if $\mathcal{U} \satisfy A$ then $\mathcal{U
 We have that if a formula $A\in \mathcal{L}$ is true in every structure of a language $\mathcal{L}$, then $A$ is \textbf{valid}.\\
 On the other hand, given a set of formulas $\Gamma$, if there exists a structure $\mathcal{U}$ such that $\mathcal{U} \satisfy A$ for every $A \in \Gamma$ then $\Gamma$ is \textbf{satisfiable}, mathematically:
 \[\Gamma = \lbrace A_1,...,A_n \rbrace,\ iff\ \exists\ \mathcal{U} :\mathcal{U}\satisfy A_i, \forall A_i \in Gamma\ \Rightarrow \Gamma\ satisfiable\]
-We can derive the notion of \textbf{logic entailment} $\gamma models A$, where $A$ is a closed formula, form the satisfiability, in the following way:\\
-For every structure $\mathcal{U}$ of the language $\mathcal{L}$, $\forall B\in \Gamma:\mathcal{U} \satisfy B$, we have $\mathcal{U} \satisfy A$ then  $\gamma models A$.
+We can derive the notion of \textbf{logic entailment} $\gamma \models A$, where $A$ is a closed formula, form the satisfiability, in the following way:\\
+For every structure $\mathcal{U}$ of the language $\mathcal{L}$, $\forall B\in \Gamma:\mathcal{U} \satisfy B$, we have $\mathcal{U} \satisfy A$ then  $\gamma \models A$.
 
 
 \subsection{Propositional vs First Order Logic}
+\label{subsec:prop_vs_fol}
 
 \newcommand{\subst}[1]{Subst(\theta,#1)} 
 
@@ -942,7 +958,7 @@ Where $G_1$ is a generic constant symbol referring to some cool game I want to p
 \subsubsection{Propositionalization}
 Is the technique of reducing first-order inference to propositional inference. The problem is that with function symbols we may have an infinite domain \footnote{For example \textit{Father(Father(Father(Father(Jhon)))).}}, so how can we preserve the entailment?\\
 Thanks to Jacques Herbrand (1930) we have a theorem which states the following:
-\textit{if a sentence is entailed by the original, first-order KB, then there is a proof involving just a finite subset of the propositionalized KB}. The problem with propositionalization is that it generates a lot of irrelevant sentences, with $p$ $k-$ary predicates and $n$ constants we have $p\cdot n^k$ instantiations.\\
+\textit{if a sentence is entailed by the original, first-order KB, then there is a proof involving just a finite subset of the propositionalized KB}. The problem with propositionalization is that it generates a lot of irrelevant sentences, with $p$  predicates of $k-$arity and $n$ constants we have $p\cdot n^k$ instantiations.\\
 The question of entailment for first-order logic is \textit{semidecidable}, that is, algorithms exist that say yes to every entailed sentence, but no algorithm exists that also says no to every non-entailed sentence
  
 \paragraph{An Example}
@@ -1007,8 +1023,8 @@ But this holds since it exactly what we have using \textit{UI}.
 
 \subsubsection{Unification}
 As before mentioned we need to find a substitution such that different logical expression looks identical ($\subst{p}=\subst{p'}$). We can use the \textbf{Unification} process that takes as input two sentences and returns an unifier for them\footnote{If exists.}:
-\[Unify(p,q)=\theta \subst{p}=\subst{q}\]
-We can have problems when having variables with the same name \footnote{As you can see in the next example.}, so we need to use a technique called \textbf{standardizing apart} which changes one of the two sentence's variables to avoid name clashes.\\
+\[Unify(p,q)=\theta\ \subst{p}=\subst{q}\]
+We can have problems when having variables with the same name \footnote{As you will see in the next example.}, so we need to use a technique called \textbf{standardizing apart} which changes one of the two sentence's variables to avoid name clashes.\\
 Finally we can say that, for every unifiable pair of expressions, there is a single \textbf{most general unifier} that is unique up to renaming and substitution of variables, for example $P(A,B)$ is less general than $P(A,x)$ that is less general than $P(y,x)$. 
 
 \paragraph{Example}
@@ -1040,7 +1056,6 @@ We ask the KB which are the persons that $Homer$ knows: $q=AskVars(Knows( Homer,
 Consider the following problem:
 \begin{center}
 \begin{textit}
-kinder eggs
 The law says that it is a crime for an American to sell kinder eggs to hostile nations. The Easter Island, an enemy of America, has some kinder eggs, and all of its kinder eggs were sold to it by Roger Rabbit, who is American.
 
 \end{textit}
@@ -1048,10 +1063,10 @@ The law says that it is a crime for an American to sell kinder eggs to hostile n
 We want to prove that Roger Rabbit is a criminal. First we need to convert the problem to a first-order definite clause KB:
 \begin{enumerate}
 \item "...it is a crime for an American to sell kinder eggs to hostile nations" results in:
-\[American(x)\wedge \KinderEgg(y)\wedge Sells(x,y,z)\wedge Hostile(z)\Rightarrow Criminal(x)\] \footnote{From now on we will not write the $\forall x,y,z$ symbol. Note that this kind of KB is called \textbf{Datalog}.}
+\[American(x)\wedge KinderEgg(y)\wedge Sells(x,y,z)\wedge Hostile(z)\Rightarrow Criminal(x)\] \footnote{From now on we will not write the $\forall x,y,z$ symbol. Note that this kind of KB is called \textbf{Datalog}.}
 
 \item "The Easter Island...has some kinder eggs", the sentence can be written as an existential formula of the form:
-\[\exists x\ Owns(EasterIsland,)\wedge KinderEgg(x)\]
+\[\exists x\ Owns(EasterIsland,x)\wedge KinderEgg(x)\]
 We can use \textit{EI} \ref{subsubsec:EI} to remove the existential quantifier by adding some new constant $K_1$ resulting in:
 \[Owns(EsterIsland,K_1),\quad KinderEgg(K_1)\]
 
@@ -1084,7 +1099,7 @@ Moreover the algorithm is \textbf{sound} since every step is an application on \
 The previous mentioned process may be improved with :
 \begin{itemize}
 \item \textbf{Conjunction ordering}: the problem of finding an ordering to solve the conjuncts of the rule premise so that the total cost is minimized. It arises when we have many facts in the KB that need to be matched against a premise.\\
-Given the rule 3 we have to find objects which are both  $KinderEggs$  owned by $EsterIsland$; so we can must iterate through all the $n$ $KinderEggs$ and all the $m$ objects owned by $EsterIsland$. It is logical that if $n\ll m$ it will be faster to find the $KinderEggs$ first and then the object owned by $EsterIsland$.\\ This problem is exactly as the CSP-problem studied before \footnote{We can use the studied techniques such as \textit{minimum-remaining-value}...}, thus being NP-Hard.
+Given the rule 3 we have to find objects which are both  $KinderEggs$  owned by $EsterIsland$; so we must iterate through all the $n$ $KinderEggs$ and all the $m$ objects owned by $EsterIsland$. It is logical that if $n\ll m$ it will be faster to find the $KinderEggs$ first and then the object owned by $EsterIsland$.\\ This problem is exactly as the CSP-problem studied before \footnote{We can use the studied techniques such as \textit{minimum-remaining-value}...}, thus being NP-Hard.
 
 \item \textbf{Incremental Forward Checking}: another problem is the one of matching redundant rules. It can be avoided if we consider that a rule is \textit{"new"} at iteration $t$ if it has been inferred by some facts generated in the previous iteration $t-1$, otherwise it would have been generated earlier.\\ Another problem is given by \textbf{partial matching} rules which are generated and discarded as soon as some atoms in the premise do not hold. Instead of discarding them we could leave them semi-generated and gradually complete them as new facts arrives.
 
@@ -1093,11 +1108,35 @@ Given the rule 3 we have to find objects which are both  $KinderEggs$  owned by 
 
 \subsubsection{Backward Chaining}
 The backward chaining is a kind of AND/OR search, the $OR$ part because the goal query can be proved by any rule in the knowledge base, and the $AND$ part because all the conjuncts in a list of clauses must be proved.\\ It is a depth-first search so it suffers from problem such as repeated states and incompleteness.\\ It is the base for \textbf{Logic programming [PROLOG]} 
-
+\newpage
 
 
 \section{Prolog}
+Prolog is the major logic-based programming language \footnote{It is a sub-set of FOL.}, it uses a set of definite clauses written in a notation somewhat different from FOL.\\ 
+For example:
+\[American(x)\wedge \KinderEgg(y)\wedge Sells(x,y,z)\wedge Hostile(z)\Rightarrow Criminal(x)\]
+becomes
+\[criminal(X)\ :-\ american(X), kinderEgg(Y), sells(X,Y,Z), hostile(Z)\]
+Note how the variables have \textit{uppercase} letters while the relationships are in \textit{lowercase}. As for the FOL case $criminal(X)$ is true if every atom in the premise $american(X), kinderEgg(Y), sells(X,Y,Z), hostile(Z)$ is also true.\\
 
+\paragraph{An Example}
+We write a program with the following rules:
+\begin{enumerate}
+\item $append([\ ],Y,Y)$: if I append to an empty list $[\ ]$ another list $Y$, then the result will be the same list $Y$.
+\item $append([A|X],Y,[A|Z]) :- append(X,Y,Z)$: the premises (on the right) says that appending $X$ to $Y$ produces $Z$, if this is true then appending $Y$ to $[A|X]$ \footnote{This notation denotes a list whose first element is $A$ and rest is $X$.} will output $[A|Z]$. 
+\end{enumerate}
+And we query $append(X,Y,[1,2])$ (what can be the values of $X,Y$ so that, if I append them, I have $[1,2]$?) and obtain:
+\begin{itemize}
+\item $X=[\ ]\quad Y=[1,2]$
+\item $X=[1]\quad Y=[2]$
+\item $X=[1,2]\quad Y=[\ ]$
+\end{itemize}
+
+
+\subsection{Efficient Implementation}
+
+\subsection{Redundant inference and infinite loops}
+Since Prolog works with backward chaining, hence using a depth-first search, some issues may arise. Specifically the problem of 
 
 \end{itemize} 
 
