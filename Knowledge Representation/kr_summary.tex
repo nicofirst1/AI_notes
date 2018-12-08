@@ -1108,6 +1108,149 @@ Given the rule 3 we have to find objects which are both  $KinderEggs$  owned by 
 
 \subsubsection{Backward Chaining}
 The backward chaining is a kind of AND/OR search, the $OR$ part because the goal query can be proved by any rule in the knowledge base, and the $AND$ part because all the conjuncts in a list of clauses must be proved.\\ It is a depth-first search so it suffers from problem such as repeated states and incompleteness.\\ It is the base for \textbf{Logic programming [PROLOG]} 
+
+\newpage
+\section{Resolution in First Order Logic}
+For applying resolution we need to convert a sentence in \textit{Conjunctive Normal Form} CNF \footnote{Section \ref{subsec:cnf}.}, fortunately every sentence in FOL can be converted into an inferentially equivalent sentence in CNF; the difference between propositional CNF and FOL CNF is the presence of the existential quantifier.
+
+
+\subsection{Skolem Normal Form}
+When removing existential quantifiers using $EI$ (Section \ref{subsubsec:EI}) we are assuming there exist an element, which we do not know, that satisfy the existential property.\\
+Now consider the sentence \textit{"Everyone has a heart"}, that is translated in FOL with:
+\[\forall x [Person(x)\Rightarrow \exists y\ Heart(y)\wedge Has(x,y)]\]
+If we use $EI$ on thi s we obtain:
+\[\forall x [Person(x)\Rightarrow  Heart(H)\wedge Has(x,H)]\]
+The meaning of the sentence becomes \textit{"Everyone has the heart H"}, which is not the same as before since we make no distinction between hearts.\\
+For this kind of problem we need a function which takes as input a person and returns the person's heart. Let us denote this function as $F(x)$ \footnote{Note that this function must not appear in the KB, similarly as for $EI$.}, so the above sentence becomes:
+\[\forall x [Person(x)\Rightarrow  Heart(F(x))\wedge Has(x,F(x))]\]
+which now links every person to his own heart, $F(x)$ is called a \textbf{Skolem function}.\\
+Formally given a formula $\exists x\psi(x)$, where $\psi(x)$ is another formula that depends on $x$ \footnote{Note that the dependence can be of any kind of \textit{arity}. The heart example mentioned before has arity 2 for the $Has(x,y)$ predicate, but we may have predicates in which the variable of the existential quantifier $x$ may depend on a huge number of other variables $v_1,...,v_n$ so to have arity $n$.}, we have that the skolemization of the formula $(\exists x\psi^{sko})$ is given by substituting the dependence on $x$ with a skolem function $\psi[F(x_1,...,x_n)/x]$ of arity $n$.
+
+\subsubsection{Prenex Normal Form}
+Before introducing the \textit{Skolem Normal Form} [SNF] we must describe the \textit{Prenex Normal Form} [PNF].\\
+A for the CNF that needs the negation symbols $\neg$ to be pushed inward \footnote{That is inside the formulas, to the left of literals.}, the PNF wants the quantifier symbols to be moved \textit{outwards} to the left side of the formula. For example, given some quantifier free formulas $\phi(x),\psi(y),\varphi(z)$ \footnote{These formulas are made of other formulas like : $\phi(x)=P(x)\vee Q(x)\vee A$. The important thing is that they do now contain any quantifier and they must depend on the specified variable.  } which appears in a formula as:
+\[[\forall x\ \phi(x) \wedge \forall y\ \psi(y)] \Rightarrow \exists z\ \varphi(z)\]
+We transform it in PNF just by pushing the quantifiers to the left:
+\[\forall x\forall y\exists z[[\phi(x) \wedge \psi(y)] \Rightarrow \varphi(z)]\]
+It is easy to understand that the two different implementation are equivalent $\equiv$.\\
+
+Generally speaking a formula $\psi$ in in PNF if:
+\begin{itemize}
+\item Does not contain quantifiers:
+	\begin{itemize}
+	\item no variable occurs in $\psi$, e.g. $\top$.
+	\item $\psi$ has only free variables, e.g.  $A\vee \neg B$.
+	\end{itemize}
+\item All the quantifiers are pushed to the left-most side. Formally given $Q=\lbrace \vee, \wedge \rbrace$, $A$ is a quantifier free formula and we have $x_1,x_2,...,x_n$ variables; $\psi$ is in the form:
+\[Q_1x_1Q_2x_2...Q_nx_nA\]
+
+\end{itemize}
+
+\paragraph{Transformation to PNF}
+Given a generic formula $\phi$ the steps for transforming it into PNF are the following:
+\begin{enumerate}
+\item Build a formula $\phi'$  where only $\vee, \wedge, \exists, \forall$ occur,  negation is pushed inwards and double negations are eliminated.
+\item Rename bound variables so that each quantifier uses a different variable \footnote{Technique known as standardization.}.
+\item Build the Prenex formula moving all quantifiers to the left.
+\end{enumerate}
+
+
+
+\subsubsection{Complete Example}
+We make the following example:
+\begin{center}
+\textit{Everyone who loves all animal is loved by someone.}
+\end{center} 
+This sentence is translated into FOL as:
+\[\forall x[ \forall y\ Animal(y)\Rightarrow Loves(x,y)]\Rightarrow [\exists y\ Loves(y,x)]\]
+The steps for reducing the sentence into SNF are the following:
+\begin{enumerate}
+
+\item \textbf{Eliminate implication}:
+\[\forall x[ \neg \forall y\ \neg Animal(y)\vee Loves(x,y)]\vee [\exists y\ Loves(y,x)]\]
+\item \textbf{Move $\neg$ inwards}:
+\[\forall x[ \exists y\ \neg \neg Animal(y)\wedge \neg Loves(x,y)]\vee [\exists y\ Loves(y,x)]\]
+\[\forall x[ \exists y\ Animal(y)\wedge \neg Loves(x,y)]\vee [\exists y\ Loves(y,x)]\]
+The sentence now reads "either there is some animal that $x$ doesn't love, or (if this is not the case) someone loves $x$".
+
+\item \textbf{Standardize variables}, that is removing variables with the same name:
+\[\forall x[ \exists y\ Animal(y)\wedge \neg Loves(x,y)]\vee [\exists z\ Loves(z,x)]\]
+
+\item \textbf{Skolemize} to remove the existential quantifier, using two skolem function $F(x),G(z)$ not present in the KB:
+  \[\forall x[ Animal(F(x))\wedge \neg Loves(x,F(x))]\vee Loves(G(z),x)\]
+
+\item \textbf{Drop universal quantifier} using $UI$ \ref{subsubsec:UI} and get:
+\[[ Animal(F(x))\wedge \neg Loves(x,F(x))]\vee Loves(G(z),x)\]
+\item \textbf{Distribute} over $\vee,\wedge$ and obtain a SNF with two clauses:
+\[[ Animal(F(x))\vee Loves(G(z),x)]\wedge[\neg Loves(x,F(x)) \vee  Loves(G(z),x)]\]
+
+\end{enumerate}
+
+\subsubsection{Proprieties}
+Let $\psi$ be a formula and $\psi^{sko}$ be its SNF, we have the following proprieties:
+\begin{itemize}
+\item $\mathcal{M}$ model of $\psi$ \textbf{does not imply}  $\mathcal{M}$ model of $\psi^{sko}$.
+\item $\mathcal{M}$ model of $\psi^{sko}$\textbf{implies}  $\mathcal{M}$ model of $\psi$.
+
+\item $\psi$ valid \textbf{does not imply}  $\psi^{sko}$ valid.
+\item $\psi^{sko}$ valid \textbf{implies}  $\psi$ valid.
+
+\item $\psi$ satisfiable \textbf{iff}  $\psi^{sko}$ satisfiable.
+\item $\psi$ unsatisfiable \textbf{iff}  $\psi^{sko}$ unsatisfiable.
+\item $\psi$ contradictory \textbf{iff}  $\psi^{sko}$ contradictory.
+\item $\psi$ valid \textbf{iff}  $\neg \psi^{sko}$ valid.
+
+\end{itemize}
+
+
+
+\subsection{Resolution Inference Rule}
+In propositional logic two clauses can be resolved if they contain complementary literals, in FOL two clauses are complementary if one \textit{unifies} with the negation of the other.
+
+\subsubsection{Binary Resolution}
+Given :
+\[\frac{l_1\vee...\vee l_k,\quad m_1\vee...\vee m_n}{\subst{l_1 \vee ... \vee l_{i-1}\vee l_{i+1}\vee ... \vee l_k\vee m_1 \vee ... \vee m_{i-1}\vee m_{i+1}\vee ... \vee m_n}}\]
+Where $Unify(l_i,\neg m_i)=\theta$. For example:
+\[[Animal(F(x))\vee Loves(G(x),x)]\quad and \quad [Loves(u,v)\vee \neg Kills(u,v)]\]
+can be resolved with $\theta=[u/G(x),v/x]$ and generate:
+\[[Animal(F(x))\vee \neg Kills(u,v)]\]
+
+\paragraph{Incompleteness of binary resolution}
+This type of resolution is called a \textit{binary} since it resolves two literals, $l_i,m_i$ or $Loves(G(x),x),Loves(u,v)$, and it can be shown to be incomplete (why???????????). But it can be made complete with the use of \textbf{factoring} that removes two identical literals \footnote{In FOL two literals are identical if they are unifiable. }.
+
+
+\subsubsection{General Resolution}
+Same as for preopositional logic.
+
+
+\subsubsection{Completeness of Resolution}
+The objective is to show that resolution is \textbf{refutation-complete}, which means that if a set of sentences is unsatisfiable, then resolution will always be able to derive a contradiction. Hence we can use resolution to establish that a certain sentence is entailed by a set of sentences (KB) \footnote{Although we can not use resolution to derive all possible consequences from a KB.} effectively answering a query $Q(x)$ by proving that $KB \wedge \neg Q(x)$ is unsatisfiable.\\
+The proof follows the steps of Figure \ref{fig:fol_res_complete}.
+
+\begin{figure}[H]
+\includegraphics[scale=0.5]{images/fol_res_complete.png}
+\caption{Structure of a completeness proof for resolution.}
+\label{fig:fol_res_complete}
+\end{figure}
+
+Before explaining the proof we need to introduce some concepts.
+
+\paragraph{Herbrand Base}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \newpage
 
 
