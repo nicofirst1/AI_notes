@@ -31,7 +31,7 @@ combinatorial auctions by Tuomas Sandholm
 - Random Walks in Swarm Robotics: An Experiment with Kilobots by Cristina Dimidov, Giuseppe Oriolo, and Vito Trianni
 - Response threshold reinforcement and division of labour in insect societies by Guy Theraulaz, Eric Bonabeau and Jean-Louis Deneubourg
 
-### Knoledge Representation
+### Knowledge Representation
 - Nardi's slides
 - R&N book chapeters:
     -  7.1, 7.2, 7.3, 7.4, 7.5, 7.6
