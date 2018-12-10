@@ -531,7 +531,9 @@ Suppose $C_1$ and $C_2$ are satisfiable, i.e. there exists a model $\mathcal{M}$
 Same goes with $\mathcal{M}\models \neg L_i$.
 
 
-\paragraph{Completeness of resolution} We introduce the notion of \textbf{resolution closure} $RC(S)$ of a set of clauses $S$ that  is the set of all clauses derivable by repeated application of the resolution rule to clauses in $S$ or their derivatives.\\
+\paragraph{Completeness of resolution}
+\label{par:ground_res_theo}
+We introduce the notion of \textbf{resolution closure} $RC(S)$ of a set of clauses $S$ that  is the set of all clauses derivable by repeated application of the resolution rule to clauses in $S$ or their derivatives.\\
 It is easy to understand that $RC(S)$ is finite because there are only finitely many distinct clauses that can be constructed out of the symbols $P_1, . . . , P_k$ that appear in $S$ \footnote{This is true only if we are using the factoring step to remove duplicate literals.}.\\ 
 
 Now let us consider the \textbf{ground resolution theorem} which states:
@@ -1234,12 +1236,58 @@ The proof follows the steps of Figure \ref{fig:fol_res_complete}.
 \end{figure}
 
 Before explaining the proof we need to introduce some concepts.
+\paragraph{Herbrand Universe}
+Given a  set of clauses $S$ the Herbrand universe $H_S$ of those clauses is constructed in the following way:
+\begin{itemize}
+\item Following a function symbol if any.
+\item Following a constant symbol if any.
+\item 
+\end{itemize}
+Per example given $Parent(x,F(x,A))\vee Sibling(x,B)$ we can construct $Parent(Parent(A),F(F(A),A)),Parent(Parent(Parent(B)),F(B,F(B,A))),Sibling(A,Parent(B))....$.\\
+That is we construct all the possible \textbf{ground terms} with the given function symbols ($Parent(x,y),Sibling(x,y)$), constant symbols ($A,B,F(A),Sibling(A,B)...$) and skolem formulas ($F(A,B),F(B,B),F(F(A),B)...$). 
 
-\paragraph{Herbrand Base}
+\paragraph{Saturation} Given the set of ground terms $P$ obtained earlier, we generate the saturation of $S$ in respect to $P$, called $P(S)$, by applying all consistent substitution of ground term in $P$ with variables in $S$.
+
+\paragraph{Herbrand Base} The saturation of a set of clauses $S$ in respect to a Herbrand Universe is called a Herbrand Base, denoted $H_S(P)$ \footnote{Which is infinite.}.
+
+\paragraph{Herbrand's Theorem}
+The theorem says that:
+\begin{center}
+\textit{If a set S of clauses is unsatisfiable, then there exists a finite subset of $H_S(S)$ that
+is also unsatisfiable.}
+\end{center}
+Let $S'$ be this finite subset of $H_S(S)$, we can use the ground resolution theorem (Section \ref{par:ground_res_theo}) to show that the resolution closure $RC(S')$ contains the empty clause. Hence we have demonstrated that there is \textit{always} a resolution proof involving some subset of $H_S(S)$, now we need to establish that there exists some proof involving $S$ itself \footnote{Note that the difference is that $S$ may not contain only ground clauses.}.
+
+\paragraph{Lifting Lemma}
+This lemma is used as a proof step from ground clauses up to general first-order clauses. The lemma says the following:
+\begin{center}
+Let $C_1$ and $C_2$ be two clauses with no shared variables, and let $C_1'$ and $C_2'$ be ground instances of $C_1$ and $C_2$. If $C'$ is a resolvent of $C_1$ and $C_2$ , then there exists a clause $C$ such that (1) $C$ is a resolvent of $C_1$ and $C_2$ and (2) $C'$ is a ground instance of $C$.
+\end{center} 
+For example, given the two clauses:
+\[C_1=Heart(x,F(x,A))\vee Human(x)\]
+\[C_2=\neg Heart(y,F(y,B))\vee Cyborg(y)\vee Oil(y,G(y,C))\]
+We instantiate them with some ground terms (constant symbols only for simplicity):
+\[C_1'=Heart(Goku,F(Goku,A))\vee Human(Goku)\]
+\[C_2'=\neg Heart(C18,F(C18,B))\vee Cyborg(C18)\vee Oil(C18,G(C18,C))\]
+Next we apply the resolution rule with $Human(x)$:
+\[C'=Cyborg(C17)\vee Oil(C17,G(C17,C))\vee Human(C17)\]
+And finally we generalize to get:
+\[C'=Cyborg(y)\vee Oil(y,G(y,C))\vee Human(y)\]
 
 
+\subsection{Resolution Strategies}
+In the following we will analyze some strategies to make resolution more efficient.
+
+\paragraph{Unit preference} Is the technique of preferring to use a single literal (unit clause) \footnote{For example $P$, not like $Q\vee R$.} to resolve against other clauses. This is because the length \footnote{Counted as the number of element in the disjunction.} of the resolution will be less than the other clause we used. For example, resolving:
+\[\frac{P\vee \neg Q \vee R,\quad  F \vee \neg R \vee A}{P\vee \neg Q\vee F \vee A}\]
+Which has length 4, higher than the two clauses used for resolution, while resolving:
+\[\frac{P,\quad  F \vee \neg P \vee A}{ F \vee A}\]
+That has length 2, shorter than the second clause.
+
+\paragraph{Set of Support} We keep a set of clauses which are considered useful for the resolution inference, when we resolve something using an element from this set we add the resolvent to the set. Usually this set contains the negated query and generate a goal-directed proof tree.
 
 
+\paragraph{Input Resolution} Is the technique of using a sentence from the input (either the query or the KB) and resolving it with another sentence. The \textbf{linear resolution} strategy is a slight generalization that allows $P$ and $Q$ to be resolved together either if $P$ is in the original KB or if $P$ is an ancestor of $Q$ in the proof tree. Linear resolution is complete.
 
 
 
