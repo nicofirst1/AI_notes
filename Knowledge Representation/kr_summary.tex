@@ -986,7 +986,6 @@ We can have the following for every element of the FOL:
 
 \subsubsection{Generalized Modus Ponens}
 
-
 When we have an implication of the kind:
 \[p_1 \wedge ... \wedge p_n \Rightarrow q\]
 If there is a substitution $\theta$ which makes every conjunct of the premises identical to a sentence in the KB, then we can infer $q$.\\
@@ -1117,6 +1116,7 @@ For applying resolution we need to convert a sentence in \textit{Conjunctive Nor
 
 
 \subsection{Skolem Normal Form}
+\label{sec:skolemNF}
 When removing existential quantifiers using $EI$ (Section \ref{subsubsec:EI}) we are assuming there exist an element, which we do not know, that satisfy the existential property.\\
 Now consider the sentence \textit{"Everyone has a heart"}, that is translated in FOL with:
 \[\forall x [Person(x)\Rightarrow \exists y\ Heart(y)\wedge Has(x,y)]\]
@@ -1210,6 +1210,7 @@ Let $\psi$ be a formula and $\psi^{sko}$ be its SNF, we have the following propr
 In propositional logic two clauses can be resolved if they contain complementary literals, in FOL two clauses are complementary if one \textit{unifies} with the negation of the other.
 
 \subsubsection{Binary Resolution}
+\label{sec:binaryresolution}
 Given :
 \[\frac{l_1\vee...\vee l_k,\quad m_1\vee...\vee m_n}{\subst{l_1 \vee ... \vee l_{i-1}\vee l_{i+1}\vee ... \vee l_k\vee m_1 \vee ... \vee m_{i-1}\vee m_{i+1}\vee ... \vee m_n}}\]
 Where $Unify(l_i,\neg m_i)=\theta$. For example:
@@ -1375,9 +1376,70 @@ Since Prolog chooses the clauses in the order of implementation, the resulting s
 \label{fig:prolog_tree}
 \end{figure}
 
+\newpage
+\section{Exercises}
+
+\subsection{First Order Logic}
+
+\subsubsection{Ex1}
+Choose a suitable vocabulary of constant and predicate symbols then represent the following sentences in FOL:
+\begin{enumerate}
+\item Steve likes easy classes
+\item Violin classes are not easy
+\item Every class of Percussion is easy
+\item The class of “Afro Drums” is a class of Percussion
+\item The class of “Violin for pre-school Kids” is a class of Violin
+\end{enumerate}
+The KB will look something like this:
+\begin{enumerate}
+
+\item $\forall x\ Class(x)\wedge Easy(x) \Rightarrow Likes(Steve,x)$
+\item $\forall x\ Class(x)\wedge Violin(x) \Rightarrow \neg Easy(x)$
+\item $\forall x\ Class(x)\wedge Percussion(x) \Rightarrow Easy(x)$
+\item $Class(AfroDrums), Percussion(AfroDrums)$
+\item $Class(ViolinKids), Violin(ViolinKids)$
+
+\end{enumerate}
+Notice that the second formula is not a definite clause but a goal clause (Section \ref{subsubsec:horn}). This makes the KB in Horn normal Form.
 
 
+Can we infer that Steve likes the class of Afro Drums ($Likes(Steve,x),\ \{x/AfroDrums\}$)?
+\begin{itemize}
+\item using Modus Ponens
+\item using Resolution
+\end{itemize} 
 
+
+\paragraph{Using Modus Ponens}
+The steps are the following:
+\begin{itemize}
+\item Use MP for 3,4:
+\[\frac{Class(AfroDrums), Percussion(AfroDrums),\quad [Class(x)\wedge Percussion(x) \Rightarrow Easy(x)]}{Easy(AfroDrums)}\]
+With the substitution $\theta=\lbrace x/AfroDrums \rbrace$. Then add  $Easy(AfroDrums)$ to the KB.
+
+\item Finally use MD on 1 using the ground term we just deducted from the previous step:
+\[\frac{Easy(AfroDrums),Class(AfroDrums),\quad [\forall x\ Class(x)\wedge Easy(x) \Rightarrow Likes(Steve,x)]}{Likes(Steve,AfroDrums)}\]
+\end{itemize}
+
+
+\paragraph{Resolution}
+We first need to bring the KB in  Skolem Normla Form SNF (Section \ref{sec:skolemNF}) \footnote{Note that there are no existential quantifiers, so there is no need for skolem unctions. On the other hand SNF is not only about skolem functions, universal quantifiers are treated too with $UI$ (Section \ref{subsubsec:UI}). }.
+
+\begin{enumerate}
+\item $\neg Class(x) \vee \neg Easy(x) \vee Likes(Steve,x)$
+\item $\neg Class(y) \vee \neg Violin(y) \vee Easy(y)$
+\item $\neg Class(z) \vee \neg Percussion(z) \vee Easy(z)$
+\item $\neg q=\neg Likes(Steve,g)$
+\end{enumerate}
+
+So we end up with three clauses and can start the resolution mechanism. We want to derive the query $q=Likes(Steve,AfroDrums)$ from the KB, $KB\vdash_{\mathcal{R}}q$, hence we need to prove that $(KB \vee \neg q) \vdash_{\mathcal{R}} \{\}$.\\
+First we use the 1,4, with the substitution $\theta=\lbrace x/AfroDrums\rbrace$ and get:
+\[\frac{\lbrace \neg Class(x), \neg Easy(x), Likes(Steve,x)\rbrace\quad \lbrace \neg Likes(Steve,g)\rbrace}{\lbrace \neg Class(AfroDrums), \neg Easy(AfroDrums) \rbrace}\]
+Note that this is a case of \textbf{binary resolution} (Section \ref{sec:binaryresolution}). Next we use the facts in the KB.
+\[\frac{\lbrace \neg Class(AfroDrums),\neg Easy(AfroDrums) \rbrace,\quad \lbrace Class(AfroDrums) \rbrace}{\lbrace \neg Easy(AfroDrums) \rbrace}\]
+And finally we use:
+\[\frac{\lbrace \neg Easy(AfroDrums) \rbrace,\quad \lbrace Easy(AfroDrums) \rbrace}{\lbrace \rbrace}\]
+Which entails the empty clause, thus $(KB \vee \neg q) \vdash_{\mathcal{R}} \{\}$ is true, thus $KB\vdash_{\mathcal{R}}q$.
 
 
 \end{document}
