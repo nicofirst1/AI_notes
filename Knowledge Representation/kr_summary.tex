@@ -18,6 +18,11 @@ top=10mm]{geometry}
 
 
 
+\newcommand{\changelocaltocdepth}[1]{%
+  \addtocontents{toc}{\protect\setcounter{tocdepth}{#1}}%
+  \setcounter{tocdepth}{#1}%
+}
+
 
 \titlespacing*{\subsection}
 {0pt}{7ex }{2ex}
@@ -1382,6 +1387,9 @@ Since Prolog chooses the clauses in the order of implementation, the resulting s
 \end{figure}
 
 \newpage
+
+\changelocaltocdepth{2}
+
 \section{Exercises}
 
 \subsection{First Order Logic}
@@ -1888,6 +1896,8 @@ Tell whether there are formulas or sentences that do not find any correnspondanc
 \item 2 : There is something that is either non-black or non-black and a dog.
 \item 6: Everything is black, or a dog, or a black dog.
 \end{itemize}
+
+\subsubsection{Ex 9}
 
 
 \end{document}
