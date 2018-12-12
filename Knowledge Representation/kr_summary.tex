@@ -1913,4 +1913,28 @@ For the first formula we have that:
 \item What said before does not hold for the existential quantifier since $\exists x\ S(x)$ and $\exists x\ B(x)$ which can be true for different interpretation of the variable $x$. On the other hand $\exists y\ (B(y)\wedge A(y))$ is saying that we want both $B(y)$ and $A(y)$ to be true for the \textbf{same} interpretation of $y$.
 \end{itemize}
 
+
+\subsubsection{Ex 10}
+Tell the formulas that adequately represent the sentence:\\
+\textit{“All the students that take the exam of Artificial Intelligence pass it”}
+\begin{enumerate}
+\item $\forall x\ Student(x)\wedge Exam(x, AI)\Rightarrow Pass(x,AI)$
+\item $\forall x\ Student(x)\wedge Exam(x, AI)\wedge Pass(x,AI)$
+\item $\forall x\ \exists y\ Student(x)\wedge y=AI \wedge  Exam(x,y)\Rightarrow Pass(x,y)$
+\item $\forall x\ Student(x)\Rightarrow Exam(x, AI)\Rightarrow Pass(x,AI)$
+
+\end{enumerate}
+
+I don't know what 3 means, but we can totally discard it \footnote{At the very least because there is only one AI exam. It could make sense if the sentence would have been something like: \textit{There is some Ai exam so that all students that take it pass it}, or something like that}.\\
+Number 2 is wrong since the universal quantifier works with the implication. The conjunction is saying that \textit{everything is a student passing an AI exam} (it would be nice).\\
+Number 1 and 4 are logically equivalent and both correct:
+\begin{itemize}
+\item $\forall x\ Student(x)\Rightarrow Exam(x, AI)\Rightarrow Pass(x,AI)$
+\item $\forall x\ Student(x)\Rightarrow [\neg Exam(x, AI)\vee Pass(x,AI)]$
+\item $\forall x\ \neg Student(x)\vee \neg Exam(x, AI)\vee Pass(x,AI)$
+\item $\forall x\ \neg [Student(x)\wedge  Exam(x, AI)]\vee Pass(x,AI)$
+\item $\forall x\ Student(x)\wedge  Exam(x, AI)\Rightarrow Pass(x,AI)$
+\end{itemize} 
+
+
 \end{document}
