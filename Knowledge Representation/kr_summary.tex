@@ -766,6 +766,7 @@ The equations symbol $=$ is used to indicate that two terms refer to the same ob
 
 
 \paragraph{Database Semantics}
+\label{sec:database_semantic}
 \begin{itemize}
 \item \textbf{Unique name assumption}: every constant symbol refers to a distinct object.
 \item \textbf{Close-world assumption}: atomic sentences not known to be true are false.
@@ -1638,6 +1639,20 @@ We want to query $q_1=Successful(F)$ and $q_2=Successful(A)$. Starting with $q_1
 \[\frac{\lbrace  \neg Cares(Adv(F),F), \neg Advisor(Adv(F),F)\rbrace,\quad \lbrace \neg Advisor(x,y), \neg Motivated(y), Cares(x,y)\rbrace}{C_{10}=\lbrace \neg Advisor(Adv(F),F),\neg Motivated(F) \rbrace}\]
 \item Finally we resolve $C_{10}$ with $C_7$ and $C_5$, with $\theta=\{Adv(F)/D\}$ obtaining the empty clause.
 \end{itemize}
+
+\subsubsection{M4}
+Tell, among the following formulas, which one adequately represents the sentence (and provide an explanation of the answer):\\
+\textit{Among all animals, Mary loves all cats and no dogs.}\\
+\begin{enumerate}
+\item $\forall x\ Animal(x)\Rightarrow[Loves(Mary,x)\Rightarrow[\neg Dog(x)\wedge Cat(x)]]$
+\item $\forall x\ Animal(x)\Rightarrow[[Dog(x)\Rightarrow \neg Loves(Mary,x)]\wedge [ Cat(x)\Rightarrow Loves(Mary,x)]]$
+\item $\forall x\ Animal(x)\Rightarrow[Cat(x)\Rightarrow Loves(Mary,x)]$
+\end{enumerate}
+
+We can tell that the first one is wrong since the implication is inverted: \textit{if Mary loves x then x must be a cat and not a dog}, which is a conclusion we can infer from the sentence but not a direct representation of it. Moreover the conjunction $\neg Dog(x)\wedge Cat(x)$ makes no sense since if $x$ is a cat then it is not a dog.\\
+
+The third and the second sentences are similar: if we are under the \textit{close world assumption} then every sentence not known to be true is false, hence $Loves(Mary,Dog)$ is not known to be true (for number 3) so it is false and can be omitted from the generation of the KB. On the other hand the exercise specify that we are working under First Order Logic, which is not assumed to work under \textit{database semantic} (Section \ref{sec:database_semantic}) so we must specify that Mary does not like dogs.
+
 
 \end{document}
 
