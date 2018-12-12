@@ -1783,8 +1783,55 @@ We can have three possibilities for this models:
 \item The last possibility is that  $Model(\alpha)= Model(\beta)$ so that $\gamma$ can be ether satisfiable, or valid if $Model(\alpha)=Interpretations(\alpha)=Interpretations(\beta)=Model(\beta)$.
 \end{enumerate}
 
+\subsubsection{Ex 4}
+Given the following propositional symbols:
+\begin{itemize}
+\item ST to indicate that John studies;
+\item SY to indicate that John is silly;
+\item LU to indicate that John is lucky;
+\item PS to indicate that John passes the exam of Artificial Intelligence.
+\end{itemize}
+\begin{center}
+\textit{If John studies and is not silly, he passes the exam of Artificial Intelligence.\\
+If John is not lucky and is silly, he does not pass the exam of Artificial Intelligence.}
+\end{center}
+
+\begin{enumerate}
+\item Represent the above sentence in the propositional logic.
+\item Tell which one, among the following sets, is a model, and which one is not a model, for the above formulas:
+\[\lbrace ST,SY,PS\rbrace;\ \lbrace LU,PS\rbrace;\ \lbrace \rbrace;\ \lbrace LU,SY,PS\rbrace.\]
+\item Specify which formulas, different from PS, need to be added to derive that John passes the exam of Artificial Intelligence.
+\end{enumerate}
+
+\paragraph{Part 1}
+\begin{itemize}
+\item The first sentence translates as: $ST \wedge \neg SY \Rightarrow PS$
+\item The second sentence translates as: $\neg LU \wedge SY \Rightarrow \neg PS$
+\end{itemize}
+
+\paragraph{Part 2}
+The above implications can be written in clausal form as:
+\[KB=C_1=\lbrace \neg ST, SY, PS \rbrace,\ C_2=\lbrace LU, \neg SY, \neg PS \rbrace\]
+
+
+To be a model a set must have an equivalent literal for each clause:
+ 
+
+\begin{enumerate}
+
+\item $\lbrace ST,SY,PS\rbrace$ has $SY,PS$ which appears in $C_1$, but none in $C_2$. Since the KB is a conjunction of clauses, all must be true, hence this is not a model.
+\item $\lbrace LU,PS\rbrace$ has one literal in both clauses, thus being a model.
+\item The empty set $\lbrace \rbrace$ does not appear in the KB. Moreover the KB cannot be resolved  to infer the empty clause.
+\item $ \lbrace LU,SY,PS\rbrace$ follows the same logic as $\lbrace LU,PS\rbrace$, hence it is a model.
+\end{enumerate}
+
+\paragraph{Part 3}
+First we resolve $C_1$ with $C_2$ resolving in $C_3$:
+\[KB=C_1=\lbrace \neg ST, SY, PS \rbrace,\ C_2=\lbrace LU, \neg SY, \neg PS \rbrace,\ C_3=\lbrace LU, \neg ST \rbrace\]
+We just need to add the formula $\lbrace ST ,\neg SY \rbrace$  to the KB in order to infer $PS$:
+\[KB=C_1=\lbrace \neg ST, SY, PS \rbrace,\ C_2=\lbrace LU, \neg SY, \neg PS \rbrace,\ C_3=\lbrace LU, \neg ST \rbrace,\ C_4=\lbrace ST, \neg SY\rbrace\]
+Then we query $q=PS$.\\
+We use resolution on $C_4$ and $C_1$ resulting in $C_5=\lbrace PS \rbrace$, then we resolve with the query to get the empty clause, thus we can infer $PS$ from the $KB$.
 
 \end{document}
-
-
 
