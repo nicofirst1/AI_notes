@@ -1651,7 +1651,121 @@ Tell, among the following formulas, which one adequately represents the sentence
 
 We can tell that the first one is wrong since the implication is inverted: \textit{if Mary loves x then x must be a cat and not a dog}, which is a conclusion we can infer from the sentence but not a direct representation of it. Moreover the conjunction $\neg Dog(x)\wedge Cat(x)$ makes no sense since if $x$ is a cat then it is not a dog.\\
 
-The third and the second sentences are similar: if we are under the \textit{close world assumption} then every sentence not known to be true is false, hence $Loves(Mary,Dog)$ is not known to be true (for number 3) so it is false and can be omitted from the generation of the KB. On the other hand the exercise specify that we are working under First Order Logic, which is not assumed to work under \textit{database semantic} (Section \ref{sec:database_semantic}) so we must specify that Mary does not like dogs.
+The third and the second sentences are similar: if we are under the \textit{close world assumption} then every sentence not known to be true is false, hence $Loves(Mary,Dog)$ is not known to be true (for number 3) so it is false and can be omitted from the generation of the KB. On the other hand the exercise specify that we are working under First Order Logic, which is not assumed to work under \textit{database semantic} (Section \ref{sec:database_semantic}) so we must specify that Mary does not like dogs, hence the correct answer is number 2.
+
+\subsection{Sample Exam Exercises}
+
+\subsubsection{Ex 1}
+Tell, for each one of the following propositional formulas if it is valid, contradictory, neither one:
+\begin{enumerate}
+\item $(A\Rightarrow \neg B)\Rightarrow((A\Rightarrow B)\Rightarrow \neg A)$
+\item $\neg ((A\Rightarrow \neg B)\Rightarrow ((A\Rightarrow B)\Rightarrow \neg A))$
+\item $((A\Rightarrow (B\wedge B))\Rightarrow C))\Rightarrow C$
+\end{enumerate}
+For the following resolution steps refer to Figure \ref{fig:logic_equivalences}.\\
+Resolution of 1:
+\begin{itemize}
+\item $(A\Rightarrow \neg B)\Rightarrow((A\Rightarrow B)\Rightarrow \neg A)$
+\item $(A\Rightarrow \neg B)\Rightarrow((\neg A\vee B)\Rightarrow \neg A)$
+\item $(A\Rightarrow \neg B)\Rightarrow(\neg (\neg A\vee B)\vee \neg A)$
+\item $(A\Rightarrow \neg B)\Rightarrow((A \wedge \neg B)\vee \neg A)$
+\item $(A\Rightarrow \neg B)\Rightarrow((\neg A \vee \neg B)\wedge (\neg A \vee A))$
+\item $(A\Rightarrow \neg B)\Rightarrow((\neg A \vee \neg B)\wedge \top)$
+\item $(A\Rightarrow \neg B)\Rightarrow(\neg A \vee \neg B)$
+\item $(\neg A\vee \neg B)\Rightarrow(\neg A \vee \neg B)$
+\item $\neg (\neg A\vee \neg B)\vee (\neg A \vee \neg B)$
+\item $ ( A \wedge B) \vee (\neg A \vee \neg B)$
+\item $ ( A \wedge B) \vee \neg ( A \wedge  B)=\top$
+\end{itemize}
+Which is always True as shown in Table \ref{tab:ex_1_sub1}.\\
+
+Resolution of 2:
+\begin{itemize}
+\item $\neg ((A\Rightarrow \neg B)\Rightarrow ((A\Rightarrow B)\Rightarrow \neg A))$
+\item $\neg ((A\Rightarrow \neg B)\Rightarrow ((\neg A\vee B)\Rightarrow \neg A))$
+\item $\neg ((A\Rightarrow \neg B)\Rightarrow (\neg (\neg A\vee B)\vee \neg A))$
+\item $\neg ((A\Rightarrow \neg B)\Rightarrow ( ( A\wedge \neg B)\vee \neg A))$
+\item $\neg ((A\Rightarrow \neg B)\Rightarrow (  (\neg A \vee \neg B) \wedge (\neg A \vee A))$
+\item $\neg ((A\Rightarrow \neg B)\Rightarrow (\neg A \vee \neg B))$
+\item $\neg ((\neg A\vee \neg B)\Rightarrow (\neg A \vee \neg B))$
+\item $\neg (\neg (\neg A\vee \neg B)\vee (\neg A \vee \neg B))$
+\item $\neg ( ( A\wedge  B)\vee (\neg A \vee \neg B))$
+\item $\neg ( ( A\wedge  B)\vee \neg ( A \wedge B))=\bot$
+\end{itemize}
+Which is the same as 1 but negated.\\
+
+Resolution 3:
+\begin{itemize}
+\item $((A\Rightarrow (B\wedge B))\Rightarrow C))\Rightarrow C$
+\item $((A\Rightarrow  B)\Rightarrow C))\Rightarrow C$
+\item $((\neg A\vee  B)\Rightarrow C))\Rightarrow C$
+\item $(\neg (\neg A\vee  B)\vee C))\Rightarrow C$
+\item $\neg (\neg (\neg A\vee  B)\vee C))\vee C$
+\item $\neg ( ( A\wedge  \neg B)\vee C))\vee C$
+\item $\neg ( ( A \vee C) \wedge( \neg B \vee C))\vee C$
+\item $( \neg A \wedge \neg C) \vee  (  B \wedge \neg C) \vee C$
+
+\end{itemize}
+Which truth table is \ref{tab:ex_1_sub3}.
+\begin{table}[H]
+\parbox{.5\linewidth}{
+
+    \begin{tabular}{|l|l|l|l|l|}
+        \hline
+        A & B & L_1= \neg(A \wedge B) & L_2= A \wedge B & L_1 \vee L_2 \\ \hline
+        T & T & F                & T          & T                                  \\ \hline
+        T & F & T                & F          & T                                  \\ \hline
+        F & T & T                & F          & T                                  \\ \hline
+        F & F & T                & F          & T                                  \\
+        \hline
+    \end{tabular}
+\caption{Truth Table for ex1 part 1}
+\label{tab:ex_1_sub1}
+}
+\parbox{.45\linewidth}{
+
+    \begin{tabular}{|l|l|l|l|l|l|}
+        \hline
+        A & B & C & L_1=\neg A \wedge \neg C & L_2=B \wedge \neg C & L_1 \vee L_2 \vee C \\ \hline
+        T & T & T & F                        & F                   & T                   \\ \hline
+        T & T & F & F                        & T                   & T                   \\ \hline
+        T & F & T & F                        & F                   & T                   \\ \hline
+        T & F & F & F                        & F                   & F                   \\ \hline
+        F & T & T & F                        & F                   & T                   \\ \hline
+        F & T & F & T                        & T                   & T                   \\ \hline
+        F & F & T & F                        & F                   & T                   \\ \hline
+        F & F & F & T                        & F                   & T                   \\
+        \hline
+    \end{tabular}
+\caption{Truth Table for ex1 part 3}
+
+\label{tab:ex_1_sub3}
+}
+\end{table}
+
+\subsubsection{Ex 2}
+Let $A, B, C$ be propositional symbols. Given
+\[KB=\{A\Rightarrow C, B\Rightarrow C, A\vee B\}\]
+tell whether the formula $C$ can be derived from KB in each of the following cases:
+\begin{enumerate}
+\item  using Modus Ponens;
+\item  using Resolution.
+\end{enumerate}
+
+Both for 1 and 2, in case of positive answer show the derivation, in case of negative answer explain why.
+Note that, in case 1, the explanation that MP cannot be used because it is not complete for non-Horn formulas is not acceptable as it is wrong: non-complete method in fact doesn’t mean that the method can never be successful!\\
+
+For the Modus Ponens part we can say that (?): $C$ can not be derived by the $KB$ since $C$ is not part of the premises of any clause in the $KB$; so adding $\neg C$ to the $KB$ \footnote{This because we want to prove that $(KB \wedge \neg C)\vdash_{\mathcal{R}}\lbrace\rbrace$.} will not make any difference since we could not apply MD to any clause.\\
+
+For the resolution part we need to  put the KB in clause form:
+\[KB= \{\neg A,B\},\{\neg B,C\},\{A,B\}\]
+We notice that we have a non-Horn KB since the clause $\lbrace A,B \rbrace$ has two true literals \footnote{Remember that the Horn form wants \textit{at most} one true literal (Section \ref{subsubsec:horn}).}. We query the KB $q=C$, thus we want to prove that $(KB \wedge \neg C)\vdash_{\mathcal{R}}\lbrace\rbrace$, hence we use resolution in the following way:
+\[\frac{\lbrace \neg A,B\rbrace,\quad \lbrace\neg B,C\rbrace}{\{C\}}\]
+\[\frac{ C,\quad \neg C }{\{\}}\]
+We proved that $C$  can be derived by $KB$.
+
+
+
 
 
 \end{document}
