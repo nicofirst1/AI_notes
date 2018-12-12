@@ -773,7 +773,7 @@ The equations symbol $=$ is used to indicate that two terms refer to the same ob
 \end{itemize}
 
 \subsubsection{Quantifiers}
-
+\label{sec:quantifiers}
 We first introduce the concept of \textbf{variables} \footnote{Variables will be in lowercase.} that are equals to terms, thus can be used as arguments for functions.
 Moreover a \textbf{free} variable is one that is not in the scope of any quantifier, elsewhere the variable is called \textbf{bounded}.\\ 
 Then we have to talk about \textbf{extended interpretations} that specifies a domain \footnote{The domain is the set of individual objects.} element for which a variable exists
@@ -1441,5 +1441,192 @@ And finally we use:
 \[\frac{\lbrace \neg Easy(AfroDrums) \rbrace,\quad \lbrace Easy(AfroDrums) \rbrace}{\lbrace \rbrace}\]
 Which entails the empty clause, thus $(KB \vee \neg q) \vdash_{\mathcal{R}} \{\}$ is true, thus $KB\vdash_{\mathcal{R}}q$.
 
+\subsubsection{Ex2}
+Let $Gov$ , $Univ$, $Luca$, $Bill$ be constant symbols, and let $Prof(x)$,$Student(x)$,$Unhappy(x)$,$CutFund(x,y)$,$FailExam(x,y)$ be unary and binary predicate symbols.
+Given:
+\begin{itemize}
+\item If the Government cuts the funds to Universities, professors are unhappy.
+\item If professors are unhappy all students fail their exams.
+\item The Government cuts the funds to Universities.
+\item $Luca$ is a professor and $Bill$ is a student
+\end{itemize}
+
+The exercise demand to:
+\begin{enumerate}
+\item Express in FOL the above KB.
+\item Prove that Bill fails Luca’s exam using both Modus Ponens and Resolution
+\end{enumerate}
+
+\paragraph{KB in FOL}
+\begin{enumerate}
+\item $Prof(Luca),Student(Bill)$
+\item $[\forall x\ Prof(x) \wedge Unhappy(x)]\Rightarrow [\forall y\ Student(y) \wedge FailExam(x,y)]$
+\item $\forall x\ CutFund(Gov,Univ) \wedge Prof(x) \Rightarrow Unhappy(x)$
+\item $e$
+\end{enumerate}
+
+
+\subsection{MidTerms}
+\subsubsection{M1}
+
+
+$D$ is the gardener of a vegetable garden $V$ and a flower garden $F$. Gardens that have a gardener are beautiful iff their gardener waters them. Every gardener waters his gardens, if water is available, which is fortunately the case for $D$.
+\begin{enumerate}
+\item  Define a vocabulary (i.e., constant, function and predicate symbols) and represent the following sentences in first order logic.
+\item Translate the sentences in clausal form.
+\item show using resolution that V and F are beautiful.
+\end{enumerate}
+
+
+\paragraph{Part 1}
+Our vocabulary will have the following predicates:
+\begin{itemize}
+\item $Garden(x)$ express that $x$ is a garden.
+\item $Gardener(x,y)$ express that $x$ is the gardener of garden $y$.
+\item $HasWater(x)$ express that the gardener $x$ has water.
+\item $Watered(x)$ express that the garden $x$ has been watered.
+\item $Beautiful(x)$ express that the garden $x$ is beautiful.
+\end{itemize}
+
+Given this predicates we can express the sentence in FOL:
+\begin{itemize}
+\item First we express the ground terms:
+\[ Garden(V), Garden(F), Gardener(D,V), Gardener(D,F), HasWater(D)\]
+\item Then we need to express that if a gardener $g$ of some garden $x$ \footnote{We know that a gardener can have multiple gardens, so we use $\forall$ gardens.} has water, then the $x$ will be watered:
+\[\forall g \forall x[\ HasWater(g)\wedge Gardener(g,x)\Rightarrow Watered(x)]\]
+\item Next we formulate that for every garden $x$, if $x$ has a gardener $y$ \footnote{We can use the existential quantifier since we're interested in knowing if there exist some gardener for $x$. } and $x$ is watered, then $x$ is beautiful.
+\[\forall x\ [Garden(x)\wedge [\exists y\ Gardener(y,x)]\wedge Watered(x)\Rightarrow Beautiful(x)]\]
+\end{itemize}
+
+\paragraph{Part 2}
+
+From 2, we have:
+\begin{itemize}
+\item Use $UI$ (Section \ref{subsubsec:UI}) to remove universal quantifiers:
+\[ HasWater(g)\wedge Gardener(g,x)\Rightarrow Watered(x)\]
+\item Remove implication:
+\[\neg HasWater(g)\vee \neg Gardener(g,x)\vee Watered(x)\]
+\item Use clausal form:
+\[\lbrace \neg HasWater(g), \neg Gardener(g,x), Watered(x)\rbrace\]
+\end{itemize}
+
+From 3, we have:
+\begin{itemize}
+\item Remove existential quantifier using a skolem function (Section \ref{sec:skolemNF}) $G(x)$:
+\[\forall x\ [Garden(x)\wedge  Gardener(G(x),x) \wedge Watered(x)\Rightarrow Beautiful(x)]\]
+\item Remove universal quantifier using $UI$:
+\[Garden(x)\wedge  Gardener(G(x),x) \wedge Watered(x)\Rightarrow Beautiful(x)\]
+\item Remove implication:
+\[\neg Garden(x)\vee \neg Gardener(G(x),x) \vee \neg Watered(x)\vee Beautiful(x)\]
+\item Use clausal form:
+\[\lbrace \neg Garden(x), \neg Gardener(G(x),x) , \neg Watered(x), Beautiful(x)\rbrace\]
+\end{itemize}
+
+Our KB now looks like this:
+\begin{itemize}
+\item $C_1=\lbrace \neg HasWater(g), \neg Gardener(g,x), Watered(x)\rbrace$
+\item $C_2=\lbrace \neg Garden(x), \neg Gardener(G(x),x) , \neg Watered(x), Beautiful(x)\rbrace$
+\item $C_3,C_4,C_5,C_6,C_7=Garden(V), Garden(F), Gardener(D,V), Gardener(D,F), HasWater(D)$
+\end{itemize}
+
+
+
+\paragraph{Part 3}
+We want to query $q_1=Beautiful(V)$ and $q_2=Beautiful(F)$. Let us start with $q_1$, so we want to show that $(KB \wedge \neg q_1)\vdash_{\mathcal{R}} \{\}$:
+\begin{itemize}
+\item We first use resolve $C_7$ with $C_1$, with the substitution $\theta=\{g/D\}$
+\[\frac{ HasWater(D),\quad \lbrace \neg HasWater(g), \neg Gardener(g,x), Watered(x)\rbrace}{\lbrace \neg Gardener(D,x), Watered(x)\rbrace}\]
+Adding it to the KB.
+\item Since we're interested in $V$ we resolve $C_8$ (this last clause) with $C_5$, with the substitution $\theta=\{x/V\}$:
+\[\frac{Gardener(D,V),\quad \lbrace \neg Gardener(D,x), Watered(x)\rbrace}{\lbrace \neg Watered(V)\rbrace}\]
+\item Until now we have used only \textbf{binary resolution}, now we will use the general one. Given $C_3,C_5,C_9,q_1$ we can resolve them with $C_2$ with the substitution $\theta=\{x/V\}$ we resolve with $\{\}$ thus proving that $(KB \wedge \neg q_1)\vdash_{\mathcal{R}} \{\}$.
+\end{itemize}
+Same thing goes for $q_2$.
+
+
+\subsubsection{M2}
+Tell which one among the following First Order Logic formulas is an adequate representation of the sentence (and provide an explanation of the answer):
+Italians are happy if the Italian National team wins the world cup.
+\begin{enumerate}
+\item $\forall x\forall y\ [Italian(x)\Rightarrow [WinWc(y)\Rightarrow Happy(x)]]$
+\item $\forall x\forall y\ [Italian(x)\wedge WinWc(y)]\Rightarrow Happy(x)]$
+\item $\forall x\exists y\ [Italian(x)\wedge WinWc(y)]\Rightarrow Happy(x)]$
+\item $\forall x\ [[Italian(x)\wedge WinWc(National)]\Rightarrow Happy(x)]$
+\item $\forall x\ [[Italian(x)\wedge WinWc(National)]\wedge Happy(x)]$
+\item $\forall x\ [[Italian(x)\wedge Happy(x)]\Rightarrow  WinWc(National)]$
+\end{enumerate}
+
+We can rule out the first two (1,2) since there is only one Italian National, so no need for an universal quantifier for ($WinWc(y)$).\\
+Number 5 is no good since universal quantifier works with implication rather than $conjunction$ (Section \ref{sec:quantifiers}).\\
+Number 6 has no sense, since it saying: if Italians are happy then the national will win.\\
+Number 4 is good since the sense is correct.\\
+Finally number 3 is also good since we can use $EI$ (Section \ref{subsubsec:EI}) to get:
+$\forall x\ [Italian(x)\wedge WinWc(N)]\Rightarrow Happy(x)]$
+And we can get exactly number 4 with the substitution $\theta=\{N/National\}$.
+
+\subsubsection{M3}
+$D$ is the advisor of two PhD students $F$ and $A$, who are both motivated. PhD students who have an advisor are successful iff their advisor cares about them. Every advisor cares about his/her students, when they are motivated.
+\begin{enumerate}
+\item Define a vocabulary (i.e., constant, function and predicate symbols) and represent the following sentences in first order logic.
+\item Translate the sentences in clausal form.
+\item Show using resolution that F and A are successful
+\end{enumerate}
+
+
+\paragraph{Part 1}
+
+Our vocabulary will have the following predicates:
+\begin{itemize}
+\item $Student(x)$ express that $x$ is a student.
+\item $Advisor(x,y)$ express that $x$ is the advisor of student $y$.
+\item $Motivated(x)$ express that the person $x$ is motivated.
+\item $Cares(x,y)$ express that the  $x$ cares about $y$.
+\item $Successful(x)$ express that the person $x$ is successful.
+\end{itemize}
+
+
+Given the sentence we can translate it into FOL:
+\begin{enumerate}
+\item Some ground temrs:
+\[Student(F),Student(A),Advisor(D,F),Advisor(D,A), Motivated(F),Motivated(A)\]
+\item For every student $x$, for every advisor $y$ \footnote{I assumed that a student can have multiple advisor.} if the advisor cares about the student then $x$ will be successful.
+\[\forall x\forall y [Cares(x,y)\wedge Advisor(x,y)]\Rightarrow Successful(y)\]
+\item Finally for every student $y$ and for every advisro $y$, if $x$ is motivated and $y$ is the advisor of $x$, then $y$ cares about $x$.
+\[\forall x \forall y [Advisor(x,y)\wedge Motivated(y)]\Rightarrow Cares(x,y)\]
+\end{enumerate}
+
+\paragraph{Part 2}
+
+From 2 we have:
+\begin{itemize}
+\item Use $UI$ (Section \ref{subsubsec:UI}) to remove universal quantifiers:
+\[ [Cares(x,y)\wedge Advisor(x,y)]\Rightarrow Successful(y)\]
+\item Remove implication:
+\[ \neg Cares(x,y)\vee \neg Advisor(x,y)\vee Successful(y)\]
+\item Use clausal form:
+\[\lbrace \neg Cares(x,y), \neg Advisor(x,y), Successful(y)\rbrace\]
+\end{itemize}
+
+
+From 3 we have:
+\begin{itemize}
+\item Use $UI$ (Section \ref{subsubsec:UI}) to remove universal quantifiers:
+\[ [Advisor(x,y)\wedge Motivated(y)]\Rightarrow Cares(x,y)\]
+\item Remove implication:
+\[ \neg Advisor(x,y)\vee \neg Motivated(y)\vee Cares(x,y)\]
+\item Use clausal form:
+\[ \lbrace \neg Advisor(x,y), \neg Motivated(y), Cares(x,y)\rbrace\]
+\end{itemize}
+
+Our KB now looks like this:
+\begin{itemize}
+\item $C_1=\lbrace \neg Advisor(x,y), \neg Motivated(y), Cares(x,y)\rbrace$
+\item $C_2=\lbrace \neg Cares(x,y), \neg Advisor(x,y), Successful(y)\rbrace$
+\item $C_3,C_4,C_5,C_6,C_7,C_8=Student(F),Student(A),Advisor(D,F),Advisor(D,A), Motivated(F),Motivated(A)$
+\end{itemize}
+
 
 \end{document}
+
+
+
