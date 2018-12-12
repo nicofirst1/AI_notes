@@ -14,6 +14,8 @@ left=20mm,
 right=20mm,
 top=10mm]{geometry}
 \usepackage{titlesec}
+\usepackage{enumitem}
+
 
 
 
@@ -1593,7 +1595,7 @@ Given the sentence we can translate it into FOL:
 \item Some ground terms:
 \[Student(F),Student(A),Advisor(D,F),Advisor(D,A), Motivated(F),Motivated(A)\]
 \item For every student $x$, there is one or more advisors $y$, if the advisor cares about the student then $x$ will be successful.
-\[\forall x\exists y\ [Cares(y,x)\wedge Advisor(y,x)]\Rightarrow Successful(x)\]
+\[\forall x\exists y\ [Cares(y,x)\wedge Advisor(y,x)]\leftrightarrow Successful(x)\]
 \item Finally for every student $y$ and for every advisor $x$, if $y$ is motivated and $x$ is the advisor of $y$, then $x$ cares about $y$.
 \[\forall x \forall y [Advisor(x,y)\wedge Motivated(y)]\Rightarrow Cares(x,y)\]
 \end{enumerate}
@@ -1833,5 +1835,59 @@ We just need to add the formula $\lbrace ST ,\neg SY \rbrace$  to the KB in orde
 Then we query $q=PS$.\\
 We use resolution on $C_4$ and $C_1$ resulting in $C_5=\lbrace PS \rbrace$, then we resolve with the query to get the empty clause, thus we can infer $PS$ from the $KB$.
 
-\end{document}
 
+\subsubsection{Ex 7}
+For each of the following pairs of formulas check whether or not the second one in the pair is a Skolemized form of the first one. In the negative case, tell why and provide a correct Skolemized form.
+
+\begin{enumerate}
+
+
+\item Is $ P(x,a)\wedge Q(a,x)$ the skolem version of $\forall x\ \exists y\ [P(x,y)\wedge Q(y,x)]$?
+\item Is $ Q(x,f(x))\wedge P(g(t),t)$ the skolem version of $\forall x\ \exists y\ (Q(x,y)\wedge \exists z\ \forall t\ P(z,t))$?
+\item Is $P(x,f(x))\wedge P(f(x),x)\Rightarrow P(f(x),f(x))$ the skolem version of $\forall x\ \exists y\  \exists z[P(x,y)\wedge P(z,x)\Rightarrow P(y,z)]$?
+\end{enumerate}
+Answers
+\begin{enumerate}
+\item No. The skolem function $F(x)$ must take into account the dependency on $x$, hence a correct skolemized version would be:
+\[P(x,F(x))\wedge Q(F(x),x)\]
+\item No. The first part of the formula $Q(x,f(x))$ is a correct usage of the skolem function $f(x)$, while the second part $P(g(t),t)$ is not because the existential quantifier  $\exists x$ comes before $\forall t$, hence it cannot depend on $t$. $z$ can either depend on $x$, in this case we would use another skolem function $g(x)$, or it can be independent of both and we could use \textit{Existential Instantiation} (Section \ref{subsubsec:EI}). 
+\item No. When using a skolem function we need to be careful to use a symbol which does not appear in the KB twice! Se the usage of $f()$ for both $x$ and $z$ is wrong. A good choice would have been:
+\[P(x,f(x))\wedge P(g(x),x)\Rightarrow P(f(x),g(x))\]
+
+
+\end{enumerate}
+
+\subsubsection{EX 8}
+For each one of the following formulas from 1 to 6, tell the sentence from A to F it represents (if any):
+\begin{enumerate}
+
+\item $\exists x\ (black(x) \wedge dog(x))$
+\item $\exists x\ (black(x)\Rightarrow dog(x)) $
+\item $\exists x(black(x) \wedge dog(x))$
+\item $\forall x\ (black(x) \wedge dog(x)) $
+\item $\forall x(black(x)\Rightarrow dog(x))$
+\item $\forall x\ (black(x) \wedge dog(x))$
+\end{enumerate}
+
+\begin{enumerate}[label=\Alph*]
+\item Every dog is black.
+\item There is something black, or a dog. 
+\item Everything that is black is a dog. 
+\item Everything is a black dog.
+\item No dog is black.
+\item There is a black dog.
+\end{enumerate}
+ 
+Tell whether there are formulas or sentences that do not find any correnspondance, and in case tell which one.
+
+\begin{itemize}
+\item 1-F
+\item 3-B
+\item 4-D
+\item 5-C
+\item 2 : There is something that is either non-black or non-black and a dog.
+\item 6: Everything is black, or a dog, or a black dog.
+\end{itemize}
+
+
+\end{document}
