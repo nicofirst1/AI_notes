@@ -231,7 +231,9 @@ Following there are some standard logic equivalences (Figure \ref{fig:logic_equi
 Validity can be tied to the deduction problem in the following way:\\
 \textit{For every sentences $\alpha$ and $\beta$, $\alpha \models \beta$ if and only if the sentence $\alpha \Rightarrow \beta$ is valid}.
 
-\paragraph{Satisfiability} A sentence is \textbf{satisfiable} \footnote{This problem is called SAT and it has been shown to be NP-complete.} if it is true in \textit{some} interpretation, i.e. it has some models. A sentence can be proved to be satisfiable by enumerating the possible implementations until a model is found \footnote{Model checking technique.}.\\
+\paragraph{Satisfiability}
+\label{sec:satisfiability}
+A sentence is \textbf{satisfiable} \footnote{This problem is called SAT and it has been shown to be NP-complete.} if it is true in \textit{some} interpretation, i.e. it has some models. A sentence can be proved to be satisfiable by enumerating the possible implementations until a model is found \footnote{Model checking technique.}.\\
 We can say that:
 \begin{itemize}
 \item \textit{$\alpha$ is valid iff $\neg \alpha$ is unsatisfiable}, or
@@ -1764,8 +1766,22 @@ We notice that we have a non-Horn KB since the clause $\lbrace A,B \rbrace$ has 
 \[\frac{ C,\quad \neg C }{\{\}}\]
 We proved that $C$  can be derived by $KB$.
 
+\subsubsection{Ex 3}
 
+Given two formulas $\alpha$, $\beta$ and $\gamma=\alpha \wedge \beta$, answer the following questions:
+\begin{enumerate}
+\item If $\alpha$ is \textit{satisfiable} and $\beta$ is unsatisfiable, then what can we say about $\gamma$?
+\item If $\alpha$ is \textit{satisfiable} and $\beta$ is satisfiable, then what can we say about $\gamma$?\end{enumerate}
 
+First we need to remember the definition of \textbf{satisfiability} (Section \ref{sec:satisfiability}). Given that $\beta$ is unsatisfiable, there are no interpretations in which it is true (no models) thus it will always be false. The conjunction will then be equivalent to $\alpha \wedge\beta \equiv \alpha \wedge \bot\equiv \bot$, that is the formula $\gamma$ will always be Flase, i.e. \textit{unsatisfiable}.\\
+The second question is trickier but the logical answer is: \textit{we cannot say}.\\
+This is because if both $\alpha,\beta$ are satisfiable then they have some models $Model(\alpha),Model(\beta)$.\\ 
+We can have three possibilities for this models:
+\begin{enumerate}
+\item One is a subset of the other, $Model(\alpha)\subset Model(\beta)$ or viceversa, then the formula  $\gamma$ will have some models, thus being satisfiable.
+\item The two sets of models have no common interpretations \footnote{Disjoint sets.}, $Model(\alpha)\cup Model(\beta)=\{\}$, then $\gamma$ is unsatisfiable.
+\item The last possibility is that  $Model(\alpha)= Model(\beta)$ so that $\gamma$ can be ether satisfiable, or valid if $Model(\alpha)=Interpretations(\alpha)=Interpretations(\beta)=Model(\beta)$.
+\end{enumerate}
 
 
 \end{document}
