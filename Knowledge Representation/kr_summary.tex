@@ -234,7 +234,9 @@ Following there are some standard logic equivalences (Figure \ref{fig:logic_equi
 \end{figure}
 
 
-\paragraph{Validity} A sentence is \textit{valid} if it is true in all interpretations \footnote{Also known as tautologies.}. For example: $A \vee \neg A$, $True$, $A \Rightarrow A$...\\
+\paragraph{Validity}
+\label{sec:validity}
+A sentence is \textit{valid} if it is true in all interpretations \footnote{Also known as tautologies.}. For example: $A \vee \neg A$, $True$, $A \Rightarrow A$...\\
 Validity can be tied to the deduction problem in the following way:\\
 \textit{For every sentences $\alpha$ and $\beta$, $\alpha \models \beta$ if and only if the sentence $\alpha \Rightarrow \beta$ is valid}.
 
@@ -1886,7 +1888,7 @@ For each one of the following formulas from 1 to 6, tell the sentence from A to 
 \item There is a black dog.
 \end{enumerate}
  
-Tell whether there are formulas or sentences that do not find any correnspondance, and in case tell which one.
+Tell whether there are formulas or sentences that do not find any correspondence, and in case tell which one.
 
 \begin{itemize}
 \item 1-F
@@ -1898,6 +1900,17 @@ Tell whether there are formulas or sentences that do not find any correnspondanc
 \end{itemize}
 
 \subsubsection{Ex 9}
+Discuss the following statements:
+\begin{enumerate}
+\item $[(\forall x\ A(x))\wedge(\forall x\ B(x))]\leftrightarrow [\forall y\ (B(y)\wedge A(y))]$ is a valid formula in FOL.
+\item $[(\exists x\ S(x))\wedge (\exists x\ B(x))]\leftrightarrow[(\exists y\ (B(y)\wedge A(y))]$ is a valid formula in FOL.
+\end{enumerate}
+First we need to recall the meaning of \textit{validity} (Section \ref{sec:validity}) which is that a formula is true in all its interpretations.\\
+For the first formula we have that:
+\begin{itemize}
+\item Since $(\forall x\ A(x))\wedge(\forall x\ B(x))$ are universal quantifiers sharing the same variable $x$, they can be simplified with $\forall x\ [A(x)\wedge B(x)]$, which is the same as the other part $\forall y\ (B(y)\wedge A(y))$ but with a different variable name. So it seems correct to  say that one implies the other since they are equivalent, thus having the same model, thus being valid.
 
+\item What said before does not hold for the existential quantifier since $\exists x\ S(x)$ and $\exists x\ B(x)$ which can be true for different interpretation of the variable $x$. On the other hand $\exists y\ (B(y)\wedge A(y))$ is saying that we want both $B(y)$ and $A(y)$ to be true for the \textbf{same} interpretation of $y$.
+\end{itemize}
 
 \end{document}
