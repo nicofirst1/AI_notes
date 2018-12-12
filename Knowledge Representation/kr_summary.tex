@@ -1587,11 +1587,11 @@ Our vocabulary will have the following predicates:
 
 Given the sentence we can translate it into FOL:
 \begin{enumerate}
-\item Some ground temrs:
+\item Some ground terms:
 \[Student(F),Student(A),Advisor(D,F),Advisor(D,A), Motivated(F),Motivated(A)\]
-\item For every student $x$, for every advisor $y$ \footnote{I assumed that a student can have multiple advisor.} if the advisor cares about the student then $x$ will be successful.
-\[\forall x\forall y [Cares(x,y)\wedge Advisor(x,y)]\Rightarrow Successful(y)\]
-\item Finally for every student $y$ and for every advisro $y$, if $x$ is motivated and $y$ is the advisor of $x$, then $y$ cares about $x$.
+\item For every student $x$, there is one or more advisors $y$, if the advisor cares about the student then $x$ will be successful.
+\[\forall x\exists y\ [Cares(y,x)\wedge Advisor(y,x)]\Rightarrow Successful(x)\]
+\item Finally for every student $y$ and for every advisor $x$, if $y$ is motivated and $x$ is the advisor of $y$, then $x$ cares about $y$.
 \[\forall x \forall y [Advisor(x,y)\wedge Motivated(y)]\Rightarrow Cares(x,y)\]
 \end{enumerate}
 
@@ -1599,12 +1599,14 @@ Given the sentence we can translate it into FOL:
 
 From 2 we have:
 \begin{itemize}
+\item Use skolem function $Adv(x)$ to remove the existential quantifier:
+\[\forall x\ [Cares(Adv(x),x)\wedge Advisor(Adv(x),x)]\Rightarrow Successful(x)\]
 \item Use $UI$ (Section \ref{subsubsec:UI}) to remove universal quantifiers:
-\[ [Cares(x,y)\wedge Advisor(x,y)]\Rightarrow Successful(y)\]
+\[ [Cares(Adv(x),x)\wedge Advisor(Adv(x),x)]\Rightarrow Successful(x)\]
 \item Remove implication:
-\[ \neg Cares(x,y)\vee \neg Advisor(x,y)\vee Successful(y)\]
+\[ \neg Cares(Adv(x),x)\vee \neg Advisor(Adv(x),x)\vee Successful(x)\]
 \item Use clausal form:
-\[\lbrace \neg Cares(x,y), \neg Advisor(x,y), Successful(y)\rbrace\]
+\[\lbrace  \neg Cares(Adv(x),x), \neg Advisor(Adv(x),x), Successful(x)\rbrace\]
 \end{itemize}
 
 
@@ -1621,10 +1623,21 @@ From 3 we have:
 Our KB now looks like this:
 \begin{itemize}
 \item $C_1=\lbrace \neg Advisor(x,y), \neg Motivated(y), Cares(x,y)\rbrace$
-\item $C_2=\lbrace \neg Cares(x,y), \neg Advisor(x,y), Successful(y)\rbrace$
-\item $C_3,C_4,C_5,C_6,C_7,C_8=Student(F),Student(A),Advisor(D,F),Advisor(D,A), Motivated(F),Motivated(A)$
+\item $C_2=\lbrace  \neg Cares(Adv(x),x), \neg Advisor(Adv(x),x), Successful(x)\rbrace$
+\item $C_3,C_4,C_5,=Student(F),Student(A),Advisor(D,F)$
+\item $C_6,C_7,C_8=Advisor(D,A), Motivated(F),Motivated(A)$
 \end{itemize}
 
+\paragraph{Part 3}
+We want to query $q_1=Successful(F)$ and $q_2=Successful(A)$. Starting with $q_1$ we get the negation $\neg q_1$ and prove that the inference yields an empty clause:
+
+\begin{itemize}
+\item We first resolve $C_2$ with $q_1$ using the substitution $\theta=\{x/F\}$:
+\[\frac{\neg Successful(F),\quad \lbrace  \neg Cares(Adv(x),x), \neg Advisor(Adv(x),x), Successful(x)\rbrace}{C_9=\lbrace  \neg Cares(Adv(F),F), \neg Advisor(Adv(F),F)\rbrace}\]
+\item Then we resolve $C_9$ with $C_1$ using $\theta=\{x/Adv(F),y/F\}$:
+\[\frac{\lbrace  \neg Cares(Adv(F),F), \neg Advisor(Adv(F),F)\rbrace,\quad \lbrace \neg Advisor(x,y), \neg Motivated(y), Cares(x,y)\rbrace}{C_{10}=\lbrace \neg Advisor(Adv(F),F),\neg Motivated(F) \rbrace}\]
+\item Finally we resolve $C_{10}$ with $C_7$ and $C_5$, with $\theta=\{Adv(F)/D\}$ obtaining the empty clause.
+\end{itemize}
 
 \end{document}
 
