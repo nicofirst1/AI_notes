@@ -1895,7 +1895,7 @@ Tell whether there are formulas or sentences that do not find any correspondence
 \item 3-B
 \item 4-D
 \item 5-C
-\item 2 : There is something that is either non-black or non-black and a dog.
+\item 2-E 
 \item 6: Everything is black, or a dog, or a black dog.
 \end{itemize}
 
@@ -1935,6 +1935,97 @@ Number 1 and 4 are logically equivalent and both correct:
 \item $\forall x\ \neg [Student(x)\wedge  Exam(x, AI)]\vee Pass(x,AI)$
 \item $\forall x\ Student(x)\wedge  Exam(x, AI)\Rightarrow Pass(x,AI)$
 \end{itemize} 
+
+\subsubsection{Ex 11}
+Let $Rose(x),Thorn(x), Has(x, y), Dangerous(x)$ be unary and binary predicate symbols. Express in FOL the following sentences:
+\begin{enumerate}
+\item There is no rose without a thorn.
+\item Thorns are dangerous.
+\item Whoever has something dangerous is dangerous.
+\end{enumerate}
+Show, using resolution, that roses are dangerous.\\
+
+Answer:
+\begin{itemize}
+\item $\forall x\ \exists y \ Rose(x) \Rightarrow Has(x,y)\wedge Thorn(y)$
+\item $\forall x\ Thorn(x) \Rightarrow Dagerous(x)$
+\item $\forall x\ \exists y\ Has(x,y)\wedge Dangerous(y) \Rightarrow Dangerous(x)$
+\end{itemize}
+
+First we need to bring our KB in Conjunctive Normal Form [CNF]:
+\begin{itemize}
+\item $\forall x\ \exists y \ Rose(x) \Rightarrow Has(x,y)\wedge Thorn(y)$
+\begin{itemize}
+\item Skolemize:
+\[\forall x\ Rose(x) \Rightarrow Has(x,F(x))\wedge Thorn(F(x))\]
+\item Use UI:
+\[Rose(x) \Rightarrow Has(x,F(x))\wedge Thorn(F(x))\]
+\item Remove implication:
+\[\neg Rose(x) \vee [Has(x,F(x))\wedge Thorn(F(x))]\]
+\item Use distribution over disjunction:
+\[[\neg Rose(x) \vee Has(x,F(x))] \wedge [\neg Rose(x) \vee Thorn(F(x))]\]
+
+\end{itemize}
+\item $\forall y\ Thorn(y) \Rightarrow Dagerous(y)$ translates into:
+\[\neg Thorn(y) \vee Dagerous(y)\].
+\item $\forall z\ \exists l\ Has(z,l)\wedge Dangerous(l) \Rightarrow Dangerous(z)$ translates into:
+\[\neg Has(z,G(z))\vee \neg Dangerous(G(z)) \vee Dangerous(z)\]
+
+\end{itemize}
+
+Finally our KB will have the following clauses:
+\begin{itemize}
+\item $C_1=\lbrace \neg Rose(x) , Has(x,F(x))\rbrace$
+\item $C_2=\lbrace \neg Rose(x) , Thorn(F(x)) \rbrace$
+\item $C_3=\lbrace \neg Thorn(y), Dagerous(y) \rbrace$
+\item $C_4=\lbrace \neg Has(z,G(z)), \neg Dangerous(G(z)) , Dangerous(z) \rbrace$
+\end{itemize}
+We query the KB about $q=\forall m\ Rose(m) \Rightarrow Dangerous(m)=\neg Rose(m) \vee Dangerous(m)$. Negating this would bring us to:
+\[\neg (\neg Rose(m) \vee Dangerous(m))\]
+\[  Rose(m) \wedge \neg Dangerous(m)\]
+ so we add two clauses:
+\[C_5=\lbrace  Rose(m)\rbrace;\ C_6=\lbrace \neg  Dangerous(m)\rbrace\]
+It is easy to resolve in two steps:
+\begin{enumerate}
+\item Resolve $q$ and $C_3$ with $\theta=\{m/y\}$, and get $C_6=\lbrace Rose(y), \neg Thorn(y)\rbrace$
+\end{enumerate}
+
+\subsubsection{Ex 12}
+Consider the following first order formulas:
+\begin{enumerate}
+\item $\forall x\ Equal(x,x)$
+\item $\forall x\ \forall y\ [Equal(x,y) \Rightarrow Equal(y,x)]$
+\item $\forall x\ \forall y\ \forall z\ [[Equal(x,y)\wedge Equal(y,z)]\Rightarrow Equal(x,z)]$
+\end{enumerate}
+
+Prove by refutation with resolution the following: 
+\[\forall x\ \forall y\ \forall z\ [Equal(x, y) \wedge \neg Equal(y, z)]\Rightarrow \neg Equal(x, z)\]
+
+First we need to bring the above formula in CNF:
+\begin{itemize}
+\item Remove Quantifiers:
+\[[Equal(x, y) \wedge \neg Equal(y, z)]\Rightarrow \neg Equal(x, z)\]
+\item Remove implication:
+\[\neg [Equal(x, y) \wedge \neg Equal(y, z)]\vee \neg Equal(x, z)\]
+\item Move negation inwards:
+\[\neg Equal(x, y) \vee Equal(y, z) \vee \neg Equal(x, z)\]
+\item Finally transom into clause:
+\[q=\lbrace \neg Equal(x, y), Equal(y, z), \neg Equal(x, z) \rbrace\]
+
+\end{itemize}
+Do the same for the KB formulas and get:
+\begin{itemize}
+\item $C_1=\lbrace Equal(x_1,x_1) \rbrace$
+\item $C_2=\lbrace \neg Equal(x_2,y_2), Equal(y_2,x_2)\rbrace$
+\item $C_3=\lbrace \neg Equal(x_3,z_3), \neg Equal(y_3,z_3),  Equal(x_3,y_3) \rbrace$
+\item $\neg q= \lbrace Equal(x_q, y_q),\neg Equal(y_q, z_q), Equal(x_q, z_q) \rbrace$
+\end{itemize}
+
+First resolve $q$ with $C_3$, using $\theta=\lbrace y_q/x_3, z_q/y_3, x_q/z_3 \rbrace$ and get:
+\[C_4=\lbrace Equal(z_3,x_3),\neg Equal(x_3,z_3),\neg Equal(y_3,z_3),\neg Equal(z_3,y_3) \rbrace\]
+Then resolve between $C_4$ and $C_2$  using $\theta=\lbrace x_2/y_3, y_2/z_3, z_3/z_3 \rbrace$ and get:
+\[C_5= \lbrace Equal(z_3,x_3),\neg Equal(x_3,z_3) \rbrace\]
+Resolve $C_5$ with $C_2$ with $\theta=\lbrace y_2/x_2, x_3/y_2 \rbrace$ and get the empty clause.
 
 
 \end{document}
