@@ -10,7 +10,12 @@
 - minimum 
 using the definitions given for natural numbers.
 
-3. Write the PROLOG programs suffix,subset,intersection using lists to represent sets.
+3. Write the PROLOG programs 
+- suffix
+- subset
+- intersection
+using lists to represent sets.
+
 4. Write a PROLOG program for a depth-first visit of possibly cyclic graphs, represented through the relation arc(X,Y)
 5. Write a PROLOG program implementing insertion sort on lists.*/
 
@@ -69,3 +74,24 @@ min(_,0,Res) :- natural_number(Res).
 min(0,_,Res) :- natural_number(Res).
 % else decrease both and increase Res.
 min(s(Num1), s(Num2), s(Res)) :- min(Num1,Num2,Res). 
+
+%---------------------------------------------
+%EX 3
+%---------------------------------------------
+
+suffix(Lst1,Lst2) :- append(_,Lst1,Lst2).
+prefix(Lst1,Lst2) :- append(Lst1,_,Lst2).
+
+
+%---------------------------------------------
+% since we're iterating on 'Lst2' we need to check when it is empty and then stop.
+inter(_,[],_).
+
+% We get the first element of Lst2 and check if it a member of Lst1.
+% if yes append it to the Res and continue with another iteration
+inter(Lst1,[H|Lst2],Res) :- 
+                        member(H,Lst1),
+                        append([H],Res,NewRes),
+                        inter(Lst1,Lst2,NewRes).
+% if no discard it and continue.
+inter(Lst1,[_|Lst2],Res) :- inter(Lst1,Lst2,Res).
