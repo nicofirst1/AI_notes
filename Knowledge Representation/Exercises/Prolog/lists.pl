@@ -67,18 +67,3 @@ twice([I|In],[O1,O2|Out]) :- I=O1,I=O2, twice(In,Out).
 
 
 %----------------------------------------------------------
-% try to understand what this is for...
-% Given foo(I,P,R).
-% This function remove every occurrence of the element I in P 
-% and checks if what is left is the same as the list R
-foo(_ ,[],[]). 
-% The next line is used to check whenever the first element of P is the same as I
-% if yes call foo again withouth the first element
-foo(I,[I | P],R) :- foo(I,P,R). 
-% this last implementation is called when the first element of P is not equal to I.
-% then it must be equal to the first element of R
-foo(I,[H | T],[H | R]) :- foo(I,T,R).
-
-% For example having:
-% foo(1,[1,2,1,3,1,1,4,1,1],[2,3,4])
-% will  
