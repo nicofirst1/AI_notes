@@ -67,3 +67,81 @@ twice([I|In],[O1,O2|Out]) :- I=O1,I=O2, twice(In,Out).
 
 
 %----------------------------------------------------------
+% Append and stuff
+%----------------------------------------------------------
+
+% Let’s call a list doubled if it is made of two consecutive blocks
+% of elements that are exactly the same. For example, [a,b,c,a,b,c] is
+% doubled (it’s made up of [a,b,c] followed by [a,b,c] ) and so is 
+%[foo,gubble,foo,gubble] . On the other hand, [foo,gubble,foo] is not doubled.
+% Write a predicate doubled(List) which succeeds when List is a doubled list.
+
+% first write a predicate which calls the accumulator version
+doubled(List) :- doubleAcc(List, []).
+% if the two lists are identical then return true
+doubleAcc(L,L).
+% get the first element of List and append it to Acc, resulting in Acc=[Acc,H]
+% then call doubleAcc again.
+doubleAcc([H|List],Acc) :- append(Acc,[H],X), doubleAcc(List,X).
+
+%----------------------------------------------------------
+% A palindrome is a word or phrase that spells the same forwards and backwards.
+% For example, ‘rotator’, ‘eve’, and ‘nurses run’ are all palindromes.
+% Write a predicate palindrome(List) , which checks whether List is a palindrome
+
+% predicate which calls the accumalator version, passing both an empty list as the
+% accumulator and a original version of the list which will not be modified
+palindrome(Lst) :- palindromeAcc(Lst, [], Lst).
+% If the iterative list is empty then we checked it all and we want to know if the accumulator
+% and the original list are the same
+palindromeAcc([],L,L).
+% take the head of the list and append it in reverse to the accumulator ([H|Acc]), 
+% pass the list withouth the first element and the original one to the next call.
+palindromeAcc([H|Lst], Acc, Original) :- palindromeAcc(Lst,[H|Acc],Original).
+
+%----------------------------------------------------------
+% Write a predicate toptail(InList,OutList) which says no if InList is a
+% list containing fewer than 2 elements, and which deletes the first and
+% the last elements of InList and returns the result as OutList , 
+%when InList is a list containing at least 2 elements.
+
+% if the list contains one element then '[_,_|InList]' returns false.
+% if the list contains two elements then 'OutList=[]' returns [].
+toptail([_,_|InList], OutList) :- InList=[], OutList=[].
+% if the list contains more than two elements then we discard the first '_'
+% and we call the Accumulator version giving the second as first element of the new list.
+toptail([_,S|InList], OutList) :-  toptailAcc(InList, [S], OutList).
+% if the next element in the InList is the lst one '[_|[]]' (this measn the tail is the empty list)
+% then the return the Accumulator value
+toptailAcc([_| []], Acc, Acc).
+% Else append the value taken from InList to Acc, which result will ben NewAcc
+% and call the function again.
+toptailAcc([H|InList], Acc, OutList):- append(Acc,[H],NewAcc),toptailAcc(InList,NewAcc,OutList).
+
+%----------------------------------------------------------
+/* There is a street with three neighbouring houses that all have a different colour,
+namely red, blue, and green. People of different nationalities live in the
+ different houses and they all have a different pet. Here are some more
+facts about them:
+
+The Englishman lives in the red house.
+The jaguar is the pet of the Spanish family.
+The Japanese lives to the right of the snail keeper.
+The snail keeper lives to the left of the blue house.
+
+Who keeps the zebra? Don’t work it out for yourself:
+define a predicate zebra/1 that tells you the nationality of the owner of the zebra!*/
+
+suffix(S,L):- append(_,S,L).
+prefix(P,L):- append(P,_,L).
+sublist(SubL,L):- suffix(S,L), prefix(SubL,S).
+
+
+% house( color, nationality, pet)
+zebra(X,Y) :- 
+        member(house(red, english, _), [H0,H1,H2]),
+        member(house(_, spanish, jaguar), [H0,H1,H2]),
+        member(house(Y, X, zebra), [H0,H1,H2]),
+        
+        sublist([house(_, _, snail), house(_, japanese, _)], [H0,H1,H2]),
+        sublist([house(_, _, snail), house(blue, _, _)], [H0,H1,H2]).
