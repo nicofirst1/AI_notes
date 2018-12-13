@@ -1,4 +1,5 @@
-/*1. build the search tree for:
+/*
+1. build the search tree for:
 ?- member(c,[a,c,b]).
 ?- plus1(Y,X,s(s(s(s(s(0))))))
 ?- reverse([a,b,c],X).
@@ -16,8 +17,11 @@ using the definitions given for natural numbers.
 - intersection
 using lists to represent sets.
 
-4. Write a PROLOG program for a depth-first visit of possibly cyclic graphs, represented through the relation arc(X,Y)
-5. Write a PROLOG program implementing insertion sort on lists.*/
+4. Write a PROLOG program for a depth-first visit of possibly cyclic graphs,
+represented through the relation arc(X,Y)
+
+5. Write a PROLOG program implementing insertion sort on lists.
+*/
 
 
 %---------------------------------------------
@@ -95,3 +99,18 @@ inter(Lst1,[H|Lst2],Res) :-
                         inter(Lst1,Lst2,NewRes).
 % if no discard it and continue.
 inter(Lst1,[_|Lst2],Res) :- inter(Lst1,Lst2,Res).
+
+
+%---------------------------------------------
+%EX 4
+%---------------------------------------------
+arc(0,1). arc(1,5).
+arc(1,2). arc(2,4).
+arc(2,3). arc(4,6).
+
+%todo
+depthFirst(Root,Previous,Res) :- 
+                append(Res,[Root],NewRes),
+                arc(Root,Next),
+                Next \= Previous,
+                depthFirst(Next,Root,NewRes).
