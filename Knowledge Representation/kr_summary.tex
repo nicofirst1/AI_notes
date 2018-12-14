@@ -2194,8 +2194,19 @@ We query the KB about $q=E$, se we need to conclude that $(KB \wedge \neg q) \vd
 \subsubsection{EX 6}
 Assuming that lower case letters indicate constants and function symbols, while upper case letters
 denote variables, tell whether the expressions:
-\[ f(X, g(Y, Z)) and f(g(a, b), g(b, a)\]
-unify, and in this case provide the most general unifier. Illustrate step by step, the execution of the unification algorithm.
+\[ f(X, g(Y, Z))\ and\ f(g(a, b), g(b, a))\]
+unify, and in this case provide the most general unifier. Illustrate step by step, the execution of the unification algorithm.\\
+
+The steps are the following:
+\begin{enumerate}
+\item $\lbrace X \neq g(a, b), Y \neq b, Z \neq a \rbrace$
+\item $\lbrace g(a, b)/X, b/Y, a/Z \rbrace$
+\end{enumerate}
+That is in the first step the algorithm notice that there is an in-equivalence between the two arguments of $f()$ for both cases. It then sets the appropriate unification in step 2. The most general unifier is given when there is a minimum number of ground term, so: 
+\[\lbrace g(Z, Y)/X, b/Y, a/Z \rbrace\].
+
+
+
 
 
 
