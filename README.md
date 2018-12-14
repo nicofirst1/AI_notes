@@ -39,6 +39,13 @@ combinatorial auctions by Tuomas Sandholm
     -  9.1, 9.3, 9.4, 9.5
 - [this](https://math.stackexchange.com/questions/2260428/why-can-we-use-implication-with-the-universal-quantifier-but-not-with-the-existe?rq=1) link from stackexchange.
 
+### Non Monotonic Reasoning
+- Nardi's slides
+- R&N book chapeter 12.6 
+- Michael Gelfond and Vladimir Lifschitz The Stable Model Semantics for Logic Programming,
+- R. J. Brachman, H.J. Levesque, Knowledge Representation and Reasoning, Morgan Kaufmann, 2004.
+- [this slides] (http://www.cs.tau.ac.il/~annaz/teaching/TAU_winter08/Seminar/yulia.pdf)
+
 ## Contributing
 You can fork this notes, add your stuff, and never ever tell anyone about it...\
 **Or** you could take a moment to think about how you could help others understand better this kind of concepts. Maybe you are the only person capable of explaning that particular argument better than anyone alse, so why not giving it a shot?
