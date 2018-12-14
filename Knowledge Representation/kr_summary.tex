@@ -2349,9 +2349,15 @@ We query the KB about $q=\forall m\ Rose(m) \Rightarrow Dangerous(m)=\neg Rose(m
 \[  Rose(m) \wedge \neg Dangerous(m)\]
  so we add two clauses:
 \[C_5=\lbrace  Rose(m)\rbrace;\ C_6=\lbrace \neg  Dangerous(m)\rbrace\]
-It is easy to resolve in two steps:
+It is easy to resolve in few steps :
 \begin{enumerate}
-\item Resolve $q$ and $C_3$ with $\theta=\{m/y\}$, and get $C_6=\lbrace Rose(y), \neg Thorn(y)\rbrace$
+\item Resolve $C_5$ with $C_2$, with the substitution $\theta=\lbrace m/x \rbrace$:
+\[\frac{Rose(m),\ [\neg Rose(x),Thorn(F(x))]}{C_7=\lbrace Thorn(F(x)) \rbrace}\]
+\item Resolve $C_7$ with $C_3$, with the substitution $\theta=\lbrace F(x)/y \rbrace$:
+\[\frac{Thorn(F(x)),\ [\neg Thorn(y), Dagerous(y)]}{C_8=\lbrace Dagerous(y) \rbrace}\]
+\item Resolve $C_8$ with $C_6$, with the substitution $\theta=\lbrace y/m \rbrace$:
+\[\frac{Dagerous(y) ,\ [\neg Dagerous(m) ]}{\lbrace \rbrace}\]
+And obtain the empty clause.
 \end{enumerate}
 
 \subsubsection{Ex 12}
