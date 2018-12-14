@@ -134,7 +134,9 @@ We first need to check if $M(KB) \subseteq M(\beta)$, in other words if the KB h
 \item  We are asking the KB for the truth of a sentence which is directly part of the KB itself; so that the set of models $M(KB)$ is a \textit{subset} of $M(\beta)$.
 \end{itemize}
 
-\paragraph{Model checking}  To know if $KB \models \beta$ we need to prove that $M(KB) \subseteq M(\beta)$. This can be done by \textbf{model checking}, that is enumerating all the possible interpretation where $KB$ is true and check if those are also models of $\beta$ \footnote{This is a direct implementation of the definition of entailment.}. For the above example we have:
+\paragraph{Model checking}
+\label{sec:model_checking}
+To know if $KB \models \beta$ we need to prove that $M(KB) \subseteq M(\beta)$. This can be done by \textbf{model checking}, that is enumerating all the possible interpretation where $KB$ is true and check if those are also models of $\beta$ \footnote{This is a direct implementation of the definition of entailment.}. For the above example we have:
 
 \begin{table}[H]
 \centering
@@ -251,6 +253,15 @@ We can say that:
 Hence we can give another interpretation for entailment:
 \[\alpha \models \beta \Longleftrightarrow (\alpha \wedge \neg \beta)\quad is \quad unsatisfiable\]
 Which is also known as the \textbf{reductio ad absurdum} (proof by contradiction).
+
+
+\paragraph{Consistency}
+\label{sec:consistency}
+A knowledge base KB is consistent iff its negation is not a tautology \footnote{A tautology  is a formula or assertion that is true in every possible interpretation}.
+That is, KB is inconsistent (not consistent) iff there is no interpretation which entails KB.\\
+Example of an inconsistent knowledge base:
+\[KB=\lbrace a, \neg a \rbrace\]
+
 
 \subsubsection{Deduction in Propositional Logic}
 \label{subsubsec:deduction}
@@ -2121,6 +2132,71 @@ We just need to add the formulas $\lbrace ST \rbrace ,\lbrace \neg SY \rbrace$ (
 \[C_1=\lbrace \neg ST, SY, PS \rbrace,\ C_2=\lbrace LU, \neg SY, \neg PS \rbrace,\ C_3=\lbrace LU, \neg ST \rbrace,\ C_4=\lbrace ST \rbrace,\  C_5=\lbrace \neg SY\rbrace\]
 Then we query $q=PS$.\\
 We use resolution on $C_4$ and $C_1$ resulting in $C_6=\lbrace SY,PS \rbrace$; then we resolve $C_5$ with $C_6$ and get $C_7=\lbrace PS \rbrace$; finally with the query to get the empty clause, thus we can infer $PS$ from the $KB$.
+
+
+\subsubsection{Ex 5}
+Given the following symbols:
+\begin{itemize}
+\item  C to indicate that Gianni is a climber.
+\item F to indicate that Gianni is fit.
+\item L to indicate that Gianni is lucky.
+\item E to indicate that Gianni climbs mount Everest.
+\end{itemize}
+
+And the following sentences:
+\begin{itemize}
+\item If Gianni is a climber and he is fit, he climbs mount Everest.
+\item If Gianni is not lucky and he is not fit, he does not climb mount Everest. Gianni is fit.
+\item Gianni is fit.
+
+\end{itemize}
+
+Do:
+\begin{enumerate}
+\item Formalize the above sentences in propositional logic.
+\item Tell if the KB is consistent, and tell if some of the following sets are models for the above sentences:
+\[\{ \}; \{C,L\}; \{L,E\}; \{F,C,E\}; \{L,F,E\}.\]
+\item Verify, using resolution, if it it follows form the KB that Gianni climbs mount Everest.
+
+\end{enumerate}
+
+\paragraph{Part 1}
+The sentences in FOL are:
+\begin{itemize}
+\item $C \wedge F \Rightarrow E$
+\item $\neg L \wedge \neg F \Rightarrow \neg E$
+\item $F$
+\end{itemize}
+
+\paragraph{Part 2}
+First let us remind the meaning of consistent (Section \ref{sec:consistency}), that is the KB has some models.\\
+To verify this we have to bring the KB in CNF:
+\[C_1=\lbrace  \neg C, \neg F, E\rbrace,\ C_2= \lbrace L, F, \neg E\rbrace,\ C_3=\lbrace F \rbrace\]
+We can apply a multitude of definitions to prove that the KB is consistent, but the easier is \textit{model checking} (Section  \ref{sec:model_checking}). Just by looking at the clauses we can determine that if both $\neg C,E,F$, or $\neg C,L,F$ are used as interpretation then we have a model, thus the KB is consistent.\\
+
+\begin{itemize}
+\item $\{ \}$ implies that every literal is False, thus it fails for $C_3$. So it is not a module.
+\item Same goes for $\{C,L\}$, that implies $\neg F$, making $C_3$ fail again.
+\item $\{L,E\}$ same as before.
+\item $\{F,C,E\}$ Is a model, since it has a same literal in every clause..
+\item $ \{L,F,E\}$ is the same as the previous one.
+\end{itemize}
+
+
+
+
+\paragraph{Part 3}
+Lets re-write the KB here:
+\[C_1=\lbrace  \neg C, \neg F, E\rbrace,\ C_2= \lbrace L, F, \neg E\rbrace,\ C_3=\lbrace F \rbrace\]
+We query the KB about $q=E$, se we need to conclude that $(KB \wedge \neg q) \vdash \{\}$. As you can see we can resolve $C_1$ with $C_2$ and then with $C_3$ but we can not resolve either $\neg C$ or $L$. So we can not infer $KB \vdash_{\mathcal{R}} q$; it makes sense in English too since we do not no if Gianni is either lucky or a climber. 
+
+
+\subsubsection{EX 6}
+Assuming that lower case letters indicate constants and function symbols, while upper case letters
+denote variables, tell whether the expressions:
+\[ f(X, g(Y, Z)) and f(g(a, b), g(b, a)\]
+unify, and in this case provide the most general unifier. Illustrate step by step, the execution of the unification algorithm.
+
 
 
 \subsubsection{Ex 7}
