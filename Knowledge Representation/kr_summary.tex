@@ -1261,7 +1261,9 @@ That is we construct all the possible \textbf{ground terms} with the given funct
 
 \paragraph{Saturation} Given the set of ground terms $P$ obtained earlier, we generate the saturation of $S$ in respect to $P$, called $P(S)$, by applying all consistent substitution of ground term in $P$ with variables in $S$.
 
-\paragraph{Herbrand Base} The saturation of a set of clauses $S$ in respect to a Herbrand Universe is called a Herbrand Base, denoted $H_S(P)$ \footnote{Which is infinite.}.
+\paragraph{Herbrand Base}
+\label{sec:herbrand_base}
+The saturation of a set of clauses $S$ in respect to a Herbrand Universe is called a Herbrand Base, denoted $H_S(P)$ \footnote{Which is infinite.}.
 
 \paragraph{Herbrand's Theorem}
 The theorem says that:
@@ -1390,6 +1392,114 @@ Since Prolog chooses the clauses in the order of implementation, the resulting s
 
 \newpage
 
+\section{Non Monotonic Reasoning}
+
+In classical logic the more facts we have, the more conclusions we can draw, this property is known as \textbf{Monotonicity}, which can be formalized as:
+\[if\ \Delta \subset \Gamma:\ Cn(\Delta)\subset Cn(\Gamma)\]
+In which $Cn(x)$ is a classical conclusion based on some st of premises $x$. So if we have a set of facts $\Delta$ which is a subset of $\Gamma$, then the new facts in gamma will have no effects on the conclusions in $Cn(\Delta)$; that is $  Cn(\Delta)\subset Cn(\Gamma)$.\\
+On the other hand \textbf{non-monotonicity} models a common behavior in humans minds: the changing of one's idea \footnote{Where more information leads us to retract previous conclusions.}. A classical example would be:\\ 
+\textit{Suppose I tell you ‘Tweety is a bird’}.\\
+\textit{You might conclude ‘Tweety flies’}.\\
+\textit{I then tell you ‘Tweety is an emu’}.\\
+\textit{You conclude ‘Tweety does not fly’}.\\
+
+Moreover there are some other problem with classical logic such as:
+\begin{itemize}
+\item It is usually not possible to write down all we would like to say about a domain.
+\item  Inferences in classical logic simply make implicit knowledge explicit; we would also like to reason with tentative statements.
+\item Sometimes we would like to represent knowledge about something that is not entirely true or false; uncertain knowledge.
+\end{itemize}
+
+\subsection{Closed World Reasoning}
+The close world assumption, CWA for short says the following:\\
+\textit{There are many more false things than true things. If something is true and relevant, it has been put into the KB. So, if something is not present in the KB, it can reasonably be assumed to be false.}\\
+The CWA completes a non-closed KB \footnote{On the contrary a complete KB is one in which for every ground atom in the language, either the atom or its negation appears in the KB. } by including the negation of a ground atom whenever the atom does not follow from the KB.\\
+In other words, if we have no evidence as to the truth of a ground atom, we assume that it is false. This can be formalized as:
+\[CWA(KB)=KB^+=KB \cup \Delta_{asm}\]
+Where $\Delta_{asm}$ is the assumption set containing all the negative literals $L$ if $L$ is not derivable from the KB:
+\[\Delta_{asm}=\{\neg L | L\ if\ L\ is\ positive\ literal\ and\ KB \nvDash L\}\]
+Another way of characterizing the assumption set is using the Herbrand Base \textit{HB(KB)} (Section \ref{sec:herbrand_base}):
+\[\Delta_{asm}=\{\neg L : KB \nvDash L\ and\ L\in HB(KB)\}\]
+
+\paragraph{An Example}
+Let the KB be made of two formulas:
+\begin{itemize}
+\item $\forall x\ P(x) \Rightarrow Q(x)$
+\item $P(a)\wedge R(b)$
+\end{itemize}
+We have that the Herbrand Base of the KB is:
+\[HB(KB)=\lbrace P(a), Q(a), R(a), P(b), Q(b), R(b) \rbrace\]
+So our set of assumption would be:
+\[\Delta_{asm}=\lbrace \neg R(a), \neg P(b), \neg Q(b) \rbrace\]
+
+
+\paragraph{Completeness of CWA}
+We can show that CWA produces a complete KB since we have that:
+\[\forall \alpha, KB^+ \modules \alpha\ or\ KB^+ \modules \neg \alpha\]
+Where $\alpha$ can be either an atom or formula. 
+
+\paragraph{Consistency of CWA}
+Let KB be a consistent \footnote{Consistent means that I cannot have both $P(a)$ and $\neg P(a)$ in the KB at the same time.} set of formulas. $CWA(KB)$ is consistent iff any clause $C$ that
+is formed of positive ground literals $P_i$ that can be deduced from the KB, such as $C=P_1\vee...\vee P_2$; every $C$ contains at least one positive ground literal $P_i$ that can be deduced from the KB.
+
+
+\paragraph{Generalized CWA}
+Let a KB be the following:
+\begin{itemize}
+\item $Course(AI) \wedge Course(MachineLearning)$
+\item $Student(Nardi) \vee Professor(Nardi)$
+\end{itemize}
+If we apply CWA to the KB we have an inconsistency. However it is still reasonable (and consistency preserving) to assume that \textit{AI} and \textit{MachineLearning} are neither students nor professors, 
+and that and that \textit{Nardi} is not a course is not a course. So we can use Generalized CWA [GCWA] in the following way:
+\[GCWA(KB)=KB\cup \Delta_{asm}\]
+Where $\Delta_{asm}= \lbrace \neg L | L$ \textit{is a positive literal and there is no positive clause C
+such that} $KB \models L\wedge C and KB \nVDash C \rbrace$.\\
+So an atom $L$ can be assumed to be false only if it is the case that whenever a disjunction of atoms, including that atom, is entailed by KB; the smaller disjunction without the atom is also entailed.\\
+For the previous example we have that, $GCWA(KB)$:
+\begin{itemize}
+\item $\neg Course(Nardi)$
+\item $\neg Student(AI), \neg Student(MachineLearning)$
+\item $\neg Professor(AI), \neg Professor(MachineLearning)$
+\end{itemize}
+
+\subsection{Negation}
+Given a KB and an atom $A$, the \textbf{negation as failure} says the following:\\
+\textit{If from the KB we do not prove $A$, then from the KB we deduce $\neg A$.}\\
+
+
+\subsubsection{Semantic of stable models}
+The basic idea is to design a model of a certain KB as a \textbf{canonical} model, i.e. this models determine which answer to a given query is considered correct. For example having KB:
+\begin{itemize}
+\item $P(1),Q(2)$
+\item $P(x) \Rightarrow Q(x)$
+\end{itemize}
+Have two models:
+\begin{enumerate}
+\item $M_1=\lbrace P(1), Q(1), Q(2) \rbrace$
+\item $M_2=\lbrace P(1), Q(1), Q(2), P(2)\rbrace$ \footnote{This one is exactly equal to the Herbrand Base of KB.}
+\end{enumerate}
+We can see how 1) is a minimal model which is also unique in KB which are in Horn Normal Form (Section \ref{subsubsec:horn}). But when we introduce negations then we loose the HNF, thus there is no unique minimal model.\\
+
+\paragraph{Grounding} is the technique of replacing a clause with its ground instance.
+
+\paragraph{Negation Elimination} Given a set $M$ of atoms of KB, the reduct $KB_M$ is obtained by eliminating:
+\begin{itemize}
+\item all the clauses that in the body have a negated atom of M;
+\item all the negative literals not in M.
+\end{itemize}
+Now we have that $KB_M$ is negation-free thus having an unique minimal model. If this model coincide with $M$ then we can say that $M$ is a \textbf{stable set} of the KB.\\
+
+\paragraph{Theorem}
+\textit{Every stable set of a KB is a minimal Herbrand model of KB}.\\
+The intuitive meaning is as follows:\\
+IF $M$ is a set of ground atoms that an Agent $A$ considers to be true, then any rule that has a sub-goal $\neg B$ with $B \in M$ is, form the agent point of view, useless; furthermore, any sub-goal $\neg B$ with $B \notin M$ is, from the agent point of view, trivial. Then $A$ can simplify the premises in the KB and replace them with $KB_M$. If $M$ happens to be precisely the set of atoms that logically follows from $KB_M$ then $A$ is being rational.\\
+
+The stable model semantic is defined for logic program if they have exactly one stable model, and it declares that model to be a canonical model.
+
+
+
+
+\newpage
 \changelocaltocdepth{2}
 
 \section{Exercises}
@@ -1457,7 +1567,17 @@ And finally we use:
 Which entails the empty clause, thus $(KB \vee \neg q) \vdash_{\mathcal{R}} \{\}$ is true, thus $KB\vdash_{\mathcal{R}}q$.
 
 \subsubsection{Ex2}
-Let $Gov$ , $Univ$, $Luca$, $Bill$ be constant symbols, and let $Prof(x)$,$Student(x)$,$Unhappy(x)$,$CutFund(x,y)$,$FailExam(x,y)$ be unary and binary predicate symbols.
+Let $Gov$ , $Univ$, $Luca$, $Bill$ be constant symbols, and let
+
+\begin{itemize}
+\item $Prof(x)$
+\item $Student(x)$
+\item $Unhappy(x)$
+\item $CutFund(x,y)$
+\item $FailExam(x,y)$
+\end{itemize}
+be unary and binary predicate symbols.
+
 Given:
 \begin{itemize}
 \item If the Government cuts the funds to Universities, professors are unhappy.
@@ -1475,10 +1595,46 @@ The exercise demand to:
 \paragraph{KB in FOL}
 \begin{enumerate}
 \item $Prof(Luca),Student(Bill)$
-\item $[\forall x\ Prof(x) \wedge Unhappy(x)]\Rightarrow [\forall y\ Student(y) \wedge FailExam(x,y)]$
+\item $\forall x\ \forall y\ [Prof(x) \wedge Unhappy(x)\wedge Student(y)]\Rightarrow [FailExam(x,y)]$
 \item $\forall x\ CutFund(Gov,Univ) \wedge Prof(x) \Rightarrow Unhappy(x)$
-\item $e$
+\item $CutFund(Gov,Univ)$
 \end{enumerate}
+
+\paragraph{Modus Ponens}
+Given the facts in 1) and 4) we can use MP on formula number 3:
+\[\frac{[CutFund(Gov,Univ),Prof(Luca)],\quad [\forall x\ CutFund(Gov,Univ) \wedge Prof(x) \Rightarrow Unhappy(x)]}{Unhappy(Luca)}\]
+with the substitution $\theta=\lbrace x/Luca \rbrace$ and add the consequence $Unhappy(Luca)$ to the KB.\\
+Finally we can use MD on the facts we have and on formula number 2):
+\[\frac{[Prof(Luca),Unhappy(Luca),Student(Bill)],\quad [\forall x\ \forall y\ [Prof(x) \wedge Unhappy(x)\wedge Student(y)]\Rightarrow [FailExam(x,y)]]}{Fail(Luca, Bill)}\]
+Proving that Bill will fail Luca's exam.
+
+\paragraph{Resolution}
+First we need to transform our KB into CNF (Section \ref{subsec:cnf}).\\
+For formula 2 we have:
+\begin{itemize}
+\item $\forall x\ \forall y\ [Prof(x) \wedge Unhappy(x)\wedge Student(y)]\Rightarrow [FailExam(x,y)]$
+\item Remove universal quantifiers with UI (Section \ref{subsubsec:UI}):
+\[[Prof(x) \wedge Unhappy(x)\wedge Student(y)]\Rightarrow FailExam(x,y)\]
+\item Remove implication:
+\[\neg [Prof(x) \wedge Unhappy(x)\wedge Student(y)]\vee FailExam(x,y)\]
+\item Move negation inwards:
+\[\neg Prof(x) \vee \neg Unhappy(x)\vee \neg Student(y)\vee FailExam(x,y)\]
+\item Write in clause form:
+\[C_1=\lbrace \neg Prof(x), \neg Unhappy(x), \neg Student(y), FailExam(x,y)\rbrace\]
+\end{itemize}
+For 3) do something similar and get:
+\[C_2= \lbrace \neg CutFund(Gov,Univ),\neg Prof(z), Unhappy(z) \rbrace\]
+Note that I've changed the variables from $x$ to $z$ to avoid confusion for later substitution.\\
+Finally get:
+\[C_3,C_4,C_5=\lbrace Prof(Luca) \rbrace,\ \lbrace Student(Bill) \rbrace,\ \lbrace CutFund(Gov,Univ) \rbrace,\]
+
+Now we query to the KB $q= FailExam(Luca,Bill)$, thus adding the negated query to the KB.\\
+First we resolve $C_3,C_5$ with $C_2$, using the substitution $\theta=\lbrace z/Luca \rbrace$:
+\[\frac{[C_3,C_5],\quad C_2}{C_6=\lbrace Unhappy(Luca) \rbrace}\]
+Then we resolve $C_6,C_3,C_4$ with $C_1$, using the substitution $\theta= \lbrace x/Luca, y/Bill \rbrace$ and get:
+\[\frac{[C_3,C_4,C_6],\quad C_1}{\lbrace \rbrace}\]
+The empty clause, which prove that $(KB \wedge \neg q)\vdash \{\}$, thus $KB \vdash_{\mathcal{R}} q$.
+
 
 
 \subsection{MidTerms}
