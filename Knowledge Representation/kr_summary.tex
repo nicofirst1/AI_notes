@@ -1636,6 +1636,50 @@ Then we resolve $C_6,C_3,C_4$ with $C_1$, using the substitution $\theta= \lbrac
 The empty clause, which prove that $(KB \wedge \neg q)\vdash \{\}$, thus $KB \vdash_{\mathcal{R}} q$.
 
 
+\subsubsection{Ex3}
+Tell whether or not the following pairs of expressions unify. Describe the unification process step by step:
+\begin{enumerate}
+\item $f(g(a, X), g(X, b)) = f(g(a, b, c, d))$
+\item $f(g(a, X), g(Y, Y )) = f(g(a, b), g(f(a), f(Z)))$
+\item $f (cons(cons(a, b))) = f (cons(cons(a, nil))$
+\end{enumerate}
+
+Number one is \textbf{not unifiable} since the predicate $f()$ has arity 2 (2 arguments) in the first part of the unification, while it has only one in the second.\\
+
+Number two is \textbf{unifiable}. First the arity of both the predicates $f,g$ are the same in the two parts of the equation. The first thing we have to unify is :
+\[g(a,X)=g(a,b)\]
+Which yields $\theta=\lbrace X/b \rbrace$. Then we nned to look at :
+\[g(Y,Y)=g(f(a),f(Z))\]
+If we notice that $Z$ is a variable which can assume any value and that we must have the two arguments of $g$ the same for $g(Y,Y)$ we just use $Z=a$ and get:
+\[g(Y,Y)=g(f(a),f(a))\]
+And then we substitute with $Y=f(a)$.\\
+
+Number three is written in a weird way, but if we look at Nardi's slides we can interpret it to be (maybe):
+\[ f([[a|b]|[]])=f([[a|[]]|[]]) \]
+Which is \textbf{not unifiable} since Prolog says so (seriously I couldn't understand it).
+
+
+\subsubsection{Ex4}
+Answer the following questions:
+\begin{enumerate}
+\item  Is $P(c)$ the Skolemized version of $\exists x\ P(x)$?
+\item  Is $\forall x\ P(c,x)$ the Skolemized version of $\forall x\ \exists y\ P(y,x)$?
+\item  Is $\forall x\ P(f(x),x)$ the Skolemized version of $\forall x\ \exists y\ P(y,x)$?
+\item  Is $P(c_1,c_2)$ the Skolemized version of $\exists x\ \exists y\ P(x,y)$?
+\item  Is $\forall y\ P(c_1,y,f(y))$ the Skolemized version of $\exists x\ \forall y\ \exists z\ P(x,y,z)$?
+\item  Is $P(x,y,f(y))$ the Skolemized version of $\forall x\ \forall y\ \exists z\ P(x,y,z)$?
+\end{enumerate}
+
+Answers:
+\begin{enumerate}
+\item No, that would be the EI (Section \ref{subsubsec:EI}) of the original formula \footnote{Given that $c$ does not appear in the KB.}. A Skolemized version would be $P(f(x))$, where $f$ does not appear in the KB.
+\item No, that would be the EI of the original formula. A Skolemized version would be $P(f(x),x)$.
+\item Yes.
+\item Yes, since the existential quantifiers [EQ] do not depend on any universal quantifier [UQ], so we can use EI to remove them.
+\item Yes, because the first EQ does not depend on any UQ, hence we can use the EI. The second  EQ depends on the UQ controlling $x$ so we need a function which depends on $x$.
+\item No, because $z$ depend both on $y$ and $x$ so the correct skolem function would take into account both the UQ. A Skolemized version would be $P(x,y,f(x,y))$
+\end{enumerate}
+
 
 \subsection{MidTerms}
 \subsubsection{M1}
