@@ -2100,27 +2100,27 @@ If John is not lucky and is silly, he does not pass the exam of Artificial Intel
 
 \paragraph{Part 2}
 The above implications can be written in clausal form as:
-\[KB=C_1=\lbrace \neg ST, SY, PS \rbrace,\ C_2=\lbrace LU, \neg SY, \neg PS \rbrace\]
+\[KB=[ C_1=\lbrace \neg ST, SY, PS \rbrace,\ C_2=\lbrace LU, \neg SY, \neg PS \rbrace]\]
 
 
-To be a model a set must have an equivalent literal for each clause:
+To prove if one of the set is a model we can either refer to the truth tables or remember that a KB in CNF (Section \ref{subsec:cnf}) is just a conjunction of clauses, hence if all the clauses are true then the set is a model. Since a clause is a set of disjunction we just need for one of the terms to be true, hence if we have two literals in the set that match with one literal in both $C_1$ and $C_2$, that set is a model:
  
 
 \begin{enumerate}
 
 \item $\lbrace ST,SY,PS\rbrace$ has $SY,PS$ which appears in $C_1$, but none in $C_2$. Since the KB is a conjunction of clauses, all must be true, hence this is not a model.
 \item $\lbrace LU,PS\rbrace$ has one literal in both clauses, thus being a model.
-\item The empty set $\lbrace \rbrace$ does not appear in the KB. Moreover the KB cannot be resolved  to infer the empty clause.
+\item The empty set $\lbrace \rbrace$ is the same of saying that we have a set in which everything is false, that is: $\lbrace  \neg ST, \neg SY, \neg PS, \neg LU\rbrace$. We have that the presence on $\neg ST$ makes $C_1$ True, while both $\neg SY, \neg PS$ make $C_2$ True, thus we can conclude that $\lbrace \rbrace$  is a model.
 \item $ \lbrace LU,SY,PS\rbrace$ follows the same logic as $\lbrace LU,PS\rbrace$, hence it is a model.
 \end{enumerate}
 
 \paragraph{Part 3}
 First we resolve $C_1$ with $C_2$ resolving in $C_3$:
 \[KB=C_1=\lbrace \neg ST, SY, PS \rbrace,\ C_2=\lbrace LU, \neg SY, \neg PS \rbrace,\ C_3=\lbrace LU, \neg ST \rbrace\]
-We just need to add the formula $\lbrace ST ,\neg SY \rbrace$  to the KB in order to infer $PS$:
-\[KB=C_1=\lbrace \neg ST, SY, PS \rbrace,\ C_2=\lbrace LU, \neg SY, \neg PS \rbrace,\ C_3=\lbrace LU, \neg ST \rbrace,\ C_4=\lbrace ST, \neg SY\rbrace\]
+We just need to add the formulas $\lbrace ST \rbrace ,\lbrace \neg SY \rbrace$ (Jhon studies and he is not silly) to the KB in order to infer $PS$:
+\[C_1=\lbrace \neg ST, SY, PS \rbrace,\ C_2=\lbrace LU, \neg SY, \neg PS \rbrace,\ C_3=\lbrace LU, \neg ST \rbrace,\ C_4=\lbrace ST \rbrace,\  C_5=\lbrace \neg SY\rbrace\]
 Then we query $q=PS$.\\
-We use resolution on $C_4$ and $C_1$ resulting in $C_5=\lbrace PS \rbrace$, then we resolve with the query to get the empty clause, thus we can infer $PS$ from the $KB$.
+We use resolution on $C_4$ and $C_1$ resulting in $C_6=\lbrace SY,PS \rbrace$; then we resolve $C_5$ with $C_6$ and get $C_7=\lbrace PS \rbrace$; finally with the query to get the empty clause, thus we can infer $PS$ from the $KB$.
 
 
 \subsubsection{Ex 7}
