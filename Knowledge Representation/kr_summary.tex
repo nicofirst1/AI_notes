@@ -2041,12 +2041,16 @@ tell whether the formula $C$ can be derived from KB in each of the following cas
 Both for 1 and 2, in case of positive answer show the derivation, in case of negative answer explain why.
 Note that, in case 1, the explanation that MP cannot be used because it is not complete for non-Horn formulas is not acceptable as it is wrong: non-complete method in fact doesn’t mean that the method can never be successful!\\
 
-For the Modus Ponens part we can say that (?): $C$ can not be derived by the $KB$ since $C$ is not part of the premises of any clause in the $KB$; so adding $\neg C$ to the $KB$ \footnote{This because we want to prove that $(KB \wedge \neg C)\vdash_{\mathcal{R}}\lbrace\rbrace$.} will not make any difference since we could not apply MD to any clause.\\
+\paragraph{Part 1}
+For the Modus Ponens part we can say that: $C$ can not be derived by the $KB$ since we do not know the truthfulness of neither $A$ nor $B$. Without the premises, the conclusion can not be established.
+
+\paragraph{Part 2}
 
 For the resolution part we need to  put the KB in clause form:
-\[KB= \{\neg A,B\},\{\neg B,C\},\{A,B\}\]
+\[KB= \{\neg A,C\},\{\neg B,C\},\{A,B\}\]
 We notice that we have a non-Horn KB since the clause $\lbrace A,B \rbrace$ has two true literals \footnote{Remember that the Horn form wants \textit{at most} one true literal (Section \ref{subsubsec:horn}).}. We query the KB $q=C$, thus we want to prove that $(KB \wedge \neg C)\vdash_{\mathcal{R}}\lbrace\rbrace$, hence we use resolution in the following way:
-\[\frac{\lbrace \neg A,B\rbrace,\quad \lbrace\neg B,C\rbrace}{\{C\}}\]
+\[\frac{\lbrace \neg A,C\rbrace,\quad \lbrace  A,B \rbrace}{\{B\}}\]
+\[\frac{\lbrace \neg B,C\rbrace,\quad \lbrace  B \rbrace}{\{C\}}\]
 \[\frac{ C,\quad \neg C }{\{\}}\]
 We proved that $C$  can be derived by $KB$.
 
@@ -2054,16 +2058,17 @@ We proved that $C$  can be derived by $KB$.
 
 Given two formulas $\alpha$, $\beta$ and $\gamma=\alpha \wedge \beta$, answer the following questions:
 \begin{enumerate}
-\item If $\alpha$ is \textit{satisfiable} and $\beta$ is unsatisfiable, then what can we say about $\gamma$?
-\item If $\alpha$ is \textit{satisfiable} and $\beta$ is satisfiable, then what can we say about $\gamma$?\end{enumerate}
+\item If $\alpha$ is \textit{satisfiable} and $\beta$ is \textit{unsatisfiable}, then what can we say about $\gamma$?
+\item If $\alpha$ is \textit{satisfiable} and $\beta$ is \textit{satisfiable}, then what can we say about $\gamma$?\end{enumerate}
 
 First we need to remember the definition of \textbf{satisfiability} (Section \ref{sec:satisfiability}). Given that $\beta$ is unsatisfiable, there are no interpretations in which it is true (no models) thus it will always be false. The conjunction will then be equivalent to $\alpha \wedge\beta \equiv \alpha \wedge \bot\equiv \bot$, that is the formula $\gamma$ will always be Flase, i.e. \textit{unsatisfiable}.\\
+
 The second question is trickier but the logical answer is: \textit{we cannot say}.\\
 This is because if both $\alpha,\beta$ are satisfiable then they have some models $Model(\alpha),Model(\beta)$.\\ 
 We can have three possibilities for this models:
 \begin{enumerate}
 \item One is a subset of the other, $Model(\alpha)\subset Model(\beta)$ or viceversa, then the formula  $\gamma$ will have some models, thus being satisfiable.
-\item The two sets of models have no common interpretations \footnote{Disjoint sets.}, $Model(\alpha)\cup Model(\beta)=\{\}$, then $\gamma$ is unsatisfiable.
+\item The two sets of models have no common interpretations \footnote{Disjoint sets.}, $Model(\alpha)\cap Model(\beta)=\{\}$, then $\gamma$ is unsatisfiable.
 \item The last possibility is that  $Model(\alpha)= Model(\beta)$ so that $\gamma$ can be ether satisfiable, or valid if $Model(\alpha)=Interpretations(\alpha)=Interpretations(\beta)=Model(\beta)$.
 \end{enumerate}
 
