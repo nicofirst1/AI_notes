@@ -1680,6 +1680,62 @@ Answers:
 \item No, because $z$ depend both on $y$ and $x$ so the correct skolem function would take into account both the UQ. A Skolemized version would be $P(x,y,f(x,y))$
 \end{enumerate}
 
+\subsubsection{Ex 5}
+Given:
+\begin{itemize}
+\item The textbooks of class CA are easy
+\item The textbooks of class CB are difficult
+\item  Mary studies (all and only) easy books
+\item  Mary passes the exam of a class if she studies at least a textbook for that class
+\item  Russel&Norvig is a textbook for class CA
+\item  Tenenbaum is a textbook for class CB
+\end{itemize}
+
+Do the following:
+\begin{enumerate}
+\item Translate the sentences in FOL, in CNF and tell if it is Horn 
+\item  Prove, using Resolution, that Mary passes an exam, by adding the appropriate knowledge (if needed)
+\end{enumerate}
+
+
+\paragraph{Part 1}
+The first order logic KB would be:
+\begin{itemize}
+\item $\forall x\ Ca(x)  \Rightarrow Easy(x)$
+\item $\forall x\ Cb(x) \Rightarrow \neg Easy(x)$
+\item $\forall x\  Easy(x) \Rightarrow Study(Mary,x)$
+\item $\exists x\ Study(Mary,x) \wedge Passes(Mary,x)$
+\item $Ca(R&N), CB(Tb)$
+\end{itemize}
+
+The CNF would be:
+\begin{itemize}
+\item $C_1= \lbrace \neg Ca(x), Easy(x) \rbrace$
+\item $C_2= \lbrace \neg Cb(x), \neg Easy(x) \rbrace$
+\item $C_3= \lbrace \neg Easy(x), Study(Mary,x) \rbrace$
+\item $C_4= \lbrace Study(Mary,B) \rbrace$, where we used EI (Section \ref{subsubsec:EI}) to refer to a generic book $B$ that Mary studies.
+\item $C_5= \lbrace Passes(Mary,B) \rbrace$, in this case we are not making any difference between the exam that Mary passes and the book she uses to study. We will refer to the exam based on R&N or on Tb.
+\item $C_6= \lbrace Ca(R&N) \rbrace$
+\item $C_7= \lbrace Cb(Tb) \rbrace$
+\end{itemize}
+We can tell that the KB is in Horn form since all the clauses have \textbf{at most one} positive literal (Section \ref{subsubsec:horn}).
+
+\paragraph{Part 2}
+First we need to add some knowledge to the KB in order to make Mary study something. We add the sentence:\\
+\textit{Mary studies R&N.}\\
+Which, in FOL, is equivalent to say : $Study(Mary,R&N)$.\\
+Which, in CNF, is :$C_8=\lbrace Study(Mary,R&N) \rbrace$.\\
+In order to prove that Mery passes the R&N exam we need to query $q=Passes(Mary,R&N)$ to the KB, thus we need to prove that $(KB \wedge \neg q) \vdash \{\}$. The resolution follows these steps:
+\begin{enumerate}
+\item Resolve $\neg q$ with $C_3$, using the substitution $\theta=\lbrace x/R&N \rbrace$:
+\[\frac{\neg Passes(Mary,R&N),\quad \lbrace \neg Easy(x), Study(Mary,x) \rbrace}{C_9=\lbrace \neg Easy(R&N) \rbrace}\]
+\item Resolve $C_9$ with $C_1$,  using the substitution $\theta=\lbrace x/R&N \rbrace$:
+\[\frac{\neg Easy(R&N),\quad \lbrace \neg Ca(x), Easy(x) \rbrace}{C_{10}=\lbrace \neg Ca(R&N) \rbrace}\]
+
+\item Finally resolve $C_{10}$ with the fact $C_6$ and obtain the empty clause.
+\end{enumerate}
+
+\vfill
 
 \subsection{MidTerms}
 \subsubsection{M1}
@@ -1704,14 +1760,14 @@ Our vocabulary will have the following predicates:
 \end{itemize}
 
 Given this predicates we can express the sentence in FOL:
-\begin{itemize}
+\begin{enumerate}
 \item First we express the ground terms:
 \[ Garden(V), Garden(F), Gardener(D,V), Gardener(D,F), HasWater(D)\]
 \item Then we need to express that if a gardener $g$ of some garden $x$ \footnote{We know that a gardener can have multiple gardens, so we use $\forall$ gardens.} has water, then the $x$ will be watered:
 \[\forall g \forall x[\ HasWater(g)\wedge Gardener(g,x)\Rightarrow Watered(x)]\]
 \item Next we formulate that for every garden $x$, if $x$ has a gardener $y$ \footnote{We can use the existential quantifier since we're interested in knowing if there exist some gardener for $x$. } and $x$ is watered, then $x$ is beautiful.
 \[\forall x\ [Garden(x)\wedge [\exists y\ Gardener(y,x)]\wedge Watered(x)\Rightarrow Beautiful(x)]\]
-\end{itemize}
+\end{enumerate}
 
 \paragraph{Part 2}
 
@@ -1750,11 +1806,11 @@ Our KB now looks like this:
 We want to query $q_1=Beautiful(V)$ and $q_2=Beautiful(F)$. Let us start with $q_1$, so we want to show that $(KB \wedge \neg q_1)\vdash_{\mathcal{R}} \{\}$:
 \begin{itemize}
 \item We first use resolve $C_7$ with $C_1$, with the substitution $\theta=\{g/D\}$
-\[\frac{ HasWater(D),\quad \lbrace \neg HasWater(g), \neg Gardener(g,x), Watered(x)\rbrace}{\lbrace \neg Gardener(D,x), Watered(x)\rbrace}\]
+\[\frac{ HasWater(D),\quad \lbrace \neg HasWater(g), \neg Gardener(g,x), Watered(x)\rbrace}{C_8=\lbrace \neg Gardener(D,x), Watered(x)\rbrace}\]
 Adding it to the KB.
-\item Since we're interested in $V$ we resolve $C_8$ (this last clause) with $C_5$, with the substitution $\theta=\{x/V\}$:
-\[\frac{Gardener(D,V),\quad \lbrace \neg Gardener(D,x), Watered(x)\rbrace}{\lbrace \neg Watered(V)\rbrace}\]
-\item Until now we have used only \textbf{binary resolution}, now we will use the general one. Given $C_3,C_5,C_9,q_1$ we can resolve them with $C_2$ with the substitution $\theta=\{x/V\}$ we resolve with $\{\}$ thus proving that $(KB \wedge \neg q_1)\vdash_{\mathcal{R}} \{\}$.
+\item Since we're interested in $V$ we resolve $C_5$  with $C_8$, with the substitution $\theta=\{x/V\}$:
+\[\frac{Gardener(D,V),\quad \lbrace \neg Gardener(D,x), Watered(x)\rbrace}{C_9=\lbrace \neg Watered(V)\rbrace}\]
+\item Until now we have used only \textbf{binary resolution}, now we will use the general one. Given $C_3,C_5,C_9,\neg q_1$ we can resolve them with $C_2$ with the substitution $\theta=\{x/V\}$ we resolve with $\{\}$ thus proving that $(KB \wedge \neg q_1)\vdash_{\mathcal{R}} \{\}$.
 \end{itemize}
 Same thing goes for $q_2$.
 
@@ -1775,9 +1831,9 @@ We can rule out the first two (1,2) since there is only one Italian National, so
 Number 5 is no good since universal quantifier works with implication rather than $conjunction$ (Section \ref{sec:quantifiers}).\\
 Number 6 has no sense, since it saying: if Italians are happy then the national will win.\\
 Number 4 is good since the sense is correct.\\
-Finally number 3 is also good since we can use $EI$ (Section \ref{subsubsec:EI}) to get:
+Finally number 3 is wrong. On the other hand it would be good  if the existential quantifier was to be moved outside the scope of the universal one; in this case we could have used $EI$ (Section \ref{subsubsec:EI}) to get:
 $\forall x\ [Italian(x)\wedge WinWc(N)]\Rightarrow Happy(x)]$
-And we can get exactly number 4 with the substitution $\theta=\{N/National\}$.
+And we could get exactly number 4 with the substitution $\theta=\{N/National\}$.
 
 \subsubsection{M3}
 $D$ is the advisor of two PhD students $F$ and $A$, who are both motivated. PhD students who have an advisor are successful iff their advisor cares about them. Every advisor cares about his/her students, when they are motivated.
@@ -1815,13 +1871,24 @@ Given the sentence we can translate it into FOL:
 From 2 we have:
 \begin{itemize}
 \item Use skolem function $Adv(x)$ to remove the existential quantifier:
-\[\forall x\ [Cares(Adv(x),x)\wedge Advisor(Adv(x),x)]\Rightarrow Successful(x)\]
+\[\forall x\ [Cares(Adv(x),x)\wedge Advisor(Adv(x),x)]\leftrightarrow Successful(x)\]
+
 \item Use $UI$ (Section \ref{subsubsec:UI}) to remove universal quantifiers:
+\[ [Cares(Adv(x),x)\wedge Advisor(Adv(x),x)]\leftrightarrow Successful(x)\]
+\item Remove double implication:
 \[ [Cares(Adv(x),x)\wedge Advisor(Adv(x),x)]\Rightarrow Successful(x)\]
-\item Remove implication:
+And 
+\[ Successful(x)\Rightarrow [Cares(Adv(x),x)\wedge Advisor(Adv(x),x)] \]
+\item Remove implication :
 \[ \neg Cares(Adv(x),x)\vee \neg Advisor(Adv(x),x)\vee Successful(x)\]
+And
+\[ \neg Successful(x)\vee [Cares(Adv(x),x)\wedge Advisor(Adv(x),x)] \]
+\item Use "OR" distribution on second term:
+\[ [\neg Successful(x)\vee Cares(Adv(x),x)]\wedge [\neg Successful(x)\vee Advisor(Adv(x),x)] \]
 \item Use clausal form:
 \[\lbrace  \neg Cares(Adv(x),x), \neg Advisor(Adv(x),x), Successful(x)\rbrace\]
+And
+\[\lbrace \neg Successful(x), Cares(Adv(x),x) \rbrace,\ \lbrace \neg Successful(x), Advisor(Adv(x),x) \rbrace \]
 \end{itemize}
 
 
@@ -1839,20 +1906,22 @@ Our KB now looks like this:
 \begin{itemize}
 \item $C_1=\lbrace \neg Advisor(x,y), \neg Motivated(y), Cares(x,y)\rbrace$
 \item $C_2=\lbrace  \neg Cares(Adv(x),x), \neg Advisor(Adv(x),x), Successful(x)\rbrace$
-\item $C_3,C_4,C_5,=Student(F),Student(A),Advisor(D,F)$
-\item $C_6,C_7,C_8=Advisor(D,A), Motivated(F),Motivated(A)$
+\item $C_3=\lbrace \neg Successful(x), Cares(Adv(x),x) \rbrace$
+\item $C_4=\lbrace \neg Successful(x), Advisor(Adv(x),x) \rbrace$
+\item $C_5,C_6,C_7,=Student(F),Student(A),Advisor(D,F)$
+\item $C_8,C_9,C_{10}=Advisor(D,A), Motivated(F),Motivated(A)$
 \end{itemize}
 
 \paragraph{Part 3}
 We want to query $q_1=Successful(F)$ and $q_2=Successful(A)$. Starting with $q_1$ we get the negation $\neg q_1$ and prove that the inference yields an empty clause:
 
-\begin{itemize}
-\item We first resolve $C_2$ with $q_1$ using the substitution $\theta=\{x/F\}$:
-\[\frac{\neg Successful(F),\quad \lbrace  \neg Cares(Adv(x),x), \neg Advisor(Adv(x),x), Successful(x)\rbrace}{C_9=\lbrace  \neg Cares(Adv(F),F), \neg Advisor(Adv(F),F)\rbrace}\]
-\item Then we resolve $C_9$ with $C_1$ using $\theta=\{x/Adv(F),y/F\}$:
-\[\frac{\lbrace  \neg Cares(Adv(F),F), \neg Advisor(Adv(F),F)\rbrace,\quad \lbrace \neg Advisor(x,y), \neg Motivated(y), Cares(x,y)\rbrace}{C_{10}=\lbrace \neg Advisor(Adv(F),F),\neg Motivated(F) \rbrace}\]
-\item Finally we resolve $C_{10}$ with $C_7$ and $C_5$, with $\theta=\{Adv(F)/D\}$ obtaining the empty clause.
-\end{itemize}
+We first resolve $C_2$ with $q_1$ using the substitution $\theta=\{x/F\}$:
+\[\frac{\neg Successful(F),\quad \lbrace  \neg Cares(Adv(x),x), \neg Advisor(Adv(x),x), Successful(x)\rbrace}{C_{11}=\lbrace  \neg Cares(Adv(F),F), \neg Advisor(Adv(F),F)\rbrace}\]
+
+Then we resolve $C_{11}$ with $C_1$ using $\theta=\{x/Adv(F),y/F\}$:
+\[\frac{\lbrace  \neg Cares(Adv(F),F), \neg Advisor(Adv(F),F)\rbrace,\quad \lbrace \neg Advisor(x,y), \neg Motivated(y), Cares(x,y)\rbrace}{C_{12}=\lbrace \neg Advisor(Adv(F),F),\neg Motivated(F) \rbrace}\]
+
+Finally we resolve $C_{12}$ with $C_9$ and $C_7$, with $\theta=\{Adv(F)/D\}$ obtaining the empty clause.
 
 \subsubsection{M4}
 Tell, among the following formulas, which one adequately represents the sentence (and provide an explanation of the answer):\\
@@ -1866,6 +1935,9 @@ Tell, among the following formulas, which one adequately represents the sentence
 We can tell that the first one is wrong since the implication is inverted: \textit{if Mary loves x then x must be a cat and not a dog}, which is a conclusion we can infer from the sentence but not a direct representation of it. Moreover the conjunction $\neg Dog(x)\wedge Cat(x)$ makes no sense since if $x$ is a cat then it is not a dog.\\
 
 The third and the second sentences are similar: if we are under the \textit{close world assumption} then every sentence not known to be true is false, hence $Loves(Mary,Dog)$ is not known to be true (for number 3) so it is false and can be omitted from the generation of the KB. On the other hand the exercise specify that we are working under First Order Logic, which is not assumed to work under \textit{database semantic} (Section \ref{sec:database_semantic}) so we must specify that Mary does not like dogs, hence the correct answer is number 2.
+
+
+\vfill
 
 \subsection{Sample Exam Exercises}
 
