@@ -104,13 +104,39 @@ inter(Lst1,[_|Lst2],Res) :- inter(Lst1,Lst2,Res).
 %---------------------------------------------
 %EX 4
 %---------------------------------------------
+%Write a PROLOG program for a depth-first visit of possibly
+%cyclic graphs, represented through the relation arc(X,Y)
+
 arc(0,1). arc(1,5).
 arc(1,2). arc(2,4).
 arc(2,3). arc(4,6).
+arc(6,0). arc(4,2).
 
-%todo
-depthFirst(Root,Previous,Res) :- 
-                append(Res,[Root],NewRes),
-                arc(Root,Next),
-                Next \= Previous,
-                depthFirst(Next,Root,NewRes).
+
+% First we need an auxiliary function which checks if a node is already 
+% in the list of visited nodes.
+
+% stop if the list is empty, return true since no node has been found
+not_visited_node([],_).
+% else get the first element of the list and compare it with 'Elem'
+% if they are the same return false, else continue with the iteration
+not_visited_node([H|Lst],Elem) :- Elem \= H, not_visited_node(Lst,Elem).
+
+
+%Then we need a function to do the actual checking.
+
+% this one returns exactly the Starting node if Start and End are the same.
+connected(Start,Start,[Start]).
+
+% this one calls the accumulator version giving as input to the Acc parameter
+% a list containing the start node
+connected(Start,End,Path):- connectedAcc(Start,End,Path,[Start]).
+% is we reached the end, then set the path varaible to the Acc list
+connectedAcc(End,End,Acc,Acc). 
+% else do the following
+connectedAcc(Start,End,Path,Acc):- 
+            arc(Start,Mid), % check if there is a connection to the current node
+            not_visited_node(Acc,Mid), % check if the connection has not already been visited
+            append(Acc,[Mid],NewAcc), % append the connection to the accumulator
+            connectedAcc(Mid,End,Path,NewAcc). % continue with the next iteration
+
