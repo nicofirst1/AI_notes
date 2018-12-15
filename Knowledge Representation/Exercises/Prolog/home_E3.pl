@@ -59,6 +59,8 @@ count_elem_acc([H|Lst],Lenght,Acc):-
 % nil.
 
 %---------------------------------------------
+%EX 1.1
+%---------------------------------------------
 
 %Write a predicate istree/1 which succeeds if and only if its argument
 % is a Prolog term representing a binary tree.
@@ -70,6 +72,8 @@ istree(nil).
 istree(tree(_,Left,Right)):- istree(Left), istree(Right).
 
 %---------------------------------------------
+%EX 2
+%---------------------------------------------
 
 %2. Write a PROLOG program which implements member for a binary tree.
 
@@ -80,6 +84,8 @@ member(M,tree(_,L,_)):- member(M,L).
 % else look for the member in the right part
 member(M,tree(_,_,R)):- member(M,R).
 
+%---------------------------------------------
+%EX 3
 %---------------------------------------------
 
 %3. Write a PROLOG program which returns a list containing
@@ -114,13 +120,40 @@ depth_check_sub(D,tree(_,L,R),Res,CurrentD):-
 
                 
 %---------------------------------------------
+%EX 4
+%---------------------------------------------
+
+/*
+tree(a,0,tree(b,1,tree(d,2,tree(h,3,nil,nil),tree(i,3,nil,nil)),tree(e,2, tree(l,3,nil,nil),nil)),tree(c,1,tree(f,2,tree(m,3,tree(n,3,nil,nil),tree(o,3,nil,nil)), nil),tree(g,2,nil,nil)))
+
+0                                 A 
+                                  |
+1                 B------------------------------C
+                  |                              | 
+2         D---------------E               G--------------F                               
+          |               |                              |
+3 H --------------I       L                              M
+                                                         |
+4                                               N-----------------O
+
+*/
+
+%is_depth_tree_acc(Tree(Symbol,Depth,L,R),CurrentDepth):- 
 
 
-%Write a predicate cbal_tree/2 to construct completely balanced binary
-%trees for a given number of nodes. The predicate should generate all
-%solutions via backtracking. 
+% function calls the accumulator version with a counter used for getting the correct depth
+is_depth_tree(Tree):-is_depth_tree_acc(Tree,0).
+% if we're at a nil lode (leaf) return true
+is_depth_tree_acc(nil,_).
 
-cbal_tree(N,Tree):- cbal_tree_acc(N,Tree,tree(0,_,_)).
+% else check that Depth is equal to CurrD, if yes add 1 to depth and check other branches
+is_depth_tree_acc(tree(_,CurrD,L,R),CurrD):- 
+                NewD is CurrD +1,
+                is_depth_tree_acc(L,NewD),
+                is_depth_tree_acc(R,NewD).
+                
 
-%cbal_tree_acc(N,Tree,Acc). 
-
+                
+%---------------------------------------------
+%EX 5
+%---------------------------------------------
