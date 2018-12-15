@@ -44,7 +44,7 @@ combinatorial auctions by Tuomas Sandholm
 - R&N book chapeter 12.6 
 - Michael Gelfond and Vladimir Lifschitz The Stable Model Semantics for Logic Programming,
 - R. J. Brachman, H.J. Levesque, Knowledge Representation and Reasoning, Morgan Kaufmann, 2004.
-- [this slides] (http://www.cs.tau.ac.il/~annaz/teaching/TAU_winter08/Seminar/yulia.pdf)
+- (this slides) [http://www.cs.tau.ac.il/~annaz/teaching/TAU_winter08/Seminar/yulia.pdf]
 
 ## Contributing
 You can fork this notes, add your stuff, and never ever tell anyone about it...\
