@@ -184,7 +184,7 @@ get_constant_depth_5(Const,Depth,tree(_,_,_,R)):-
 
 % same tree as before without the information depth
 % tree(symbol,leftBranch, rightBranch)
-% tree(a,tree(b,tree(d,tree(h,nil,nil),tree(i,nil,nil)),tree(e, tree(l,nil,nil),nil)),tree(c,tree(f,tree(m,tree(n,nil,nil),tree(o,nil,nil)), nil),tree(g,nil,nil)))
+% tree(a,nil,tree(c,tree(f,nil, nil),tree(g,nil,nil)))
 
 % Function declarations:
 %get_constant_depth_6(Const,Depth,Tree)
@@ -205,3 +205,33 @@ get_constant_depth_acc_6(Const,Depth,tree(_,L,_),CurrDepth):-
 get_constant_depth_acc_6(Const,Depth,tree(_,_,R),CurrDepth):-
                 NewCurrDepth is CurrDepth +1,
                 get_constant_depth_acc_6(Const,Depth,R,NewCurrDepth).
+
+
+%---------------------------------------------
+%EX 7
+%---------------------------------------------
+
+%tree(a,tree(b,tree(d,tree(h,nil,nil),tree(i,nil,nil)),tree(e, tree(l,nil,nil),nil)),tree(c,tree(f,tree(m,tree(n,nil,nil),tree(o,nil,nil)), nil),tree(g,nil,nil)))
+
+% Function decalrations:
+% tree_converter(OriginalTree,DepthTree).
+% tree_converter_acc(OriginalTree,DepthTree,Depth).
+
+% return true if input is nil
+tree_converter(nil,nil).
+% Call the accumulator version with initial depth 0
+tree_converter(OriginalTree,DepthTree):- 
+        tree_converter_acc(OriginalTree,DepthTree,0).
+
+% if we reached a leaf then return nil
+tree_converter_acc(nil,nil,_).
+% else construct the tree addign the depth 
+tree_converter_acc(tree(Symbol,L,R),tree(Symbol,Depth,LD,RD),Depth):-
+        NewDepth is Depth+1, % increase the depth
+        tree_converter_acc(L,LD,NewDepth), % generate the left branch with the new depth
+        tree_converter_acc(R,RD,NewDepth). % generate the left branch with the new depth
+        
+
+
+
+
