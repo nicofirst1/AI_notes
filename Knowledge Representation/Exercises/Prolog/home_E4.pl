@@ -7,7 +7,7 @@ Provide a definition using NAF and one without it, and compare them.
 3. Define union using the negation of member. Build the search tree for the goal
 ? union([a,b],[b,c],Z).
 
-4. Apply the cut operator to the program insert of assign- ment 2, and draw
+4. Apply the cut operator to the program insert of assignment 2, and draw
 the search tree for the goal insert(4, [3,5,7], X).
 
 5. Define a predicate sortm(X,Y,Z), to order lists X and Y and return 
@@ -131,4 +131,58 @@ union_acc([_ | Lst1],Lst2,Res,Acc) :-
 
 
 
+%---------------------------------------------
+%EX 4
+%---------------------------------------------
 
+
+
+%---------------------------------------------
+%EX 5
+%---------------------------------------------
+
+/*
+msort( L, S )
+True if S is a sorted copy of L, using merge sort
+*/
+
+% the sort of an empty list is the empty list
+msort( [], [] ).
+% same goes when the list has one element
+msort( [X], [X] ).
+% execute the sort
+msort( ToSort, Sorted ) :- 
+        % first split the list in left and right
+        split(ToSort, L, R), 
+        % merge and sort left
+        msort(L, SL), 
+        % merge and sort right
+        msort(R, SR), 
+        % repeat until the split yields an empty list
+        merge(SL, SR, Sorted).
+ 
+/*
+split( LIST, L, R )
+Alternate elements of LIST in L and R
+*/
+
+% if the passed list is empty then return empty for both left and right
+split( [], [], [] ). split( [X], [X], [] ).
+ % if there is just one lemenet then return it as the left list, while the right one is empty
+split( [L,R|T], [L|LT], [R|RT] ) :- split( T, LT, RT ).
+
+ /*
+merge( LS, RS, M )
+Assuming LS and RS are sorted, True if M is the sorted merge of the two
+*/
+
+% if one of the two list to merge is empty simply return the other
+merge( [], RS, RS ). 
+merge( LS, [], LS ).
+% If the first element of left is the smallest append it to the result '[L|T]'
+% and continue to merge passing the entire right list [R|RS]
+merge( [L|LS], [R|RS], [L|T] ) :- L =< R, merge(    LS, [R|RS], T).
+% otherwise do the opposite
+merge( [L|LS], [R|RS], [R|T] ) :- L > R,  merge( [L|LS],   RS,  T).
+        
+        
