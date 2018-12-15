@@ -157,3 +157,26 @@ is_depth_tree_acc(tree(_,CurrD,L,R),CurrD):-
 %---------------------------------------------
 %EX 5
 %---------------------------------------------
+
+% same tree as before without the information depth
+% tree(a,tree(b,tree(d,tree(h,nil,nil),tree(i,nil,nil)),tree(e, tree(l,nil,nil),nil)),tree(c,tree(f,tree(m,tree(n,nil,nil),tree(o,nil,nil)), nil),tree(g,nil,nil)))
+
+% Function declarations:
+%get_constant_depth(Const,Depth,Tree)
+%get_constant_depth_acc(Const,Depth,Tree,CurrDepth)
+
+% call the accumulator version initializing the depht to zero
+get_constant_depth(Const,Depth,Tree):-get_constant_depth_acc(Const,Depth,Tree,0).
+
+% id the constant is equal to the one in the node, return the current depth
+get_constant_depth_acc(Const,CurrDepth,tree(Const,_,_),CurrDepth).
+
+% else look for it both in the Left part
+get_constant_depth_acc(Const,Depth,tree(_,L,_),CurrDepth):-
+                NewCurrDepth is CurrDepth +1,
+                get_constant_depth_acc(Const,Depth,L,NewCurrDepth).
+
+% and in the right part
+get_constant_depth_acc(Const,Depth,tree(_,_,R),CurrDepth):-
+                NewCurrDepth is CurrDepth +1,
+                get_constant_depth_acc(Const,Depth,R,NewCurrDepth).
