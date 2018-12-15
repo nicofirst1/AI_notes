@@ -114,3 +114,21 @@ Notice that there are two more steps before the ending of the algoritmh.
 % Function declaration
 % union(Lst1,Lst2, Res)
 
+% define the original function and call the accumulator version, passing an empty list
+union(Lst1,Lst2, Res) :- union_acc(Lst1,Lst2,Res,[]).
+
+% if the first list is empty concatenate the accumulator with the second
+union_acc([],Lst2 ,Res,Acc):- append(Lst2,Acc,Res).
+
+% else check if the first member of Lst1 is in Lst2
+union_acc([H | Lst1],Lst2,Res,Acc) :- 
+        \+ member(Lst2,H), % usage of negation as failure 
+        union_acc(Lst1,Lst2,Res,[H|Acc]). % append H to Acc 
+
+% else discard H and go on
+union_acc([_ | Lst1],Lst2,Res,Acc) :- 
+        union_acc(Lst1,Lst2,Res,Acc).
+
+
+
+
