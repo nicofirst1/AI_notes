@@ -140,3 +140,50 @@ connectedAcc(Start,End,Path,Acc):-
             append(Acc,[Mid],NewAcc), % append the connection to the accumulator
             connectedAcc(Mid,End,Path,NewAcc). % continue with the next iteration
 
+
+%---------------------------------------------
+%EX 5
+%---------------------------------------------
+%Write a PROLOG program implementing insertion sort on lists.
+
+
+% First we need an auxiliary function to insert an element into a list 
+% in a sorted fhashion
+
+% this function calls its accumulator version
+sort_elem(Lst,Elem,Res):- sort_elem_acc(Lst,Elem,Res,[]).
+
+% If the list is empty then the element is the bigger in the list,
+% so append it to the accumulator and return it as Res
+sort_elem_acc([], Elem, Res, Acc):-
+        append(Acc,[Elem],Res).
+
+% If the list is not empty then check whenever the first element 'H' is smaller
+% than the elmenet we want to inser. If true we need to look forward for the 
+% position of the element, so append H to the accumulator and begin another call
+sort_elem_acc([H | Lst], Elem, Res, Acc):-
+        H<Elem,
+        append(Acc,[H],NewAcc),
+        sort_elem_acc(Lst,Elem,Res,NewAcc).
+
+% If false then we have found the position for Elem, so we do two things:
+% First build the last part of the list [Elem,H|Lst] in which we concatenate Elem 
+% with H and the rest of the list
+% Then append this to the accumulator (which is the first part of the original list)
+sort_elem_acc([H | Lst], Elem, Res, Acc):-
+        H>=Elem,
+        append(Acc,[Elem,H|Lst],Res).
+
+
+
+% insertion sort is pretty easy (the difficult part was sort elem).
+% this function calls the accumulator version
+insertion_sort([H|Lst], SortedLst):- 
+            insertion_sort_acc(Lst, SortedLst,[H]).
+
+% if the list to iterate is empty then return Acc
+insertion_sort_acc([], Acc,Acc).
+% else sort the new element and take the result as the new accumulator
+insertion_sort_acc([H|Lst], SortedLst, Acc):-
+            sort_elem(Acc,H,NewAcc),  
+            insertion_sort_acc(Lst, SortedLst, NewAcc).
