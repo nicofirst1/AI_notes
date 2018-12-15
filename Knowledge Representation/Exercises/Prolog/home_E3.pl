@@ -124,6 +124,8 @@ depth_check_sub(D,tree(_,L,R),Res,CurrentD):-
 %---------------------------------------------
 
 /*
+tree(symbol,depth,leftBranch, rightBranch)
+
 tree(a,0,tree(b,1,tree(d,2,tree(h,3,nil,nil),tree(i,3,nil,nil)),tree(e,2, tree(l,3,nil,nil),nil)),tree(c,1,tree(f,2,tree(m,3,tree(n,3,nil,nil),tree(o,3,nil,nil)), nil),tree(g,2,nil,nil)))
 
 0                                 A 
@@ -157,26 +159,49 @@ is_depth_tree_acc(tree(_,CurrD,L,R),CurrD):-
 %---------------------------------------------
 %EX 5
 %---------------------------------------------
+% tree(symbol,depth,leftBranch, rightBranch)
+
+% tree(a,0,tree(b,1,tree(d,2,tree(h,3,nil,nil),tree(i,3,nil,nil)),tree(e,2, tree(l,3,nil,nil),nil)),tree(c,1,tree(f,2,tree(m,3,tree(n,3,nil,nil),tree(o,3,nil,nil)), nil),tree(g,2,nil,nil)))
+% Function declarations:
+%get_constant_depth_5(Const,Depth,Tree)
+
+% id the constant is equal to the one in the node, return the current depth
+get_constant_depth_5(Const,CurrDepth,tree(Const,CurrDepth,_,_)).
+
+% else look for it both in the Left part
+get_constant_depth_5(Const,Depth,tree(_,_,L,_)):-
+                get_constant_depth_5(Const,Depth,L).
+
+% and in the right part
+get_constant_depth_5(Const,Depth,tree(_,_,_,R)):-
+                get_constant_depth_5(Const,Depth,R).
+
+
+
+%---------------------------------------------
+%EX 6
+%---------------------------------------------
 
 % same tree as before without the information depth
+% tree(symbol,leftBranch, rightBranch)
 % tree(a,tree(b,tree(d,tree(h,nil,nil),tree(i,nil,nil)),tree(e, tree(l,nil,nil),nil)),tree(c,tree(f,tree(m,tree(n,nil,nil),tree(o,nil,nil)), nil),tree(g,nil,nil)))
 
 % Function declarations:
-%get_constant_depth(Const,Depth,Tree)
-%get_constant_depth_acc(Const,Depth,Tree,CurrDepth)
+%get_constant_depth_6(Const,Depth,Tree)
+%get_constant_depth_acc_6(Const,Depth,Tree,CurrDepth)
 
 % call the accumulator version initializing the depht to zero
-get_constant_depth(Const,Depth,Tree):-get_constant_depth_acc(Const,Depth,Tree,0).
+get_constant_depth_6(Const,Depth,Tree):-get_constant_depth_acc_6(Const,Depth,Tree,0).
 
 % id the constant is equal to the one in the node, return the current depth
-get_constant_depth_acc(Const,CurrDepth,tree(Const,_,_),CurrDepth).
+get_constant_depth_acc_6(Const,CurrDepth,tree(Const,_,_),CurrDepth).
 
 % else look for it both in the Left part
-get_constant_depth_acc(Const,Depth,tree(_,L,_),CurrDepth):-
+get_constant_depth_acc_6(Const,Depth,tree(_,L,_),CurrDepth):-
                 NewCurrDepth is CurrDepth +1,
-                get_constant_depth_acc(Const,Depth,L,NewCurrDepth).
+                get_constant_depth_acc_6(Const,Depth,L,NewCurrDepth).
 
 % and in the right part
-get_constant_depth_acc(Const,Depth,tree(_,_,R),CurrDepth):-
+get_constant_depth_acc_6(Const,Depth,tree(_,_,R),CurrDepth):-
                 NewCurrDepth is CurrDepth +1,
-                get_constant_depth_acc(Const,Depth,R,NewCurrDepth).
+                get_constant_depth_acc_6(Const,Depth,R,NewCurrDepth).
