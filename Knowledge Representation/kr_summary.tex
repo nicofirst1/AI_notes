@@ -2259,9 +2259,27 @@ Tell whether there are formulas or sentences that do not find any correspondence
 \item 3-B
 \item 4-D
 \item 5-C
-\item 2-E 
 \item 6: Everything is black, or a dog, or a black dog.
 \end{itemize}
+The second one is more complicated. It is better to draw the truth table.
+
+\begin{table}[H]
+\centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        B & D & \neg Black(x) \vee Dog(x) \\ \hline
+        T & T & T                         \\  \hline
+        T & F & F                         \\  \hline
+        F & T & T                         \\  \hline
+        F & F & T                         \\
+        \hline
+    \end{tabular}
+\label{tab:ex2sub2}
+\end{table}
+
+As can you see from Table \ref{tab:ex2sub2}, the only interpretation in which the formula is false is when we have a black object which is not a dog. On the other hand we can have black  dogs, non black dogs and everything else. 
+
+
 
 \subsubsection{Ex 9}
 Discuss the following statements:
@@ -2270,7 +2288,7 @@ Discuss the following statements:
 \item $[(\exists x\ S(x))\wedge (\exists x\ B(x))]\leftrightarrow[(\exists y\ (B(y)\wedge A(y))]$ is a valid formula in FOL.
 \end{enumerate}
 First we need to recall the meaning of \textit{validity} (Section \ref{sec:validity}) which is that a formula is true in all its interpretations.\\
-For the first formula we have that:
+We have that:
 \begin{itemize}
 \item Since $(\forall x\ A(x))\wedge(\forall x\ B(x))$ are universal quantifiers sharing the same variable $x$, they can be simplified with $\forall x\ [A(x)\wedge B(x)]$, which is the same as the other part $\forall y\ (B(y)\wedge A(y))$ but with a different variable name. So it seems correct to  say that one implies the other since they are equivalent, thus having the same model, thus being valid.
 
@@ -2289,7 +2307,6 @@ Tell the formulas that adequately represent the sentence:\\
 
 \end{enumerate}
 
-I don't know what 3 means, but we can totally discard it \footnote{At the very least because there is only one AI exam. It could make sense if the sentence would have been something like: \textit{There is some Ai exam so that all students that take it pass it}, or something like that}.\\
 Number 2 is wrong since the universal quantifier works with the implication. The conjunction is saying that \textit{everything is a student passing an AI exam} (it would be nice).\\
 Number 1 and 4 are logically equivalent and both correct:
 \begin{itemize}
@@ -2299,6 +2316,8 @@ Number 1 and 4 are logically equivalent and both correct:
 \item $\forall x\ \neg [Student(x)\wedge  Exam(x, AI)]\vee Pass(x,AI)$
 \item $\forall x\ Student(x)\wedge  Exam(x, AI)\Rightarrow Pass(x,AI)$
 \end{itemize} 
+Number 3 is logically equivalent to 1 and 4 \footnote{Don't ask me why.}, so it is correct.
+
 
 \subsubsection{Ex 11}
 Let $Rose(x),Thorn(x), Has(x, y), Dangerous(x)$ be unary and binary predicate symbols. Express in FOL the following sentences:
