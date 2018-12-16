@@ -38,6 +38,9 @@ interception([_|L1],L2,Res,Acc):-
 
 
 %---------------------------------------------
+%---------------------------------------------
+%---------------------------------------------
+
 
 % try to understand what this is for...
 foo(_ ,[],[]). 
@@ -83,6 +86,9 @@ foo(I,[H | T],[H | R]) :- foo(I,T,R).
 
 
 %---------------------------------------------
+%---------------------------------------------
+%---------------------------------------------
+
 
 /*
 Write a Prolog program that given a binary tree and a list of forbidden members,
@@ -139,15 +145,20 @@ forbitten_path_acc(Goal,tree(Symbol,_,R),ForbittenCount):-
 
 
 %---------------------------------------------
+%---------------------------------------------
+%---------------------------------------------
+
 % Assume you have a graph encoded as a list of edges in your knowledge base.
 % Each edge is a directed connection between two nodes identified by an integer number.
 
-
+%Uncomment to use this tree
+/*
 edge(0, 1). edge(0, 2). 
 edge(1, 3). edge(2, 3). 
 edge(3, 4). edge(3, 5). 
 edge(4, 6). edge(5, 7). 
 edge(6, 8). edge(7, 8).
+*/
 
 % Write a Prolog program that, given a start and a target node,
 % finds a path - if it exists - such that all the nodes appear in increasing order.
@@ -180,4 +191,80 @@ pathAcc(Start, End, Acc, _) :- edge(Start,End), append([End],[],Acc).
 pathAcc(Start, End, Acc, P) :- 
             edge(Start,Mid),pathAcc(Mid,End,NewAcc,P),
             append(NewAcc,[Mid],Acc).
-                               
+
+
+%---------------------------------------------
+%---------------------------------------------
+%---------------------------------------------                             
+
+/*
+Assume to have a graph, in your Prolog knowledge base, encoded as a 
+collection of edges.For example:
+
+edge(a, b). edge(b, c). edge(c, d).
+
+Moreover, assume that each node of the graph is associated
+with a value. For example:
+
+val(a, 1). val(b, 0). val(c, 1). val(d, 2).
+
+Write a Prolog program which returns a path that only traverses nodes
+that have binary values (0 or 1). In the example, [a, b, c] is such a path, 
+while [b, c, d)] is not.
+*/
+
+
+/*
+Using
+edge(symbol1,symbol1)
+val(symbol,val)
+
+
+0                                 A 
+                                  |
+1                 B------------------------------C
+                  |                              | 
+2         D---------------E               G--------------F                               
+          |               |                              |
+3 H --------------I       L                              M
+                                                         |
+4                                               N-----------------O
+
+*/
+edge(a,b). edge(a,c).
+edge(b,d). edge(b,e). edge(c,g). edge(c,f).
+edge(d,h). edge(d,i). edge(e,l). edge(f,m).
+edge(m,n). edge(m,o).
+
+val(a,0). val(h,1).
+val(b,1). val(i,6).
+val(c,0). val(l,1).
+val(d,1). val(m,6).
+val(e,2). val(n,1).
+val(f,0). val(o,0).
+val(g,5).
+
+
+% auxiliary function to check whenever a value is binary or not
+check_binary_val(Val):-
+    Val == 0.
+check_binary_val(Val):-
+    Val == 1.
+
+
+% original function called by the user
+% initilize the accumulator to an empty list and the start to a
+traversable_path(Path):-traversable_path_acc(Path,a,[]).
+
+% any path that has reached this step is a valid path, so return it
+traversable_path_acc(Path,Current,Acc):-
+    append(Acc,[Current],Path). % append current and return
+
+% to reach other steps we need a recursive function
+traversable_path_acc(Path,Current,Acc):-
+        append(Acc,[Current],NewAcc), % append current to new accumualtor
+        edge(Current,Mid), % check for the existance of an edge Mid
+        val(Mid,Val), % get the value of Mid
+        check_binary_val(Val), % check if Val is binary
+        traversable_path_acc(Path,Mid,NewAcc). % if yes search for its childrens.
+
