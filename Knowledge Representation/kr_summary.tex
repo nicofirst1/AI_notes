@@ -1585,9 +1585,44 @@ Again we can either use the truth table or the CNF. First let us remember that a
 
 As you can see from Table \ref{tab:prop_logic_ex2}), the formula is not valid.
 
-
-
 \subsubsection{Ex3}
+Consider a knowledge base consisting of the conjunction of the
+following propositions:
+\begin{itemize}
+\item $\neg A \Rightarrow B$
+\item $ B \Rightarrow A$
+\item $ A \Rightarrow (C \wedge D)$
+\end{itemize}
+
+Do:
+\begin{enumerate}
+\item Tell whether the knowledge base is consistent. In the positive case provide a model
+\item Transform the above propositions into a new knowledge base written in conjunctive normal form
+\item Which of the clauses in your new knowledge base (if any) are not Horn clauses? Justify your answer
+\end{enumerate}
+
+
+\paragraph{Part 1 and 2}
+First we need to remember the meaning of \textit{consistent} KB (Section \ref{sec:consistency}), that is the negation of the KB is not valid. The easiest way of telling is by transforming the KB in CNF (Section \ref{subsec:cnf}):
+
+\begin{itemize}
+\item $C_1=\braces{A,B}$
+\item $C_2=\braces{A,\neg B}$
+\item $C_3=\braces{\neg A,C}$
+\item $C_4=\braces{\neg A,D}$
+\end{itemize}
+
+To check if the KB is consistent we need to find one interpretation in which all the clauses are true; for a clause to be true we need at least one literal to be true. We can prove it by simply looking at the clauses:
+\begin{itemize}
+\item Since $C,D$ appear in \textbf{only one} clause each, $C_3,C_4$, we can set them to true, (independently of A).
+\item Now we can set $A$ to true and bring $C_1,C_2$ to true and have a model.
+\end{itemize}
+
+\paragraph{Part 3}
+For a clause to be in horn clause it must have \textbf{at most} one true literal. So it is obvious that the only clause that is not in Horn Normal Form is $C_1$.
+
+
+\subsubsection{Ex5}
 Consider the following propositional formulas:
 \begin{itemize}
 \item $P \Rightarrow (Q \leftrightarrow R)$
