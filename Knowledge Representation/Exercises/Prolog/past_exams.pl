@@ -231,6 +231,12 @@ val(symbol,val)
 4                                               N-----------------O
 
 */
+
+
+
+
+% Uncomment the following to use function
+/*
 edge(a,b). edge(a,c).
 edge(b,d). edge(b,e). edge(c,g). edge(c,f).
 edge(d,h). edge(d,i). edge(e,l). edge(f,m).
@@ -243,7 +249,7 @@ val(d,1). val(m,6).
 val(e,2). val(n,1).
 val(f,0). val(o,0).
 val(g,5).
-
+*/
 
 % auxiliary function to check whenever a value is binary or not
 check_binary_val(Val):-
@@ -267,4 +273,97 @@ traversable_path_acc(Path,Current,Acc):-
         val(Mid,Val), % get the value of Mid
         check_binary_val(Val), % check if Val is binary
         traversable_path_acc(Path,Mid,NewAcc). % if yes search for its childrens.
+
+
+
+
+
+%---------------------------------------------
+%---------------------------------------------
+%---------------------------------------------                             
+
+
+/*
+Consider trees whose nodes are labelled with positive integers. 
+Write a program that given such a tree as input, verifies that it is a 
+binary search tree. A binary search tree is a tree where the value of 
+each node is greater than the value of the left child and smaller or 
+equal to the value of the right child. The algorithm must be able to 
+handle unbalanced trees and void trees.
+*/
+
+/*
+Using
+edge(symbol1,symbol1)
+val(symbol,val)
+
+
+0                                 A [50] 
+                                  |
+1                 B[20]------------------------------C[70]
+                   |                                  | 
+2         D[10]---------------E[27]        G[63]--------------F[85]                               
+            |                                                    
+3 H[7] --------------I[13]                                 
+                                                        
+
+*/
+
+
+
+% Uncomment the following to use function 
+
+/*
+edge(a,b). edge(a,c).
+edge(b,d). edge(b,e). edge(c,g). edge(c,f).
+edge(d,h). edge(d,i). 
+
+val(a,50). val(h,7).
+val(b,20). val(i,13).
+val(c,70). val(f,85). 
+val(d,10). val(g,63).
+val(e,27). 
+
+*/
+
+% We need an auxiliary functions for checking if an element is the smaller
+% af a list
+
+smallest_element(_,[]).
+
+smallest_element(Elem,[H|List]):-
+        Elem<H,
+        smallest_element(Elem,List).
+
+% the function doesn't need any parameters since the tree is defined above
+check_binary_tree():- check_binary_tree_acc(a,[]).
+
+% if a node has no branches then return true
+check_binary_tree_acc(Start,_):- 
+    \+ edge(Start,_).
+
+% else check the value of the branches
+check_binary_tree_acc(Start,Traversed):- 
+    val(Start,Val), % get the value of the current node
+    append(Traversed,[Val],NewTraversed), % append it to the others
+
+    % get the left and right nodes
+    edge(Start,Left),
+    edge(Start,Right),
+
+    % which must be diffrent nodes
+    Left \= Right,
+
+    % get the values
+    val(Left,ValL),
+    val(Right,ValR),
+
+    % check if the left one is the smallest 
+    % and the right is higher than the current one
+    smallest_element(ValL,NewTraversed),
+    ValR>=Val,
+
+    % continue to check for their childrens
+    check_binary_tree_acc(Left,NewTraversed),
+    check_binary_tree_acc(Right,Traversed).
 

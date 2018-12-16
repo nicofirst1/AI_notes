@@ -7,7 +7,7 @@ is [[1,5],[4,6]].
 */
 
 % First we need the functions to get the lenght of a list
-% this one return true as sson as i have iterated throught all the list 
+% this one return true as soon as i have iterated throught all the list 
 len([],Acc,Acc).
 % this one increases the value of Acc  for every element in the list.
 len([_|Lst],Acc,Lenght) :- NewAcc is Acc +1, len(Lst,NewAcc,Lenght).
