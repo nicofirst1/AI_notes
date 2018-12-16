@@ -1621,6 +1621,25 @@ To check if the KB is consistent we need to find one interpretation in which all
 \paragraph{Part 3}
 For a clause to be in horn clause it must have \textbf{at most} one true literal. So it is obvious that the only clause that is not in Horn Normal Form is $C_1$.
 
+\subsubsection{Ex4}
+Tell which one among the following formulas is a good representation of the sentence.\\
+\textit{If John studies and his father works, then his grandfather is happy.}\\
+\begin{enumerate}
+\item $(Study \wedge Work) \Rightarrow Happy$
+\item $Study \wedge Work \wedge Happy$
+\item $\neg Study \vee \neg Work \vee Happy$
+\item $(Study \vee Work) \Rightarrow Happy$
+
+\end{enumerate}
+
+Answer
+\begin{enumerate}
+\item Is correct since the premises of the implication are: \textit{Study} \textbf{and} \textit{Work}, while the conclusion is \textit{Happy}.
+\item Is wrong since we're saying that all of them must be true in order to be a model, so there is no correlation between the \textit{Study,Work} and \textit{Happy}.
+\item Is also right since is 1) written without the implication
+\item Is wrong since we're saying that either \textit{Study} or \textit{Work} must be true for the \textit{Happy} literal to be true, instead of both.
+\end{enumerate}
+
 
 \subsubsection{Ex5}
 Consider the following propositional formulas:
