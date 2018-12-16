@@ -111,6 +111,7 @@ Finally an agent can be viewed at:
 \end{itemize}
 
 \subsection{Logic}
+\label{sec:logic}
 Sentences must follow two principles in order to be considered \textit{correct}:
 \begin{itemize}
 \item \textbf{Syntax} holds when a sentence is \textit{well formed}, e.g. in mathematics "$x+y=4$" is correct while "$x3y +=$" is not.
@@ -1522,7 +1523,71 @@ The stable model semantic is defined for logic program if they have exactly one 
 
 \subsection{Propositional Exercises}
 
+
 \subsubsection{Ex1}
+Let $\alpha, \beta, \gamma$ be three propositional predicates, tell whether or
+not:
+\[A=(\alpha \wedge \beta) \Rightarrow \gamma \models (\alpha \Rightarrow \gamma) \vee (\beta \Rightarrow \gamma)=B\]
+For the entailment to be true we need to have that all the models of B are also models of A, $Models(A)\subseteq Models(B)$ (Section \ref{sec:logic}). We can check this with a simple truth Table \ref{tab:prop_logic_ex1}.
+\begin{table}[H]
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        \alpha & \beta & \gamma & A & B \\ \hline
+        T      & T     & T      & T & T \\ \hline
+        T      & T     & F      & F & F \\ \hline
+        T      & F     & T      & T & T \\ \hline
+        T      & F     & F      & T & T \\ \hline
+        F      & T     & T      & T & T \\ \hline
+        F      & T     & F      & T & T \\ \hline
+        F      & F     & T      & T & T \\
+        \hline
+    \end{tabular}
+\caption{Truth Table for Ex 1 of Propositional Logic}
+\label{tab:prop_logic_ex1}
+\end{table}
+
+As can you see from the table the two formulas are equivalent (they have the same interpretation), thus we have that: iff $A \equiv B$ then $A \model B$ and $B \model A$.\\
+We can show the equivalence by bringing both the formulas in conjunctive normal form (Section \ref{subsec:cnf}):
+
+For A we have:
+\begin{itemize}
+\item $(\alpha \wedge \beta) \Rightarrow \gamma$
+\item $\neg (\alpha \wedge \beta) \vee \gamma$
+\item $\neg \alpha \vee \neg  \beta \vee \gamma$
+\end{itemize}
+
+For B we have:
+\begin{itemize}
+\item $(\alpha \Rightarrow \gamma) \vee (\beta \Rightarrow \gamma)$
+\item $(\neg \alpha \vee \gamma) \vee (\neg \beta \vee \gamma)$
+\item $\neg \alpha \vee \gamma \vee \neg \beta$
+\end{itemize}
+Which is equivalent to A.
+
+\subsubsection{Ex2}
+Tell whether the following propositional formula is valid:
+\[(A ∧ B) ∨ (¬A ∧ ¬B)\]
+Again we can either use the truth table or the CNF. First let us remember that a valid formula has only true interpretations, that is it has only models (Section \ref{sec:validity}).
+\begin{table}[H]
+    \begin{tabular}{|c|c|c|c|c|}
+        \hline
+        A & B & W_1=A \wedge B & W_2= \neg A \wedge \neg B & W_1 \vee W_2 \\ \hline
+        T & T & T              & F                         & T            \\ \hline
+        T & F & F              & F                         & F            \\ \hline
+        F & T & F              & F                         & F            \\ \hline
+        F & F & F              & T                         & T            \\
+        \hline
+    \end{tabular}
+\caption{Truth Table for Ex 2 of Propositional Logic}
+\label{tab:prop_logic_ex2}
+
+\end{table}
+
+As you can see from Table \ref{tab:prop_logic_ex2}), the formula is not valid.
+
+
+
+\subsubsection{Ex3}
 Consider the following propositional formulas:
 \begin{itemize}
 \item $P \Rightarrow (Q \leftrightarrow R)$
