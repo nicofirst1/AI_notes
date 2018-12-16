@@ -22,6 +22,11 @@ top=10mm]{geometry}
   \addtocontents{toc}{\protect\setcounter{tocdepth}{#1}}%
   \setcounter{tocdepth}{#1}%
 }
+\newcommand{\braces}[1]{%
+  \lbrace{#1}\rbrace}%
+}
+
+
 
 
 \titlespacing*{\subsection}
@@ -1514,6 +1519,76 @@ The stable model semantic is defined for logic program if they have exactly one 
 \changelocaltocdepth{2}
 
 \section{Exercises}
+
+\subsection{Propositional Exercises}
+
+\subsubsection{Ex1}
+Consider the following propositional formulas:
+\begin{itemize}
+\item $P \Rightarrow (Q \leftrightarrow R)$
+\item $Q \Rightarrow (P \vee R)$.
+\item $R \Rightarrow (Q \wedge \neg P)$
+\end{itemize}
+
+So the following :
+\begin{enumerate}
+\item Convert them into Conjunctive Normal Form
+\item Tell whether or not the resulting set of clauses is Horn
+\item Tell whether or not the resulting set of clauses is satisfiable,
+in the positive case show a model
+\end{enumerate}
+
+\paragraph{Part 1}
+
+For the first formula:
+\begin{itemize}
+\item $P \Rightarrow (Q \leftrightarrow R)$
+\item $\neg P \vee (Q \leftrightarrow R)$
+\item $\neg P \vee [(Q \Rightarrow R) \wedge (R \Rightarrow Q)]$
+\item $\neg P \vee [(\neg Q \vee R) \wedge (\neg R \vee Q)]$
+\item $\neg P \vee [(\neg Q \vee R) \wedge (\neg R \vee Q)]$
+\item $\neg P \vee [(\neg Q \vee R) \wedge (\neg R \vee Q)]$
+\item $[\neg P \vee (\neg Q \vee R)] \wedge [\neg P \vee  (\neg R \vee Q)]$
+\item $[\neg P \vee \neg Q \vee R] \wedge [\neg P \vee  \neg R \vee Q]$
+\item $C_1=\lbrace \neg P, \neg Q , R\rbrace,\ C_2=\lbrace \neg P,  \neg R, Q\rbrace$
+\end{itemize}
+
+For the second one:
+\begin{itemize}
+\item $Q \Rightarrow (P \vee R)$.
+\item $\neg Q \vee (P \vee R)$.
+\item $\neg Q \vee P \vee R$.
+\item $C_3= \lbrace \neg Q, P, R\rbrace$.
+\end{itemize}
+
+For the third one:
+\begin{itemize}
+\item $R \Rightarrow (Q \wedge \neg P)$
+\item $\neg R \vee (Q \wedge \neg P)$
+\item $(\neg R \vee Q) \wedge( \neg R \vee \neg P)$
+\item $\C_4= \lbrace \neg R, Q\rbrace,\ C_5=\lbrace \neg R , \neg P\rbrace$
+
+\end{itemize}
+
+\paragraph{Part 2}
+The result in \textbf{not} in Horn form since $C_3$ has two positive literals, while the Horn Normal Form wants at most one for each clause (Section \ref{subsubsec:horn}).
+
+\paragraph{Part 3}
+To prove the unsatisfiability of the KB we can use various techniques such as: resolution, model enumeration, truth table. For time reasons I will go with resolution.\\
+If the KB is unsatisfiable then we have $KB \vdash_{\mathcal{R}} \{\}$; that is, we can infer the empty clause from the KB using resolution.
+
+\begin{enumerate}
+\item First resolve $C_1$ with $C_2$:
+\[\frac{\lbrace \neg P, \neg Q, R \rbrace,\quad \braces{\neg P, \neg R, Q} }{C_6=\braces{\neg P}}\]
+\item Then resolve $C_6$ with $C_3$:
+\[\frac{\braces{\neg P},\quad \braces{\neg Q,P,R}}{C_7=\braces{\neg Q, R}}\]
+\item Finally resolve $C_7$ with $C_4$:
+\[\frac{\braces{\neg Q,R},\quad \braces{\neg R, Q}}{\braces{}}\]
+Which resolve in the empty clause.
+\end{enumerate}
+
+
+
 
 \subsection{First Order Logic}
 
