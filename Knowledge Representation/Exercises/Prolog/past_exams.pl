@@ -367,3 +367,77 @@ check_binary_tree_acc(Start,Traversed):-
     check_binary_tree_acc(Left,NewTraversed),
     check_binary_tree_acc(Right,Traversed).
 
+
+%---------------------------------------------
+%---------------------------------------------
+%---------------------------------------------                             
+
+
+/*
+Given a binary tree, where the nodes contain integer numbers,
+write a Prolog program which returns a full path (i.e., a path from 
+the root to a leaf, represented as a list) such that all the 
+elements in the path appear in increasing order from the root to the leaf.
+*/
+
+
+
+/*
+Using
+edge(symbol1,symbol1)
+val(symbol,val)
+
+
+0                                 A [13] 
+                                  |
+1                 B[11]--------------------------C[14]
+                   |                              | 
+2         D[4]------------E[15]        G[12]-------------F[3]                               
+            |                                                    
+3 H[2] -----------I[13]                                 
+                                                        
+
+*/
+
+% Uncomment the following to use function 
+
+edge(a,b). edge(a,c).
+edge(b,d). edge(b,e). edge(c,g). edge(c,f).
+edge(d,h). edge(d,i). 
+
+val(a,13). val(h,2).
+val(b,11). val(i,13).
+val(c,14). val(f,3). 
+val(d,4). val(g,12).
+val(e,15). 
+
+
+
+% we need an auxiliary function to chech whenever a list is sorted
+sorted_lst([]). % if the list is empty return true
+sorted_lst([_]). % if the list has one element return true
+sorted_lst([F,S|Lst]):-
+    F<S, % check if the first element is less than the secon
+    sorted_lst([S|Lst]). % recall function with list withouth F
+
+% the function doesn't need any parameters since the tree is defined above
+sorted_binary_tree():- sorted_binary_tree_acc(a,[]).
+
+% if a node has no branches then return true
+sorted_binary_tree_acc(Start,_):- 
+    \+ edge(Start,_).
+
+% else check the value of the branches
+sorted_binary_tree_acc(Start,Traversed):- 
+    val(Start,Val), % get the value of the current node
+    append([Val],Traversed,NewTraversed), % append it to the others
+
+    % get an adjacent node
+    edge(Start,Next),
+    % and its value
+    val(Next,ValN),
+    % check if the list containing its value is ordered
+    sorted_lst([ValN|NewTraversed]),
+
+    % continue to check for their childrens
+    sorted_binary_tree_acc(Next,NewTraversed).
