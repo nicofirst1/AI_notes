@@ -4,6 +4,7 @@ Notes taken from the  Artificial Intelligence [class](https://www.dis.uniroma1.i
 The lessons are taught by professor [Daniele Nardi](http://www.dis.uniroma1.it/~nardi/) and are based both on his slides and on the third edition of *Artificial Intelligence A Modern Approach* by Stuart Russell and Peter Norvig ; plus some other materials.
 
 
+
 ## Materials used 
 ### Search
 - Nardi's slides
@@ -46,10 +47,14 @@ combinatorial auctions by Tuomas Sandholm
 - R. J. Brachman, H.J. Levesque, Knowledge Representation and Reasoning, Morgan Kaufmann, 2004.
 - [this slides](http://www.cs.tau.ac.il/~annaz/teaching/TAU_winter08/Seminar/yulia.pdf)
 
+## Disclaimer
+I'm just a student so don't get mad if you find something wrong!\
+If you do then is just another reason to read the *Contributing* part.
+
 ## Contributing
 You can fork this notes, add your stuff, and never ever tell anyone about it...\
 **Or** you could take a moment to think about how you could help others understand better this kind of concepts. Maybe you are the only person capable of explaning that particular argument better than anyone alse, so why not giving it a shot?
 
-Contributing is super easy! Just change what you think should be changed, add your name in the contribution part of the title page and make a pull request.\
+Contributing is super easy! Just add what you think should be changed, include your name in the contribution part of the title page and make a pull request.\
 And vualà, you're making a difference. \
 Easy, wasn't it?
