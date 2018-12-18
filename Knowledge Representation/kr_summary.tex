@@ -480,7 +480,9 @@ So why are we interested in definite/goal/Horne clauses?\\
 \item When we have a definite clause we can write it as an implication of conjunctions. For example:
 \[(\neg L_1 \vee \neg L_2 \vee L_3)\quad becomes\quad (L_1 \wedge L_2)\Rightarrow L_3\]
 In this case the premise is called the \textit{body} and the conclusion is called \textit{head}. Moreover a single positive literal is a \textit{fact} \footnote{Since a single literal can be viewed as a disjunction of one literal.}.
-\item what is the advantage of having a goal clause??????????
+\item To understand the advantage of having a goal clause  we need to think about it as an implication with a negated conclusion, for example: $\braces{\neg A, \neg B}=\neg A \vee \neg B= A \Rightarrow \neg B$.\\
+This clause is saying that if A then not B and can be used in a KB to prove inconsistency. That is, if for some step $i$ of the resolution procedure we inferred $B$, while having $A$, then we can prove that the KB is inconsistent since both $B$ and $\neg B$ are true in the KB.
+
 \item Moreover inference in horn clauses can be done with the forward/backward chaining algorithm (Section \ref{subsec:chaining}).
 \item Finally deciding entailment with Horn clauses can be done in time that is linear in the size of the knowledge base.
 
@@ -750,8 +752,8 @@ A model in first-order logic consists of a set of objects and an interpretation 
 Given a domain $\mathcal{D}$, an interpretation is a function $\mathcal{I}$ which maps:
 \begin{itemize}
 \item Every constant symbol $c$ into an element of $\mathcal{D}$.
-\item Every $n$-ary\footnote{A function with $n$ arguments.} function symbol $f$ into a  function $f^I$: $\mathcal{D}^n\rightarrow \mathcal{D}$. More specifically $f$ is a function which may assume any value in the domain $\mathcal{D}^n$, while $f^I$ assumes just one ($\mathcal{D}$).
-\item Every predicate symbol $P$ into a  $n$-ary relation $P^I$: $P^I\subset \mathcal{D}^n$. This means that a predicate symbol, e.g. ????????????????
+\item Every $n$-ary\footnote{A function with $n$ arguments.} function symbol $f$ into a  function $f^I$: $\mathcal{D}^n\rightarrow \mathcal{D}$. More specifically $f$ is a function which may assume any value in the domain $\mathcal{D}^n$, while $f^I$ assumes just one ($\mathcal{D}$), e.g. $fater(Pietro,x)$ which can be true for multiple values of $x$ \footnote{Since we're asking who is that has Pietro as father.}.
+\item Every predicate symbol $P$ into a  $n$-ary relation $P^I$: $P^I\subset \mathcal{D}^n$. This means that a predicate symbol is mapped to either True or False, e.g. $father(Pietro,Luca)$ which can be either True or False.
 \end{itemize}
 
 \paragraph{Terms}
@@ -1248,7 +1250,7 @@ can be resolved with $\theta=[u/G(x),v/x]$ and generate:
 \[[Animal(F(x))\vee \neg Kills(u,v)]\]
 
 \paragraph{Incompleteness of binary resolution}
-This type of resolution is called a \textit{binary} since it resolves two literals, $l_i,m_i$ or $Loves(G(x),x),Loves(u,v)$, and it can be shown to be incomplete (why???????????). But it can be made complete with the use of \textbf{factoring} that removes two identical literals \footnote{In FOL two literals are identical if they are unifiable. }.
+This type of resolution is called a \textit{binary} since it resolves two literals, $l_i,m_i$ or $Loves(G(x),x),Loves(u,v)$, and it can be shown to be incomplete \footnote{You can get stuck into loops.} .But it can be made complete with the use of \textbf{factoring} that removes two identical literals \footnote{In FOL two literals are identical if they are unifiable. }.
 
 
 \subsubsection{General Resolution}
@@ -1375,7 +1377,7 @@ The algorithm works as shown in Figure \ref{fig:interpreted_prolog} with two maj
 \end{itemize}
 
 
-\paragraph{Compiled} In this mode the Prolog program becomes  an inference procedure for a specific set of clauses, so it knows what clauses match the goal. Prolog basically generates a miniature theorem prover for each different predicate, thereby eliminating much of the overhead of interpretation. ??????????????????
+\paragraph{Compiled} In this mode the Prolog program becomes  an inference procedure for a specific set of clauses, so it knows what clauses match the goal. Prolog basically generates a miniature theorem prover for each different predicate, thereby eliminating much of the overhead of interpretation. 
 
 \paragraph{Parallelization} There are two principal sources of parallelism. The first, called \textbf{OR} parallelism, comes from the possibility of a goal unifying with many different clauses in the knowledge base. Each gives rise to an independent branch in the search space that can lead to a potential solution, and all such branches can be solved in parallel. The second, called textbf{AND} parallelism, comes from the possibility of solving each conjunct in the body of an implication in parallel.
 
@@ -2431,10 +2433,10 @@ For each one of the following formulas from 1 to 6, tell the sentence from A to 
 
 \item $\exists x\ (black(x) \wedge dog(x))$
 \item $\exists x\ (black(x)\Rightarrow dog(x)) $
-\item $\exists x(black(x) \wedge dog(x))$
+\item $\exists x(black(x) \vee dog(x))$
 \item $\forall x\ (black(x) \wedge dog(x)) $
 \item $\forall x(black(x)\Rightarrow dog(x))$
-\item $\forall x\ (black(x) \wedge dog(x))$
+\item $\forall x\ (black(x) \vee dog(x))$
 \end{enumerate}
 
 \begin{enumerate}[label=\Alph*]
@@ -2455,7 +2457,7 @@ Tell whether there are formulas or sentences that do not find any correspondence
 \item 5-C
 \item 6: Everything is black, or a dog, or a black dog.
 \end{itemize}
-The second one is more complicated. It is better to draw the truth table.
+The second one is more complicated. It is better to draw the truth table. ???????
 
 \begin{table}[H]
 \centering
