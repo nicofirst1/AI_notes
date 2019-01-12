@@ -530,7 +530,5 @@ maximum_value_acc([N|Tree],Max,Curr):- % if N is not an integer then is a Tree
     maximum_value_acc(Tree,NewMax2,Curr), % continue the search in the tree.
     max_val(NewMax1,NewMax2,Max). % get the maximum 
 
-
-
 maximum_value_acc([],Curr,Curr). % if the search is done return the accumulator
     
