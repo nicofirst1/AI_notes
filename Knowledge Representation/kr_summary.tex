@@ -25,6 +25,7 @@ top=10mm]{geometry}
 \newcommand{\braces}[1]{%
   \lbrace{#1}\rbrace}
 
+\newcommand{\subst}[1]{Subst(\theta,#1)} 
 
 
 
@@ -954,7 +955,6 @@ For every structure $\mathcal{U}$ of the language $\mathcal{L}$, $\forall B\in \
 \subsection{Propositional vs First Order Logic}
 \label{subsec:prop_vs_fol}
 
-\newcommand{\subst}[1]{Subst(\theta,#1)} 
 
 First-order inference can be done by converting the KB to propositional logic and using propositional inference. This can be done by replacing the quantifiers as explained in the following paragraphs.
 
@@ -2163,12 +2163,12 @@ Do the following:
 To translate the text into FOL we need the following predicates:
 
 \begin{itemize}
-\item $StoredRoom1(x),SoredRoom2(x)$ : meaning that x cann be stored in room1 or room2.
+\item $StoredRoom1(x),SoredRoom2(x)$ : meaning that $x$ can be stored in room1 or room2.
 \item $Package(x)$ : meaning that $x$ is a package.
 \item $Smaller(x,y)$ : meaning that $x$ is smaller than $y$.
 \end{itemize}
 
-The sentence is represented in FOL as follows:
+The sentence is represented in FOL along these lines:
 \begin{enumerate}
 \item $\forall x\ \forall y\ [[StoredRoom1(x) \wedge StoredRoom2(y) \wedge Package(x) \wedge Package(y)]\rightarrow Smaller(x,y)]$
 \item $Package(A), Package(B)$
@@ -2176,6 +2176,47 @@ The sentence is represented in FOL as follows:
 \item $StoredRoom1(B)$
 \item $\neg Smaller(B,A)$.
 \end{enumerate}
+
+\paragraph{Part 2}
+
+\begin{enumerate}
+\item For the first one we have:
+
+	\begin{itemize}
+	\item $\neg[StoredRoom1(x) \wedge StoredRoom2(y) \wedge Package(x) \wedge Package(y)] \vee Smaller(x,y)$
+	\item $\neg StoredRoom1(x) \vee \neg StoredRoom2(y) \vee \neg Package(x) \vee \neg Package(y) \vee Smaller(x,y)$
+	\item $C_1=\braces{\neg StoredRoom1(x) , \neg StoredRoom2(y) , \neg Package(x) , \neg Package(y) , Smaller(x,y)}$
+	\end{itemize}
+\item $C_2=\braces{Package(A)},C_3=\braces{Package(B)}$
+\item $C_4=\braces{StoredRoom1(A), StoredRoom2(A)}$
+\item $C_5=\braces{StoredRoom1(B)}$
+\item $C_6=\braces{\neg Smaller(B,A)}$
+\end{enumerate}
+
+\paragraph{Part 3}
+We want to query the KB  about the veracity of $q=StoredRoom1(A)$.
+
+\begin{enumerate}
+\item First resolve $C_1$ and $C_2$ with $\subst{y/A}$, and get:
+\[C_7=\braces{\neg StoredRoom1(x) , \neg StoredRoom2(A) , \neg Package(x)  , Smaller(x,A)}\]
+
+\item Do the same with $C_7,C_3$ and $\subst{x/B}$, and get: 
+\[C_8=\braces{\neg StoredRoom1(B) , \neg StoredRoom2(A) , Smaller(B,A)}\]
+
+\item Now resolve $C_8$ with $C_6$:
+\[C_9=\braces{\neg StoredRoom1(B) , \neg StoredRoom2(A)}\]
+
+\item Resolve $C_9, C_5$:
+\[C_{10}=\braces{\neg StoredRoom2(A)}\]
+
+\item Same for $C_{10},C_4$:
+\[C_{11}=\braces{StoredRoom1(A)}\]
+
+\item Finally use the negated query and get the empty set.
+
+
+
+
 
 
 \vfill
@@ -2290,8 +2331,8 @@ For the Modus Ponens part we can say that: $C$ can not be derived by the $KB$ si
 For the resolution part we need to  put the KB in clause form:
 \[KB= \{\neg A,C\},\{\neg B,C\},\{A,B\}\]
 We notice that we have a non-Horn KB since the clause $\lbrace A,B \rbrace$ has two true literals \footnote{Remember that the Horn form wants \textit{at most} one true literal (Section \ref{subsubsec:horn}).}. We query the KB $q=C$, thus we want to prove that $(KB \wedge \neg C)\vdash_{\mathcal{R}}\lbrace\rbrace$, hence we use resolution in the following way:
-\[\frac{\lbrace \neg A,C\rbrace,\quad \lbrace  A,B \rbrace}{\{B\}}\]
-\[\frac{\lbrace \neg B,C\rbrace,\quad \lbrace  B \rbrace}{\{C\}}\]
+\[\frac{\lbrace \neg A,C\rbrace,\quad \lbrace  A,B \rbrace}{\{C,B\}}\]
+\[\frac{\lbrace \neg B,C\rbrace,\quad \lbrace  C,B \rbrace}{\{C\}}\]
 \[\frac{ C,\quad \neg C }{\{\}}\]
 We proved that $C$  can be derived by $KB$.
 
