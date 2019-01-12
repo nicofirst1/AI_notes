@@ -401,6 +401,7 @@ val(symbol,val)
 
 % Uncomment the following to use function 
 
+/*
 edge(a,b). edge(a,c).
 edge(b,d). edge(b,e). edge(c,g). edge(c,f).
 edge(d,h). edge(d,i). 
@@ -410,7 +411,7 @@ val(b,11). val(i,13).
 val(c,14). val(f,3). 
 val(d,4). val(g,12).
 val(e,15). 
-
+*/
 
 
 % we need an auxiliary function to chech whenever a list is sorted
@@ -441,3 +442,52 @@ sorted_binary_tree_acc(Start,Traversed):-
 
     % continue to check for their childrens
     sorted_binary_tree_acc(Next,NewTraversed).
+
+
+%---------------------------------------------
+%---------------------------------------------
+%---------------------------------------------                             
+
+/*
+Write a PROLOG program that, given two lists of integers INDXS and VALUES, returns a list whose first
+element is the value stored in the position corresponding to the first element of INDXS of the list VALUES.
+For example, given INDXS=[2,1,4,3] and VALUES=[2,4,6,8], the output is [4,2,8,6]. You may start
+by defining a predicate that, given an integer I and a list L returns the value of the element of the list L
+in the position I. Explain what happens if the position I does not correspond to an element of L.
+*/
+
+
+
+% get_index_elem(Index,List,Element)
+% return the element if the position given by index in the List
+% Returns false when an index exceeds the list lenght
+
+get_index_elem(Index,List,Element):- get_index_elem_acc(Index,List,Element,1).
+
+
+% get_index_elem_acc(Index, List, Element, Accumulator)
+% return the element in the list when the accumulator matches the index
+get_index_elem_acc(Index,[Element|List],Element,Index). % if the index is the same ass the accumulator value, return Element
+
+
+get_index_elem_acc(Index,[_|List],Element,Acc):-
+        NewAcc is Acc +1, % increment the value of the accumulator
+        get_index_elem_acc(Index,List,Element,NewAcc). % recall the function withouth the head 
+
+
+%list_slicing(Indices, Values,Result)
+% return the Values ordered by the Indices in Result
+
+list_slicing(Indices, Values,Result):- list_slicing_acc(Indices,Values,Result,[]).
+
+%list_slicing(Indices, Values,Result, Accumulator)
+% Accumulator Version
+
+
+list_slicing_acc([Idx|Indices],Values,Result,Acc):-
+
+        get_index_elem(Idx,Values,Elem), % get the elem in the idx position
+        list_slicing_acc(Indices,Values,Result,[Elem|Acc]). % append it to the list\
+
+
+list_slicing_acc([],_,Result,Result). % do Result=Acc when the indices list is empty
