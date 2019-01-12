@@ -1863,7 +1863,7 @@ And then we substitute with $Y=f(a)$.\\
 
 Number three is written in a weird way, but if we look at Nardi's slides we can interpret it to be (maybe):
 \[ f([[a|b]|[]])=f([[a|[]]|[]]) \]
-Which is \textbf{not unifiable} since $b \neq nil$.
+Which is \textbf{not unifiable} since Prolog says so (seriously I couldn't understand it).
 
 
 \subsubsection{Ex4}
@@ -2142,6 +2142,40 @@ Tell, among the following formulas, which one adequately represents the sentence
 We can tell that the first one is wrong since the implication is inverted: \textit{if Mary loves x then x must be a cat and not a dog}, which is a conclusion we can infer from the sentence but not a direct representation of it. Moreover the conjunction $\neg Dog(x)\wedge Cat(x)$ makes no sense since if $x$ is a cat then it is not a dog.\\
 
 The third and the second sentences are similar: if we are under the \textit{close world assumption} then every sentence not known to be true is false, hence $Loves(Mary,Dog)$ is not known to be true (for number 3) so it is false and can be omitted from the generation of the KB. On the other hand the exercise specify that we are working under First Order Logic, which is not assumed to work under \textit{database semantic} (Section \ref{sec:database_semantic}) so we must specify that Mary does not like dogs, hence the correct answer is number 2.
+
+
+\subsubsection{M5}
+Given the following text:
+\begin{center}
+\textit{The packages stored in room1 are smaller than those stored in room 2.
+A and B are packages; A is stored either in room1 or in room2, B is stored in room1. B is not smaller than A.}
+\end{center}
+
+Do the following:
+\begin{enumerate}
+\item Define a vocabulary (i.e., constant, function and predicate symbols) and represent the above sentences in first order logic.
+\item translate the sentences in clausal form and tell whether the resulting KB is Horn.
+\item show, using resolution that package A is stored in room1.
+\end{enumerate}
+
+\paragraph{Part 1}
+
+To translate the text into FOL we need the following predicates:
+
+\begin{itemize}
+\item $StoredRoom1(x),SoredRoom2(x)$ : meaning that x cann be stored in room1 or room2.
+\item $Package(x)$ : meaning that $x$ is a package.
+\item $Smaller(x,y)$ : meaning that $x$ is smaller than $y$.
+\end{itemize}
+
+The sentence is represented in FOL as follows:
+\begin{enumerate}
+\item $\forall x\ \forall y\ [[StoredRoom1(x) \wedge StoredRoom2(y) \wedge Package(x) \wedge Package(y)]\rightarrow Smaller(x,y)]$
+\item $Package(A), Package(B)$
+\item $StoredRoom1(A) \vee StoredRoom2(A)$
+\item $StoredRoom1(B)$
+\item $\neg Smaller(B,A)$.
+\end{enumerate}
 
 
 \vfill
