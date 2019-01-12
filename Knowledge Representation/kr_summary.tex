@@ -4,7 +4,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
-\usepackage[table]{xcolor}
+%\usepackage[table]{xcolor}
 \usepackage{float}
 \usepackage[table, svgnames, dvipsnames]{xcolor}
 \usepackage{makecell, cellspace, caption}
@@ -23,8 +23,8 @@ top=10mm]{geometry}
   \setcounter{tocdepth}{#1}%
 }
 \newcommand{\braces}[1]{%
-  \lbrace{#1}\rbrace}%
-}
+  \lbrace{#1}\rbrace}
+
 
 
 
@@ -148,11 +148,11 @@ To know if $KB \models \beta$ we need to prove that $M(KB) \subseteq M(\beta)$. 
 \centering
     \begin{tabular}{|l|l|l|}
         \hline
-        ~                              & KB    & \beta \\ \hline
-        \alpha \wedge \beta            & \cellcolor{blue!25} True  & \cellcolor{blue!25} True  \\ 
-        \neg \alpha \wedge \beta     & False & \cellcolor{blue!25} True  \\ 
-        \alpha \wedge \neg \beta       & False & False \\ 
-        \neg \alpha \wedge \neg \beta  & False & False \\
+        ~                          & KB    & $\beta$ \\ \hline
+        $\alpha \wedge \beta   $         & \cellcolor{blue!25} True  & \cellcolor{blue!25} True  \\ 
+        $\neg \alpha \wedge \beta  $   & False & \cellcolor{blue!25} True  \\ 
+       $\alpha \wedge \neg \beta  $     & False & False \\ 
+        $\neg \alpha \wedge \neg \beta$  & False & False \\
         \hline
     \end{tabular}
     \caption{Model checking for $KB\models\beta$}
@@ -1123,7 +1123,7 @@ The steps for the forward chaining are the following:
 \item Rule 3 is satisfied with $\subst{x}=\lbrace x/K_1 \rbrace$, so that $Sells(RogerRabbit,K_1,EsterIsland)$ is added to the KB.
 \item Rule 4 is satisfied by $\subst{x}=\lbrace x/EsterIsland \rbrace$, so that $Hostile(EsterIsland)$ is added.
 \item Finally rule 1 is satisfied with $\subst{x,y,z}=\lbrace x/RogerRabbit, y/K_1, z/EsterIsland \rbrace$ so we can add $Criminal(RogerRabbit)$.\\
-
+\end{itemize}
 Notice that we reached a \textbf{fixed point} in which no more inferences can be induced, but the difference with the propositional fixed point is that we may have universally quantified atomic sentence.\\
 Moreover the algorithm is \textbf{sound} since every step is an application on \textit{GMP} and complete for definite clause knowledge bases; that is, it answers every query whose answers are entailed by any knowledge base of definite clauses.\\ Finally let $k$ be the maximum arity (number of arguments) of any predicate, $p$ be the number of predicates, and $n$ be the number of constant symbols. Clearly, there can be no more than $pn^k$ distinct ground facts, so after this many iterations the algorithm must have reached a fixed point.
 
@@ -1568,7 +1568,7 @@ Which is equivalent to A.
 
 \subsubsection{Ex2}
 Tell whether the following propositional formula is valid:
-\[(A ∧ B) ∨ (¬A ∧ ¬B)\]
+\[(A \wedge B) \vee (\neg A \wedge \neg B)\]
 Again we can either use the truth table or the CNF. First let us remember that a valid formula has only true interpretations, that is it has only models (Section \ref{sec:validity}).
 \begin{table}[H]
     \begin{tabular}{|c|c|c|c|c|}
