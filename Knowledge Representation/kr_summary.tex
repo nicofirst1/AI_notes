@@ -2215,8 +2215,27 @@ We want to query the KB  about the veracity of $q=StoredRoom1(A)$.
 \item Finally use the negated query and get the empty set.
 
 
+\subsection{M6}
+For each pair of formulas tell whether or not the second one is a Skolem normal form of the first one; in the negative case, make an appropriate correction.
+\begin{enumerate}[alpha]
+\item 
+	\begin{enumerate}
+	\item $\forall x\ \exists y\ [P(x,y) \wedge Q(y,x)]$
+	\item $ P(x,f(x)) \wedge Q(a,x)$
+	\end{enumerate}
+\item 
+\begin{enumerate}
+	\item $\forall x\ \exists y\ \exists z\ [P(x,y) \wedge Q(z,x) \wedge P(y,z)]$
+	\item $ P(x,f(x))\wedge P(g(x),x) \wedge P(f(x),g(x))$
+	\end{enumerate}
+\end{enumerate}
 
-
+The solution are:
+\begin{enumerate}[alpha]
+\item \textbf{Not correct}. The right SNF is:
+\[P(x,f(x)) \wedge Q(f(x),x)\]
+\item \textbf{Correct}.
+\end{enumerate}
 
 
 \vfill
