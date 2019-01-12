@@ -467,7 +467,7 @@ get_index_elem(Index,List,Element):- get_index_elem_acc(Index,List,Element,1).
 
 % get_index_elem_acc(Index, List, Element, Accumulator)
 % return the element in the list when the accumulator matches the index
-get_index_elem_acc(Index,[Element|List],Element,Index). % if the index is the same ass the accumulator value, return Element
+get_index_elem_acc(Index,[Element|_],Element,Index). % if the index is the same ass the accumulator value, return Element
 
 
 get_index_elem_acc(Index,[_|List],Element,Acc):-
@@ -491,3 +491,46 @@ list_slicing_acc([Idx|Indices],Values,Result,Acc):-
 
 
 list_slicing_acc([],_,Result,Result). % do Result=Acc when the indices list is empty
+
+%---------------------------------------------
+%---------------------------------------------
+%---------------------------------------------                             
+
+/*
+Write a PROLOG program that given a binary tree of with integer numbers
+stored in the nodes. Write a program that returns the maximum value stored in the tree.
+For example, given the input [4,[1,[],[]],[7,[],[]]] the algorithm should return 7. 
+Write a modified version of the program so that it also counts the number of 
+occurrences of the maximum value.
+*/
+
+% return the maximum value between two numbers
+max_val(Val1,Val2,Res):-
+    Val1> Val2,
+    Res is Val1.
+
+max_val(_,Val2,Val2).
+
+%---------------------------------------------                             
+
+maximum_value(Tree,Max):- maximum_value_acc(Tree,Max,0).
+
+maximum_value_acc([N|Tree],Max,Curr):-
+    integer(N), % for the comparison N must be an integer
+    N > Curr, % if the current node N is higher than the saved value Curr
+    maximum_value_acc(Tree,Max,N). % return it and continue
+
+maximum_value_acc([N|Tree],Max,Curr):- % if N is an integer but is not grather than Curr
+    integer(N), % assure N is integer
+    maximum_value_acc(Tree,Max,Curr). % ignore N
+
+
+maximum_value_acc([N|Tree],Max,Curr):- % if N is not an integer then is a Tree
+    maximum_value_acc(N, NewMax1,Curr), % look for the maximum in the sub tree
+    maximum_value_acc(Tree,NewMax2,Curr), % continue the search in the tree.
+    max_val(NewMax1,NewMax2,Max). % get the maximum 
+
+
+
+maximum_value_acc([],Curr,Curr). % if the search is done return the accumulator
+    
