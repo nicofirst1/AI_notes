@@ -16,6 +16,7 @@ top=10mm]{geometry}
 \usepackage{titlesec}
 \usepackage{enumitem}
 
+\setlist[enumerate]{label={\arabic*}.}
 
 
 \newcommand{\changelocaltocdepth}[1]{%
@@ -89,6 +90,8 @@ top=10mm]{geometry}
 This is \textbf{free} material! You should not spend money on it.\\
 This notes are about the \textit{Knowledge Representation} part taught by professor Daniele Nardi in the Artificial Intelligence class. Everyone is welcome to contribute to this notes in any relevant form, just ask for a pull request and be patient.\\ Remember to add your name under the contributors list in the title page when submitting some changes (if you feel like it).
 \end{abstract}
+
+\newpage
 
 \section{Logic based agents}
 A \textbf{knowledge base} [KB] is a set of sentences in a knowledge representation language that express some assertion about the world.\\
@@ -2215,9 +2218,9 @@ We want to query the KB  about the veracity of $q=StoredRoom1(A)$.
 \item Finally use the negated query and get the empty set.
 
 
-\subsection{M6}
+\subsubsection{M6}
 For each pair of formulas tell whether or not the second one is a Skolem normal form of the first one; in the negative case, make an appropriate correction.
-\begin{enumerate}[alpha]
+\begin{enumerate}[label=(\alph*)]
 \item 
 	\begin{enumerate}
 	\item $\forall x\ \exists y\ [P(x,y) \wedge Q(y,x)]$
@@ -2231,11 +2234,86 @@ For each pair of formulas tell whether or not the second one is a Skolem normal 
 \end{enumerate}
 
 The solution are:
-\begin{enumerate}[alpha]
+\begin{enumerate}[label=(\alph*)]
 \item \textbf{Not correct}. The right SNF is:
 \[P(x,f(x)) \wedge Q(f(x),x)\]
 \item \textbf{Correct}.
 \end{enumerate}
+
+
+\subsubsection{M7}
+Given the following knowledge:
+\begin{enumerate}[label=\arabic*]
+\item Gourmand students eat at breakfast bread with nutella.
+\item Regular students eat at breakfast bread only \footnote{In the representation of the sentence consider also the constraint only, even though it is not needed in the derivation.}.
+\item Students that are not gourmand are regular.
+\item  Francesco is a student.
+\end{enumerate}
+
+Do the following:
+\begin{enumerate}[label=(\alph*)]
+\item  Define a vocabulary (i.e., constant, function and predicate symbols) and represent the following sentences in first order logic.
+\item Translate the sentences in clausal form.
+\item derive that Francesco eats bread only at breakfast using resolution.
+\item Write a model for the resulting KB. Are there other models?
+
+\end{enumerate}
+
+\paragraph{Part 1}
+
+Using the following symbols:
+\begin{itemize}
+\item $Student(x)$ meaning that $x$ is a student.
+\item $Gourmand(x)$ meaning that $x$ is a a Gourmand.
+\item $BnN(x)$ meaning that $x$ eats bread and nutella for breakfast.
+\item $B(x)$ meaning that $x$ eats bread only for breakfast.
+\end{itemize}
+
+We can translate the above sentences in FOL:
+\begin{enumerate}
+\item $\forall x\ [Gourmand(x) \Rightarrow BnN(x)]$
+\item $\forall x\ [Student(x) \Rightarrow B(x)]$
+\item $\forall x\ [\neg Gourmand(x) \Rightarrow Student(x)]$
+\item $Student(Francesco)$
+\end{enumerate}
+
+\paragraph{Part 2}
+The clausal form for the sentences is:
+
+\begin{enumerate}
+\item $C_1=\braces{\neg Gourmand(x), BnN(x)}$
+\item $C_2=\braces{\neg Student(x), B(x)}$
+\item $C_3=\braces{Gourmand(x), Student(x)}$
+\item $C_4=\braces{Student(Francesco)}$
+\end{enumerate}
+
+\paragraph{Part 3}
+
+We want to derive that Francesco eats bread only for breakfast, that is $q=B(Francesco)$, using resolution. The steps are simple:
+
+\begin{enumerate}
+\item First resolve $C_4$ with $C_2$ using $\subst{x/Francesco}$ and get:
+\[C_5=\braces{B(Francesco)}\]
+\item Then use the negated query to resolve with $C_5$ and get the empty set, showing that Francesco eats bread only for breakfast.
+\end{enumerate}
+
+\paragraph{Part 4}
+To write a model for the KB we first exclude $C_4$ since is a fact, hence nothing can make it false \footnote{While having also $\neg Student(Francesco)$ will not make $C_4$ false but will make the KB inconsistent.}. So we only focus on :
+\begin{itemize}
+\item $C_1=\braces{\neg Gourmand(x), BnN(x)}$
+\item $C_2=\braces{\neg Student(y), B(y)}$
+\item $C_3=\braces{Gourmand(z), Student(z)}$
+\end{itemize}
+Notice how the letters change for every clause, that is because we do not need one specific object to be unifiable with every clause, instead we need one object for every clause.\\
+To have a model from a set of clause we need that \textbf{at least} one atom of \textbf{every} clause is true; so we can have something like:
+\begin{itemize}
+\item $F_1=\braces{Gourmand(Federico)}$, with substitution $\subst{z/Federico}$.
+\item $F_2=\braces{B(Antonio)}$, with substitution $\subst{y/Antonio}$.
+\item $F_3=\braces{BnB(Giuseppe)}$, with substitution $\subst{x/Giuseppe}$.
+\end{itemize}
+
+
+
 
 
 \vfill
