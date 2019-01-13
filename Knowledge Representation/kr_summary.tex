@@ -304,7 +304,7 @@ Finding a proof for a formula can implemented as a search where:
 We need to describe the proprieties of a inferring method $\mathcal{R}$ given a set of formulas $KB$ and a formula $A$. It is important to understand that by writing $\models A$ we are referring to the truthfulness of $A$ in all its interpretation, thus referring to the \textit{validity} of $A$.
 \begin{itemize}
 \item First we need to prove that an infer rule $\mathcal{R}$ is \textbf{sound}, to do so we need to prove that $A$ is \textbf{valid} given the fact that it can be derived with $\vdash_{\mathcal{R}}$.\\ 
-First thing is to notice that there is no KB before the symbol since we want to prove $A$ being valid  regardless of the existence of any KB \footnote{That is a formula which is true in all models, for example $A \vee \neg A$.}.\\
+Notice that there is no KB before the symbol since we want to prove $A$ being valid  regardless of the existence of any KB \footnote{That is a formula which is true in all models, for example $A \vee \neg A$.}.\\
 But if we can derive $A$ with a deduction $\vdash$ then $A$ must be valid, so $\mathcal{R}$ is \textbf{sound} and we have: $KB \vdash_{\mathcal{R}} A$ implies $KB \models A$.
 \item On the other hand, if $A$ is valid then it exist a derivation $\vdash_{\mathcal{R}} $ than let me derive it, so that $KB \models A$ implies $KB \vdash_{\mathcal{R}} A$, thus  $\mathcal{R}$ is \textbf{complete}.
 \end{itemize}
@@ -312,7 +312,7 @@ But if we can derive $A$ with a deduction $\vdash$ then $A$ must be valid, so $\
 \subsubsection{Inference and proof}
 \label{subsec:modusPonens}
 
-First thing first the truth tables we cited before are not associated with the inference rules. They are associated with the formulas! So you cannot apply any truth table to Modus Ponens, And Elimination and Resolution since it does not make sense.\\
+First thing first the truth tables we cited before are not associated with the inference rules. They are associated with the formulas! So you cannot apply any truth table to Modus Ponens, And Elimination or Resolution since it does not make sense.\\
 
 Moreover atom and literal are the two basic elements for the construction of the formulae, in propositional logic $A$ is a propositional variable. But since we can have bot $A$ and $\neg A$ we say that $A$ is a literal which can be positive or negative.\\
 
@@ -504,9 +504,9 @@ This clause is saying that if A then not B and can be used in a KB to prove inco
 
 \subsubsection{Propositional Resolution }
 \label{subsubsec:prop_resolution}
-The key idea of the propositional resolution is that if I have two clauses $C_1,C_2$ \footnote{You should know by now that a clause is a disjunction of literals.} and one literal $L$ that appears with different sign in both $L \in C_1\ ,\neg L \in C_2$, then I can generate a new clause by joining $C_1 \vee C_2$ and removing $L,\neg L$ from them. That is because if I have a clause where a symbol appears with both sign, e.g. $C_3=L_1 \vee L_2 \vee \neg L_1$, then every interpretation I can give to $L_1$ will be indifferent since it will result in a model. 
+The key idea of the propositional resolution is that if I have two clauses $C_1,C_2$ \footnote{You should know by now that a clause is a disjunction of literals.} and one literal $L$ that appears with different sign in both $L \in C_1\ ,\neg L \in C_2$, then I can generate a new clause by joining $C_1 \vee C_2$ and removing $L,\neg L$ from them. That is because if I have a clause where a symbol appears with both sign, e.g. $C_3=L_1 \vee L_2 \vee \neg L_1$, then every interpretation given to $L_1$ will be indifferent since it will result in a model. 
 
-\paragraph{English Example} Consider the following KB, with two clauses, trying to understand why can't I play Overwatch on Monday:
+\paragraph{English Example} Consider the following KB, with two clauses, trying to understand why I can't play Overwatch on Monday:
 \begin{itemize}
 \item $C_1$=\textit{"There is an exam the next day"} or \textit{"My pc is broken"} or \textit{"I'm tired"}
 \item $C_2$=\textit{"There is no exam the next day"}
@@ -526,12 +526,12 @@ L=L_1\vee L_2 \vee...\vee L_n=\lbrace L_1,...,L_n\rbrace\\
 P=P_1\vee P_2 \vee...\vee P_m=\lbrace P_1,...,P_m\rbrace
 \end{align}
 for any $n,m$.\\
-Let there be a set of literals, $O=\lbrace O_1,...,O_k\rbrace$, which appears in both $L$ and $P$ but with opposite sign:
-\[\forall O_i,\ O_i \in L, \neg O_i \in P\]
+Let there be a set of two literals, $O=\lbrace O_l,O_p\rbrace$, which appears in both $L$ and $P$ but with opposite sign:
+\[\ O_l \in L, \neg O_l=O_p \in P\]
 Se we can use resolution to join $P$ and $L$ \footnote{In this instance by \textit{joining} we mean to merge together the two set of disjunction with a disjunction symbol} and remove $O$ from the union:
 \[\frac{L\quad P}{(L\cup P)\setminus O}\]
 Which result will look like:
-\[(L_1\vee L_2 \vee...\vee L_n\vee P_1\vee P_2 \vee...\vee P_m)\setminus (O_1\vee...\vee O_k)  \]
+\[(L_1\vee L_2 \vee...\vee L_n\vee P_1\vee P_2 \vee...\vee P_m)\setminus (O_l\vee O_p)  \]
 
 \paragraph{Formal Example}
 Let's use the following KB:
