@@ -727,7 +727,7 @@ FOL assumes the world contains:
 \item \textbf{Objects} like: pc, tv, beer....
 \item \textbf{Relations} are sets of tuples of objects that are related. Depending on the number of tuple in the set we can have:
 	\begin{itemize}
-	\item \textit{Proprieties} (or unary relationship) that have just one tuple in the set; such as:\textit{red, round, big}...
+	\item \textit{Proprieties} (or unary relationship) that have just one tuple in the set; such as: \textit{red, round, big}...
 	\item \textit{General} (or $n$-ary relationship)  which may have $n$ tuples; like:\textit{ bigger than, has color, owns}...
 	\end{itemize}
 
@@ -773,7 +773,7 @@ An atomic formula (or atom for short) is a predicate symbol with a number $n\in 
 \begin{itemize}
 \item \textit{Sibling($t_i,t_j$)}:  predicate symbol with arity 2.
 \item $Friend(t_1,...,t_n)$: predicate symbol with arity $n$.
-\item $t_i=t_j$: predicate symbol $=$ with arity 2, can be written as $Equals(t_i,t_j)$
+\item $t_i=t_j$: predicate symbol $" = "$ with arity 2, can be written as $Equals(t_i,t_j)$
 \item $ParentOf(ParentOf(x))$ is the grandparent of $x$ and has arity 1.
 \item $\bot ,\top$ are atoms.
 \end{itemize}
@@ -867,13 +867,13 @@ On the other hand the implication needs to look for all the objects since its be
 We can use multiple quantifiers in the same formula to express different kind of proprieties. For example, given the function $Love(x,y)$ that can be read as, $x$ loves $y$, we can say the following things:
 \begin{itemize}
 \item Everybody loves somebody:
-\[\forall x \exists y Loves(x,y)\]
+\[\forall x\ \exists y\ Loves(x,y)\]
 \item Somebody loves us
-\[\forall x \exists y Loves(y,x)\]
+\[\forall x\ \exists y\ Loves(y,x)\]
 \item X loves everybody
-\[\exists x \forall y Loves(x,y)\]
+\[\exists x\ \forall y\ Loves(x,y)\]
 \item Everybody loves x
-\[\exists x \forall y Loves(y,x)\]
+\[\exists x\ \forall y\ Loves(y,x)\]
 \end{itemize}
 
 
@@ -1154,17 +1154,17 @@ For applying resolution we need to convert a sentence in \textit{Conjunctive Nor
 When removing existential quantifiers using $EI$ (Section \ref{subsubsec:EI}) we are assuming there exist an element, which we do not know, that satisfy the existential property.\\
 Now consider the sentence \textit{"Everyone has a heart"}, that is translated in FOL with:
 \[\forall x [Person(x)\Rightarrow \exists y\ Heart(y)\wedge Has(x,y)]\]
-If we use $EI$ on thi s we obtain:
+If we use $EI$ on this we obtain:
 \[\forall x [Person(x)\Rightarrow  Heart(H)\wedge Has(x,H)]\]
 The meaning of the sentence becomes \textit{"Everyone has the heart H"}, which is not the same as before since we make no distinction between hearts.\\
 For this kind of problem we need a function which takes as input a person and returns the person's heart. Let us denote this function as $F(x)$ \footnote{Note that this function must not appear in the KB, similarly as for $EI$.}, so the above sentence becomes:
 \[\forall x [Person(x)\Rightarrow  Heart(F(x))\wedge Has(x,F(x))]\]
 which now links every person to his own heart, $F(x)$ is called a \textbf{Skolem function}.\\
-Formally given a formula $\exists x\psi(x)$, where $\psi(x)$ is another formula that depends on $x$ \footnote{Note that the dependence can be of any kind of \textit{arity}. The heart example mentioned before has arity 2 for the $Has(x,y)$ predicate, but we may have predicates in which the variable of the existential quantifier $x$ may depend on a huge number of other variables $v_1,...,v_n$ so to have arity $n$.}, we have that the skolemization of the formula $(\exists x\psi^{sko})$ is given by substituting the dependence on $x$ with a skolem function $\psi[F(x_1,...,x_n)/x]$ of arity $n$.
+Formally given a formula $\exists x\ \psi(x)$, where $\psi(x)$ is another formula that depends on $x$ \footnote{Note that the dependence can be of any kind of \textit{arity}. The heart example mentioned before has arity 2 for the $Has(x,y)$ predicate, but we may have predicates in which the variable of the existential quantifier $x$ may depend on a huge number of other variables $v_1,...,v_n$ so to have arity $n$.}, we have that the skolemization of the formula $(\exists x	\ \psi^{sko})$ is given by substituting the dependence on $x$ with a skolem function $\psi[F(x_1,...,x_n)/x]$ of arity $n$.
 
 \subsubsection{Prenex Normal Form}
 Before introducing the \textit{Skolem Normal Form} [SNF] we must describe the \textit{Prenex Normal Form} [PNF].\\
-A for the CNF that needs the negation symbols $\neg$ to be pushed inward \footnote{That is inside the formulas, to the left of literals.}, the PNF wants the quantifier symbols to be moved \textit{outwards} to the left side of the formula. For example, given some quantifier free formulas $\phi(x),\psi(y),\varphi(z)$ \footnote{These formulas are made of other formulas like : $\phi(x)=P(x)\vee Q(x)\vee A$. The important thing is that they do now contain any quantifier and they must depend on the specified variable.  } which appears in a formula as:
+As for the CNF that needs the negation symbols $\neg$ to be pushed inward \footnote{That is inside the formulas, to the left of literals.}, the PNF wants the quantifier symbols to be moved \textit{outwards} to the left side of the formula. For example, given some quantifier free formulas $\phi(x),\psi(y),\varphi(z)$ \footnote{These formulas are made of other formulas like : $\phi(x)=P(x)\vee Q(x)\vee A$. The important thing is that they do now contain any quantifier and they must depend on the specified variable.  } which appears in a formula as:
 \[[\forall x\ \phi(x) \wedge \forall y\ \psi(y)] \Rightarrow \exists z\ \varphi(z)\]
 We transform it in PNF just by pushing the quantifiers to the left:
 \[\forall x\forall y\exists z[[\phi(x) \wedge \psi(y)] \Rightarrow \varphi(z)]\]
@@ -1276,9 +1276,11 @@ Given a  set of clauses $S$ the Herbrand universe $H_S$ of those clauses is cons
 \begin{itemize}
 \item Following a function symbol if any.
 \item Following a constant symbol if any.
-\item 
 \end{itemize}
-Per example given $Parent(x,F(x,A))\vee Sibling(x,B)$ we can construct $Parent(Parent(A),F(F(A),A)),Parent(Parent(Parent(B)),F(B,F(B,A))),Sibling(A,Parent(B))....$.\\
+Per example given 
+\[Parent(x,F(x,A))\vee Sibling(x,B)\]
+we can construct 
+\[Parent(Parent(A),F(F(A),A)),\ Parent(Parent(Parent(B)),\ F(B,F(B,A))), \Sibling(A,Parent(B))....\]
 That is we construct all the possible \textbf{ground terms} with the given function symbols ($Parent(x,y),Sibling(x,y)$), constant symbols ($A,B,F(A),Sibling(A,B)...$) and skolem formulas ($F(A,B),F(B,B),F(F(A),B)...$). 
 
 \paragraph{Saturation} Given the set of ground terms $P$ obtained earlier, we generate the saturation of $S$ in respect to $P$, called $P(S)$, by applying all consistent substitution of ground term in $P$ with variables in $S$.
