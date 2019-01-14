@@ -532,3 +532,10 @@ maximum_value_acc([N|Tree],Max,Curr):- % if N is not an integer then is a Tree
 
 maximum_value_acc([],Curr,Curr). % if the search is done return the accumulator
     
+% check that the tree is binary 
+check_tree([N,L,R]):-
+    integer(N),
+    check_tree(L),
+    check_tree(R).
+
+check_tree([]).
