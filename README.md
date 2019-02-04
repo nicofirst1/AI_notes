@@ -1,7 +1,8 @@
 # AI_notes
 
 Notes taken from the  Artificial Intelligence [class](https://www.dis.uniroma1.it/~nardi/Didattica/AI/index-new.html) at the Sapienza University of Rome.
-The lessons are taught by professor [Daniele Nardi](http://www.dis.uniroma1.it/~nardi/) and are based both on his slides and on the third edition of *Artificial Intelligence A Modern Approach* by Stuart Russell and Peter Norvig ; plus some other materials.
+The lessons are taught by professor [Daniele Nardi](http://www.dis.uniroma1.it/~nardi/) and are based both on his slides and on the third edition of *Artificial Intelligence A Modern Approach* by Stuart Russell and Peter Norvig ; plus some other materials.\
+If you find this notes helpful click on the star button and I'll be really happy.
 
 
 
