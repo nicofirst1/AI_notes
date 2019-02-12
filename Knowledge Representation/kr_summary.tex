@@ -609,7 +609,7 @@ Given the following KB:
 \item $B$, (known fact, since positive literal)
 \end{itemize}
 We query Q \footnote{That is we ask the KB about the truthfulness of Q.}.\\
- The KB can bee seen as an \textbf{AND-OR Graph} where the implications are $OR$ arches while the $\wedge$ are $AND$ arches (Figure \ref{fig:forward_graph_1}).\\
+ The KB can be seen as an \textbf{AND-OR Graph} where the implications are $OR$ arches while the $\wedge$ are $AND$ arches (Figure \ref{fig:forward_graph_1}).\\
 
 
 \begin{figure}[t]
@@ -1521,7 +1521,7 @@ Let a KB be the following:
 \item $Student(Nardi) \vee Professor(Nardi)$
 \end{itemize}
 If we apply CWA to the KB we have an inconsistency. However it is still reasonable (and consistency preserving) to assume that \textit{AI} and \textit{MachineLearning} are neither students nor professors, 
-and that and that \textit{Nardi} is not a course is not a course. So we can use Generalized CWA [GCWA] in the following way:
+and that \textit{Nardi} is not a course. So we can use Generalized CWA [GCWA] in the following way:
 \[GCWA(KB)=KB\cup \Delta_{asm}\]
 Where $\Delta_{asm}= \lbrace \neg L | L$ \textit{is a positive literal and there is no positive clause C
 such that} $KB \models L\wedge C and KB \nVDash C \rbrace$.\\
