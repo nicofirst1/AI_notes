@@ -15,6 +15,7 @@ right=20mm,
 top=10mm]{geometry}
 \usepackage{titlesec}
 \usepackage{enumitem}
+\usepackage{listings}
 
 \setlist[enumerate]{label={\arabic*}.}
 
@@ -862,6 +863,52 @@ Like previously said, the conjunction for an universal quantifier makes the form
 Going back to the apple example, we want to say that there are some apples which are delicious, if we use the implication symbol then the formula will return $True$ as soon as there is an object which is either a delicious non-apple or a non-delicious non-apple, so the look for some delicious apple stops immediately.\\
 It is useful to imagine the existential quantifier to be like a disjunction in which as soon as we encounter a $True$ element we can stop the look for other and just return $True$.
 On the other hand the implication needs to look for all the objects since its behavior is closer to the one of a conjunction.
+
+\paragraph{Anther way of viewing it}
+Imagine to have a \textit{for loop} in which you iterate through a list of objects $L=\lbrace o_1,o_2,...,o_n\rbrace$.  These objects are restaurants with the following proprieties:
+\begin{itemize}
+\item Rating: an integer in range $r \in \braces{0,5}$
+\item Price: an integer $p \in \braces{0,3}$
+\item Distance: a real value in range $d \in [0,\infty]$
+\end{itemize}
+Both the universal and existential quantifiers are a way of iterating trough this list with an specific goal in mind.
+
+\subparagraph{Universal Quantifier} 
+If say that the restaurants which have more than $3$ in rating, less than $2$ in prices and less than $50$ in distance are good the FOL formula will be:
+\[\[\forall x\ [MoreThan(x_r,3) \wedge LessThan(x_p,2) \wedge LessThan(x_d,50) \Rightarrow Good(x)]\]
+Where \textit{MoreThan/LessThan} are predicates with arity 2 used for numerical comparison.\\
+This process can be seen also as iterating trough the list with a \textit{for loop} and filtering the elements in respect to their attributes. in python would be something like this:
+\begin{lstlisting}[language=Python]
+
+good=list()
+
+for elem in L:
+	if elem[r]>3 and elem[p]<2 and elem[d]<50:
+		good.append(elem)
+
+\end{lstlisting}
+
+\subparagraph{Existential Quantifier} 
+On the other hand the existential quantifier can answer a question like:\\
+\textit{Is there a restaurant which is both closer than 10 and which rates are 5?}\\
+Notice that the nature of the response in no more a list or something like it, but instead is a yes or no kind of answer. In FOL the formula would look like:
+\[\exists x\ [LessThan(x_d,10) \wedge Equal(x_r,5)]\]
+In python the algorithm would be:
+\begin{lstlisting}[language=Python]
+
+answer=False
+for elem in L:
+	if elem[d]<10 and elem[r]==5:
+		answer=True
+		break
+		
+return answer
+
+\end{lstlisting}
+Notice the presence of the \textit{break} operator which is essential in the existential quantifier.
+
+
+
 
 \paragraph{Nested Quantifiers}
 We can use multiple quantifiers in the same formula to express different kind of proprieties. For example, given the function $Love(x,y)$ that can be read as, $x$ loves $y$, we can say the following things:
