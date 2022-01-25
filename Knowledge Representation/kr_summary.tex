@@ -17,6 +17,12 @@ top=10mm]{geometry}
 \usepackage{enumitem}
 \usepackage{listings}
 
+\usepackage{amstext} % for \text macro
+\usepackage{array}   % for \newcolumntype macro
+\newcolumntype{L}{>{$}l<{$}} % math-mode version of "l" column type
+\newcolumntype{C}{>{$}c{$}} % math-mode version of "c" column type
+
+
 \setlist[enumerate]{label={\arabic*}.}
 
 
@@ -36,7 +42,6 @@ top=10mm]{geometry}
     linkcolor=blue,
     filecolor=magenta,      
     urlcolor=cyan,
-
     }
 
 \titlespacing*{\subsection}
@@ -96,7 +101,7 @@ top=10mm]{geometry}
 \newpage
 \begin{abstract}
 This is \textbf{free} material! You should not spend money on it.\\
-Find the complete material on GitHub \hyperlink{https://github.com/nicofirst1/AI_notes}{https://github.com/nicofirst1/AI\_notes}.
+Find the complete material on GitHub \url{https://github.com/nicofirst1/AI_notes}.
 
 These notes are about the \textit{Knowledge Representation} part taught by professor Daniele Nardi in the Artificial Intelligence class. Everyone is welcome to contribute to these notes in any relevant form, just ask for a pull request and be patient.\\ Remember to add your name under the contributors' list in the title page when submitting some changes (if you feel like it).
 \end{abstract}
@@ -407,14 +412,14 @@ $(\neg A \vee B \vee C)\wedge(\neg B \vee A)\wedge(\neg C \vee A)$
 \paragraph{Alpha-Beta Formulas}
 There are some cases in which we need to separate dis/conjunction depending on the following formulas:
 \begin{table}[H]
-    \begin{array}{|l|l|l|l|}
+    \begin{tabular}{|L|L|L|L|}
         \hline
         C=\lbrace \alpha \rbrace     & C_1=\lbrace \alpha_1 \rbrace,C_2=\lbrace \alpha_2 \rbrace & C=\lbrace \beta \rbrace & C=\lbrace \beta_1, \beta_2\rbrace \\ \hline\hline
         \alpha =A \wedge B           & \alpha_1 = A,\ \alpha_2= B                                & \beta=A\vee B           & \beta_1= A ,\ \beta_2=B           \\ \hline
         \alpha =\neg(A\vee B)        & \alpha_1 =\neg A,\ \alpha_2= \neg B                       & \beta=A \Rightarrow B   & \beta_1=\neg A,\ \beta_2= B       \\ \hline
         \alpha =\neg(A\Rightarrow B) & \alpha_1=A,\ \alpha_2= \neg B                             & \beta=\neg(A\wedge B)   & \beta_1=\neg A,\ \beta_2= \neg B  \\
         \hline
-    \end{array}
+    \end{tabular}
 \caption{Alpha-Beta formulas for CNF}
 \label{tab:alpha-beta}
 \end{table}
@@ -884,7 +889,7 @@ Both the universal and existential quantifiers are a way of iterating trough thi
 
 \subparagraph{Universal Quantifier} 
 If say that the restaurants which have more than $3$ in rating, less than $2$ in prices and less than $50$ in distance are good the FOL formula will be:
-\[\[\forall x\ [MoreThan(x_r,3) \wedge LessThan(x_p,2) \wedge LessThan(x_d,50) \Rightarrow Good(x)]\]
+\[\forall x\ [MoreThan(x_r,3) \wedge LessThan(x_p,2) \wedge LessThan(x_d,50) \Rightarrow Good(x)]\]
 Where \textit{MoreThan/LessThan} are predicates with arity 2 used for numerical comparison.\\
 This process can be seen also as iterating trough the list with a \textit{for loop} and filtering the elements in respect to their attributes. in python would be something like this:
 \begin{lstlisting}[language=Python]
@@ -941,7 +946,7 @@ So we can make use of this information to switch between universal and existenti
 \centering
 \setlength\extrarowheight{5pt}
 
-    \begin{tabular}{|l|l|}
+    \begin{tabular}{|L|L|}
         \hline
 		Quantifiers & Equivalences\\ \hline\hline
         \forall x\ \neg P \equiv \neg \exists x\ P  & \neg(P\vee Q) \equiv \neg P \wedge \neg Q \\ \hline
@@ -1068,7 +1073,7 @@ So that the new propositionalized KB is:
 \paragraph{Horn Clauses}
 We can have the following for every element of the FOL:
 \begin{itemize}
-\item \textit{Facts}: $\top\RightarrowA(x)$ ($A(x)$ for simplicity). 
+\item \textit{Facts}: $\top\Rightarrow A(x)$ ($A(x)$ for simplicity). 
 \item \textit{Rules}: $A_1(x)\wedge...\wedge A_n(x)\Rightarrow B(x)$
 \item \textit{Goals}: $A_1(x)\wedge...\wedge A_n(x)\Rightarrow \bot$ \footnote{We are using $\bot$ since want to prove the falsity of the premise is impossible so the premise is true.}
 \end{itemize}
@@ -1336,7 +1341,7 @@ Given a  set of clauses $S$ the Herbrand universe $H_S$ of those clauses is cons
 Per example given 
 \[Parent(x,F(x,A))\vee Sibling(x,B)\]
 we can construct 
-\[Parent(Parent(A),F(F(A),A)),\ Parent(Parent(Parent(B)),\ F(B,F(B,A))), \Sibling(A,Parent(B))....\]
+\[Parent(Parent(A),F(F(A),A)),\ Parent(Parent(Parent(B)),\ F(B,F(B,A))), \ Sibling(A,Parent(B))....\]
 That is we construct all the possible \textbf{ground terms} with the given function symbols ($Parent(x,y),Sibling(x,y)$), constant symbols ($A,B,F(A),Sibling(A,B)...$) and skolem formulas ($F(A,B),F(B,B),F(F(A),B)...$). 
 
 \paragraph{Saturation} Given the set of ground terms $P$ obtained earlier, we generate the saturation of $S$ in respect to $P$, called $P(S)$, by applying all consistent substitution of ground term in $P$ with variables in $S$.
@@ -1356,7 +1361,7 @@ Let $S'$ be this finite subset of $H_S(S)$, we can use the ground resolution the
 \paragraph{Lifting Lemma}
 This lemma is used as a proof step from ground clauses up to general first-order clauses. The lemma says the following:
 \begin{center}
-Let $C_1$ and $C_2$ be two clauses with no shared variables, and let $C_1'$ and $C_2'$ be ground instances of $C_1$ and $C_2$. If $C'$ is a resolvent of $C_1$ and $C_2$ , then there exists a clause $C$ such that (1) $C$ is a resolvent of $C_1$ and $C_2$ and (2) $C'$ is a ground instance of $C$.
+    Let $C_1$ and $C_2$ be two clauses with no shared variables, and let $C_1'$ and $C_2'$ be ground instances of $C_1$ and $C_2$. If $C'$ is a resolvent of $C_1$ and $C_2$ , then there exists a clause $C$ such that (1) $C$ is a resolvent of $C_1$ and $C_2$ and (2) $C'$ is a ground instance of $C$.
 \end{center} 
 For example, given the two clauses:
 \[C_1=Heart(x,F(x,A))\vee Human(x)\]
@@ -1515,7 +1520,7 @@ So our set of assumption would be:
 
 \paragraph{Completeness of CWA}
 We can show that CWA produces a complete KB since we have that:
-\[\forall \alpha, KB^+ \modules \alpha\ or\ KB^+ \modules \neg \alpha\]
+\[\forall \alpha, KB^+ \models \alpha\ or\ KB^+ \models \neg \alpha\]
 Where $\alpha$ can be either an atom or formula. 
 
 \paragraph{Consistency of CWA}
@@ -1595,7 +1600,7 @@ For the entailment to be true we need to have that all the models of B are also 
 \begin{table}[H]
     \begin{tabular}{|c|c|c|c|c|}
         \hline
-        \alpha & \beta & \gamma & A & B \\ \hline
+        $\alpha$ & $\beta$ & $\gamma$ & A & B \\ \hline
         T      & T     & T      & T & T \\ \hline
         T      & T     & F      & F & F \\ \hline
         T      & F     & T      & T & T \\ \hline
@@ -1609,7 +1614,7 @@ For the entailment to be true we need to have that all the models of B are also 
 \label{tab:prop_logic_ex1}
 \end{table}
 
-As can you see from the table the two formulas are equivalent (they have the same interpretation), thus we have that: iff $A \equiv B$ then $A \model B$ and $B \model A$.\\
+As can you see from the table the two formulas are equivalent (they have the same interpretation), thus we have that: iff $A \equiv B$ then $A\models B$ and $B \models A$.\\
 We can show the equivalence by bringing both the formulas in conjunctive normal form (Section \ref{subsec:cnf}):
 
 For A we have:
@@ -1634,7 +1639,7 @@ Again we can either use the truth table or the CNF. First let us remember that a
 \begin{table}[H]
     \begin{tabular}{|c|c|c|c|c|}
         \hline
-        A & B & W_1=A \wedge B & W_2= \neg A \wedge \neg B & W_1 \vee W_2 \\ \hline
+        A & B & $W_1=A \wedge B$ & $W_2= \neg A \wedge \neg B$ & $W_1 \vee W_2$ \\ \hline
         T & T & T              & F                         & T            \\ \hline
         T & F & F              & F                         & F            \\ \hline
         F & T & F              & F                         & F            \\ \hline
@@ -1955,7 +1960,7 @@ Given:
 \item The textbooks of class CB are difficult
 \item  Mary studies (all and only) easy books
 \item  Mary passes the exam of a class if she studies at least a textbook for that class
-\item  Russel&Norvig is a textbook for class CA
+\item  Russel and Norvig [RN] is a textbook for class CA
 \item  Tenenbaum is a textbook for class CB
 \end{itemize}
 
@@ -1973,7 +1978,7 @@ The first order logic KB would be:
 \item $\forall x\ Cb(x) \Rightarrow \neg Easy(x)$
 \item $\forall x\  Easy(x) \Rightarrow Study(Mary,x)$
 \item $\exists x\ Study(Mary,x) \wedge Passes(Mary,x)$
-\item $Ca(R&N), CB(Tb)$
+\item $Ca(RN), CB(Tb)$
 \end{itemize}
 
 The CNF would be:
@@ -1982,25 +1987,25 @@ The CNF would be:
 \item $C_2= \lbrace \neg Cb(x), \neg Easy(x) \rbrace$
 \item $C_3= \lbrace \neg Easy(x), Study(Mary,x) \rbrace$
 \item $C_4= \lbrace Study(Mary,B) \rbrace$, where we used EI (Section \ref{subsubsec:EI}) to refer to a generic book $B$ that Mary studies.
-\item $C_5= \lbrace Passes(Mary,B) \rbrace$, in this case we are not making any difference between the exam that Mary passes and the book she uses to study. We will refer to the exam based on R&N or on Tb.
-\item $C_6= \lbrace Ca(R&N) \rbrace$
+\item $C_5= \lbrace Passes(Mary,B) \rbrace$, in this case we are not making any difference between the exam that Mary passes and the book she uses to study. We will refer to the exam based on RN or on Tb.
+\item $C_6= \lbrace Ca(RN) \rbrace$
 \item $C_7= \lbrace Cb(Tb) \rbrace$
 \end{itemize}
 We can tell that the KB is in Horn form since all the clauses have \textbf{at most one} positive literal (Section \ref{subsubsec:horn}).
 
 \paragraph{Part 2}
 First we need to add some knowledge to the KB in order to make Mary study something. We add the sentence:\\
-\textit{Mary studies R&N.}\\
-Which, in FOL, is equivalent to say : $Study(Mary,R&N)$.\\
-Which, in CNF, is :$C_8=\lbrace Study(Mary,R&N) \rbrace$.\\
-In order to prove that Mery passes the R&N exam we need to query $q=Passes(Mary,R&N)$ to the KB, thus we need to prove that $(KB \wedge \neg q) \vdash \{\}$. The resolution follows these steps:
+\textit{Mary studies RN.}\\
+Which, in FOL, is equivalent to say : $Study(Mary,RN)$.\\
+Which, in CNF, is :$C_8=\lbrace Study(Mary,RN) \rbrace$.\\
+In order to prove that Mery passes the RN exam we need to query $q=Passes(Mary,RN)$ to the KB, thus we need to prove that $(KB \wedge \neg q) \vdash \{\}$. The resolution follows these steps:
 \begin{enumerate}
-\item Resolve $\neg q$ with $C_3$, using the substitution $\theta=\lbrace x/R&N \rbrace$:
-\[\frac{\neg Passes(Mary,R&N),\quad \lbrace \neg Easy(x), Study(Mary,x) \rbrace}{C_9=\lbrace \neg Easy(R&N) \rbrace}\]
-\item Resolve $C_9$ with $C_1$,  using the substitution $\theta=\lbrace x/R&N \rbrace$:
-\[\frac{\neg Easy(R&N),\quad \lbrace \neg Ca(x), Easy(x) \rbrace}{C_{10}=\lbrace \neg Ca(R&N) \rbrace}\]
-
-\item Finally resolve $C_{10}$ with the fact $C_6$ and obtain the empty clause.
+    \item Resolve $\neg q$ with $C_3$, using the substitution $\theta=\lbrace x/RN \rbrace$:
+    \[\frac{\neg Passes(Mary,RN),\quad \lbrace \neg Easy(x), Study(Mary,x) \rbrace}{C_9=\lbrace \neg Easy(RN) \rbrace}\]
+    \item Resolve $C_9$ with $C_1$,  using the substitution $\theta=\lbrace x/RN \rbrace$:
+    \[\frac{\neg Easy(RN),\quad \lbrace \neg Ca(x), Easy(x) \rbrace}{C_{10}=\lbrace \neg Ca(RN) \rbrace}\]
+    
+    \item Finally resolve $C_{10}$ with the fact $C_6$ and obtain the empty clause.
 \end{enumerate}
 
 \vfill
@@ -2274,6 +2279,7 @@ We want to query the KB  about the veracity of $q=StoredRoom1(A)$.
 \[C_{11}=\braces{StoredRoom1(A)}\]
 
 \item Finally use the negated query and get the empty set.
+\end{enumerate}
 
 
 \subsubsection{M6}
@@ -2435,7 +2441,7 @@ Which truth table is \ref{tab:ex_1_sub3}.
 
     \begin{tabular}{|l|l|l|l|l|}
         \hline
-        A & B & L_1= \neg(A \wedge B) & L_2= A \wedge B & L_1 \vee L_2 \\ \hline
+        A & B & $L_1= \neg(A \wedge B)$ & $L_2= A \wedge B$ & $L_1 \vee L_2$ \\ \hline
         T & T & F                & T          & T                                  \\ \hline
         T & F & T                & F          & T                                  \\ \hline
         F & T & T                & F          & T                                  \\ \hline
@@ -2449,7 +2455,7 @@ Which truth table is \ref{tab:ex_1_sub3}.
 
     \begin{tabular}{|l|l|l|l|l|l|}
         \hline
-        A & B & C & L_1=\neg A \wedge \neg C & L_2=B \wedge \neg C & L_1 \vee L_2 \vee C \\ \hline
+        A & B & C & $L_1=\neg A \wedge \neg C$ & $L_2=B \wedge \neg C$ & $L_1 \vee L_2 \vee C$ \\ \hline
         T & T & T & F                        & F                   & T                   \\ \hline
         T & T & F & F                        & T                   & T                   \\ \hline
         T & F & T & F                        & F                   & T                   \\ \hline
@@ -2693,13 +2699,14 @@ The second one is more complicated. It is better to draw the truth table. ??????
 \centering
     \begin{tabular}{|c|c|c|}
         \hline
-        B & D & \neg Black(x) \vee Dog(x) \\ \hline
+        B & D & $\neg Black(x) \vee Dog(x)$ \\ \hline
         T & T & T                         \\  \hline
         T & F & F                         \\  \hline
         F & T & T                         \\  \hline
         F & F & T                         \\
         \hline
     \end{tabular}
+    \caption{}
 \label{tab:ex2sub2}
 \end{table}
 
