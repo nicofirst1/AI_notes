@@ -6,8 +6,10 @@
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage[table, svgnames, dvipsnames]{xcolor}
-\usepackage{makecell, cellspace, caption}
+\usepackage{makecell, cellspace}
 \usepackage{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
 
 \author{Nicolò Brandizzi}
 \title{Multi-Agent System Summary}
@@ -99,14 +101,14 @@ we can look at a game as a tree where each node is a state and the edges are mov
 The \textbf{MinMax strategy} is a strategy with the following heuristic:
 \[MinMax(s)=\\
 \left(
-    \begin{tabular}{c\quad c}
-    
-    \begin{cases} Utility(s) & \mbox{if } TerminalTest(s)  \\ 
+    \begin{tabular}{c c}
+    $
+    \begin{cases} 
+    Utility(s)  & \mbox{if } TerminalTest(s)  \\ 
     \max_{a \in Actions(s)}MinMax(Result(s,a)) & \mbox{if } Playes(s)=Max\\
     \min_{a \in Actions(s)}MinMax(Result(s,a)) & \mbox{if } Playes(s)=Min\\
-    
      \end{cases}
-    
+    $
     \end{tabular}
 \right)
 \]
@@ -142,7 +144,8 @@ We can use \textbf{dynamic move-ordering schemes}, that first try the moves that
 A \textbf{transposition table} is a way to store the evaluation of the resulting position in a hash table, so that we do not have to recompute it on subsequent occurrence.
 
 \subsection{Imperfect Real-Time Decisions}
-We can use an evaluation function as the cutoff value for iterative deepening instead of a fixed depth $d$. This will turn non-terminal nodes into terminal leaves. This can be easily done by slightly modified the minmax algorithm including a heuristic function EVAL which estimates the position utility and replace the terminal test with a \texbf{cutoff test} that decides when to use EVAL.
+
+We can use an evaluation function as the cutoff value for iterative deepening instead of a fixed depth $d$. This will turn non-terminal nodes into terminal leaves. This can be easily done by slightly modified the minmax algorithm including a heuristic function EVAL which estimates the position utility and replace the terminal test with a \textbf{cutoff test} that decides when to use EVAL.
 
 \paragraph{Evaluation Functions}
 How do we design a good evaluation function?
@@ -499,7 +502,6 @@ Another possible implementation is the one where a bidder (B) who has been award
 \end{itemize}
 
 \paragraph{Pro/Cons of contract net}
-\\
 Pros:
 \begin{itemize}
 \item Allocation mechanism is simpler to implement.
@@ -710,7 +712,7 @@ In this kind of setting there is an auctioneer that has a set of items $M=	\{1,2
 The \textbf{winner determination problem} is the problem of maximizing the sum of accepted bid prices:
 \[max \sum_{j=1}^np_jx_j\] 
 under the constrain that each item is allocated to at most one bid:
-\[ \sum_{j|i\in S_j}x_j \le 1,\ \foralli \in \{1..m\},\ x_j \in \{0,1\}\]
+\[ \sum_{j|i\in S_j}x_j \le 1,\ \forall i \in \{1..m\},\ x_j \in \{0,1\}\]
 and each agent receives at most one bundle:
 \[\sum_{S \subseteq M} x_{S,i} \le 1,\ \forall i\in N\]
 This problem is NP-complete and inapproximable.\\
@@ -945,7 +947,7 @@ Given a graph coloring example, whit the graph in Figure \ref{fig:util_p}, in wh
 \centering
 \begin{tabular}{|l|l|l|l|l|l|}
 \hline
-x_1 & x_2 & x_3 &F_{3,1}  & F_{3,2} &F_{3,1}(x_3,x_1) \oplus F_{3,2}(x_3,x_2) \\ \hline
+$x_1$ & $x_2$ & $x_3$ &$F_{3,1}$  & $F_{3,2}$ &$F_{3,1}(x_3,x_1) \oplus F_{3,2}(x_3,x_2)$ \\ \hline
 0 & 0 & 0 & -1 & -1 &-2  \\ \hline
 \rowcolor{Gainsboro!60}
 0 & 0 & 1 & 0 &  0& 0 \\ \hline
@@ -1053,21 +1055,19 @@ There are two kind of aggregation algorithms:
 \end{itemize}
 
 \begin{figure}[H]
-\centering
-\begin{subfigure}
- \centering
-\includegraphics[scale=0.5]{images/positivie_feedback.png}
-\caption{Positive feedback approach for swarm aggregation}
-\label{fig:positive_feed}
-\end{subfigure}%
-
-\begin{subfigure}
-\centering
-\includegraphics[scale=0.5]{images/social_cues.png}
-\caption{Positive feedback approach for swarm aggregation}
-\label{fig:social_cues}
-\end{subfigure}%
-
+    \centering
+    \begin{subfigure}[b]{0.7\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/positivie_feedback.png}
+        \caption{Positive feedback approach for swarm aggregation}
+        \label{fig:positive_feed}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.7\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/social_cues.png}
+        \caption{Positive feedback approach for swarm aggregation}
+        \label{fig:social_cues}
+    \end{subfigure}
 \end{figure}
 
 \subsection{Coordination}
@@ -1125,12 +1125,13 @@ In the fixed threshold model we have the probability of response equal to:
 \[\mathcal{T}_{\theta_{ij}}(s_j)=\frac{s_j^2}{s_j^2+\theta^2_{ij}}\]
 
 We have that:
-\\
-\begin{cases} \mathcal{T}_{\theta_{ij}}(s_j) \rightarrow 0 , & \mbox{if } s_j \ll \theta_{ij}\\
+  \[
+\begin{cases} 
+\mathcal{T}_{\theta_{ij}}(s_j) \rightarrow 0 , & \mbox{if } s_j \ll \theta_{ij}\\
 \mathcal{T}_{\theta_{ij}}(s_j) \rightarrow 1 , & \mbox{if } s_j \gg \theta_{ij}\\
 \mathcal{T}_{\theta_{ij}}(s_j) =0.5 & \mbox{if } s_j = \theta_{ij}
 \end{cases}
-\\
+  \]
 That is lower $\theta_{ij}$ are more likely to respond to lower level of stimulus.
 
 \paragraph{Dynamic model}
@@ -1142,11 +1143,11 @@ On the other hand we can have a time dependent threshold, given:
 \end{itemize}
 both assumed to be identical for all tasks.\\
 An individual $i$ becomes \textit{more} sensitive \footnote{I.e. the agent has a better knowledge of task $j$, thus in the future it will be more likely to choose task $j$ for its familiarity.} by an amount $\zeta \delta t$ to a stimulus $s_j$ associated with the task $j$  when performing that task during the time period of duration $\delta t$:
-\[\theta_{ij} = \theta_{ij} - \zeta\detla t\]
+\[\theta_{ij} = \theta_{ij} - \zeta\delta_t\]
 
 
 On the other hand, an individual $i$ becomes \textit{less} sensitive by an amount $\phi \delta t$ to a stimulus $s_j$ associated with the task $j$  when \textit{not} performing that task for a time period of duration $\delta t$:
-\[\theta_{ij} = \theta_{ij} + \phi\detla t\]
+\[\theta_{ij} = \theta_{ij} + \phi\delta_t\]
 
 Finally, given $x_{ij}$, i.e. the fraction of time spent by agent $i$ in performing taks $j$: the agent performs the task during $x_{ij}\delta t$ whitihn $\delta t$, and other tasks during $(1-x_{ij})\delta t$. The resulting cchange in $\theta_{ij}$ within $\delta t$ is given by:
 \[\theta_{ij}= \theta_{ij}-x_{ij}\zeta\delta t+ (1-x_{ij})\phi\delta t \quad \theta_{ij} \in [\theta_{min},\theta_{max}]\]
