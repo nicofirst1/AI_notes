@@ -7,6 +7,7 @@
 \usepackage{float}
 \usepackage[table, svgnames, dvipsnames]{xcolor}
 \usepackage{makecell, cellspace, caption}
+\usepackage{hyperref}
 
 \author{Nicolò Brandizzi}
 \title{Multi-Agent System Summary}
@@ -97,17 +98,17 @@ we can look at a game as a tree where each node is a state and the edges are mov
 
 The \textbf{MinMax strategy} is a strategy with the following heuristic:
 \[MinMax(s)=\\
-\left{
-\begin{tabular}{c\quad c}
-
-\begin{cases} Utility(s) & \mbox{if } TerminalTest(s)  \\ 
-\max_{a \in Actions(s)}MinMax(Result(s,a)) & \mbox{if } Playes(s)=Max\\
-\min_{a \in Actions(s)}MinMax(Result(s,a)) & \mbox{if } Playes(s)=Min\\
-
- \end{cases}
-
-\end{tabular}
-\right}
+\left(
+    \begin{tabular}{c\quad c}
+    
+    \begin{cases} Utility(s) & \mbox{if } TerminalTest(s)  \\ 
+    \max_{a \in Actions(s)}MinMax(Result(s,a)) & \mbox{if } Playes(s)=Max\\
+    \min_{a \in Actions(s)}MinMax(Result(s,a)) & \mbox{if } Playes(s)=Min\\
+    
+     \end{cases}
+    
+    \end{tabular}
+\right)
 \]
 That is the minmax value of a node is the utility (for MAX) of being in that state, assuming that both players play optimally  \footnote{If MIN is not optimal than MAX will do even better.}.
 

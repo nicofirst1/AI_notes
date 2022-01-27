@@ -1309,7 +1309,7 @@ In propositional logic two clauses can be resolved if they contain complementary
 Given :
 \[\frac{l_1\vee...\vee l_k,\quad m_1\vee...\vee m_n}{\subst{l_1 \vee ... \vee l_{i-1}\vee l_{i+1}\vee ... \vee l_k\vee m_1 \vee ... \vee m_{i-1}\vee m_{i+1}\vee ... \vee m_n}}\]
 Where $Unify(l_i,\neg m_i)=\theta$. For example:
-\[[Animal(F(x))\vee Loves(G(x),x)]\quad and \quad [Loves(u,v)\vee \neg Kills(u,v)]\]
+\[[Animal(F(x))\vee \neg Loves(G(x),x)]\quad and \quad [Loves(u,v)\vee \neg Kills(u,v)]\]
 can be resolved with $\theta=[u/G(x),v/x]$ and generate:
 \[[Animal(F(x))\vee \neg Kills(u,v)]\]
 
@@ -2082,7 +2082,7 @@ We want to query $q_1=Beautiful(V)$ and $q_2=Beautiful(F)$. Let us start with $q
 \[\frac{ HasWater(D),\quad \lbrace \neg HasWater(g), \neg Gardener(g,x), Watered(x)\rbrace}{C_8=\lbrace \neg Gardener(D,x), Watered(x)\rbrace}\]
 Adding it to the KB.
 \item Since we're interested in $V$ we resolve $C_5$  with $C_8$, with the substitution $\theta=\{x/V\}$:
-\[\frac{Gardener(D,V),\quad \lbrace \neg Gardener(D,x), Watered(x)\rbrace}{C_9=\lbrace \neg Watered(V)\rbrace}\]
+\[\frac{Gardener(D,V),\quad \lbrace \neg Gardener(D,x), Watered(x)\rbrace}{C_9=\lbrace Watered(V)\rbrace}\]
 \item Until now we have used only \textbf{binary resolution}, now we will use the general one. Given $C_3,C_5,C_9,\neg q_1$ we can resolve them with $C_2$ with the substitution $\theta=\{x/V\}$ we resolve with $\{\}$ thus proving that $(KB \wedge \neg q_1)\vdash_{\mathcal{R}} \{\}$.
 \end{itemize}
 Same thing goes for $q_2$.
